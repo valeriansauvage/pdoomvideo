@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Atelier – La chaux, le souffle du vieux bâti</title>
+<style>
+  @font-face { font-family: "Fraunces"; font-weight: 600; font-display: block; src: url(assets/fonts/fraunces.woff2) format("woff2"); }
+  @font-face { font-family: "Fraunces"; font-style: italic; font-weight: 500; font-display: block; src: url(assets/fonts/fraunces-italic.woff2) format("woff2"); }
+  @font-face { font-family: "Caveat"; font-weight: 600; font-display: block; src: url(assets/fonts/caveat.woff2) format("woff2"); }
+  @font-face { font-family: "Nunito"; font-weight: 400 900; font-display: block; src: url(assets/fonts/nunito.woff2) format("woff2"); }
+  html, body { margin: 0; background: #26221f; color: #eee; font: 13px system-ui, sans-serif; }
+  main { padding: 12px; display: grid; gap: 8px; }
+  #out { width: min(100%, 1280px); aspect-ratio: 16 / 9; height: auto; background: #F4EDE1; }
+  .p5Canvas { display: none !important; }
+  .bar { display: flex; gap: 10px; align-items: center; max-width: 1280px; }
+  #scrub { flex: 1; }
+  #tt { font-variant-numeric: tabular-nums; min-width: 190px; }
+</style>
+<script src="../node_modules/p5/lib/p5.min.js"></script>
+<script src="../node_modules/p5.brush/dist/p5.brush.js"></script>
+</head>
+<body>
+<main>
+  <canvas id="out" width="1920" height="1080"></canvas>
+  <div class="bar"><input id="scrub" type="range" min="0" max="60" step="0.0417" value="0"><span id="tt">chargement…</span></div>
+</main>
+<script src="site/cues.js"></script>
+<script src="src/core.js"></script>
+<script src="src/timeline.js"></script>
+<script src="src/cast.js"></script>
+<script src="src/props.js"></script>
+<script src="src/ch/c1_vieux_bati.js"></script>
+<script src="src/ch/c2_mur_respire.js"></script>
+<script src="src/ch/c3_ciment.js"></script>
+<script src="src/ch/c4_chaux.js"></script>
+<script src="src/ch/c5_savoir_faire.js"></script>
+<script src="src/ch/c6_contact.js"></script>
+</body>
+</html>
