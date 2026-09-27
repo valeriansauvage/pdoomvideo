@@ -63,7 +63,7 @@ const CUES = {
   fin: {
     titre: 'Redonnons du souffle à votre maison',
     boutons: [
-      { texte: 'Demander un diagnostic', lien: 'https://valeriansauvage.com/', principal: true },
+      { texte: 'Demander un diagnostic', lien: 'https://valeriansauvage.fr/', principal: true },
       { texte: 'Revoir la vidéo', action: 'revoir' },
     ],
   },

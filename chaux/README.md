@@ -1,6 +1,6 @@
 # La chaux, le souffle du vieux bâti
 
-Vidéo interactive d'une minute, en français, pour le site [valeriansauvage.com](https://valeriansauvage.com/).
+Vidéo interactive d'une minute, en français, pour le site [valeriansauvage.fr](https://valeriansauvage.fr/).
 Elle explique simplement pourquoi un vieux mur doit respirer, pourquoi le ciment l'abîme et pourquoi la chaux
 le protège. Elle se termine sur une invitation à demander un diagnostic.
 

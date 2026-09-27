@@ -1,5 +1,5 @@
 > **Nouveau : [« La chaux, le souffle du vieux bâti »](chaux/)**, une vidéo interactive d'une minute en français pour
-> [valeriansauvage.com](https://valeriansauvage.com/), peinte avec ce même moteur aquarelle. Voir [`chaux/README.md`](chaux/README.md).
+> [valeriansauvage.fr](https://valeriansauvage.fr/), peinte avec ce même moteur aquarelle. Voir [`chaux/README.md`](chaux/README.md).
 
 # I'm Upping My P(doom)
 

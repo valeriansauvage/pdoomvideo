@@ -39,7 +39,7 @@
     if (u > 0) inkLine(partial([[175, 458], [350, 450], [520, 456], [690, 446]], u), 2.8, PAL.ocre, 'ink', .5);
     letter('Valérian Sauvage', 430, 560, 84, PAL.ocreDk, { font: 'hand', pop: seg(t, 56.4, 56.8), rot: -.02 });
     letter('Enduits à la chaux · Bâti ancien', 430, 640, 40, PAL.ink, { font: 'text', weight: 700, pop: seg(t, 56.7, 57.1) });
-    letter('valeriansauvage.com', 430, 712, 46, PAL.tuileDk, { font: 'text', weight: 800, pop: seg(t, 57.0, 57.4) });
+    letter('valeriansauvage.fr', 430, 712, 46, PAL.tuileDk, { font: 'text', weight: 800, pop: seg(t, 57.0, 57.4) });
     camEnd();
   }
   chapter('contact', 55, 60, [[55, fin]]);
