@@ -139,10 +139,10 @@ const S = {
   toc: (t, p = 0) => { tone(t, { f0: 560, f1: 470, dur: .09, amp: .09, decay: .03, pan: p, harm: .3, send: .15 }); noiseHit(t, { dur: .03, amp: .05, f: 3000, decay: .006, pan: p }); },
   bois: (t, p = 0) => { tone(t, { f0: 420, f1: 380, dur: .08, amp: .07, decay: .025, pan: p, harm: .4 }); tone(t + .045, { f0: 520, f1: 470, dur: .07, amp: .05, decay: .02, pan: p, harm: .4 }); },
   seau: (t, p = 0) => { tone(t, { f0: 180, f1: 120, dur: .2, amp: .16, decay: .06, pan: p }); bell(t, 81, { amp: .02, decay: .25, pan: p, send: .2, dst: SFX }); },
-  clac: t => { noiseHit(t, { dur: .3, amp: .32, f: 2200, decay: .07, pan: -.35, send: .25 }); noiseHit(t + .01, { dur: .18, amp: .14, type: 'bp', f: 3200, q: 1.5, decay: .04, pan: -.35 }); tone(t, { f0: 120, f1: 55, dur: .25, amp: .3, decay: .09, pan: -.3 }); },
+  clac: t => { noiseHit(t, { dur: .3, amp: .24, f: 2200, decay: .07, pan: -.35, send: .25 }); noiseHit(t + .01, { dur: .18, amp: .11, type: 'bp', f: 3200, q: 1.5, decay: .04, pan: -.35 }); tone(t, { f0: 120, f1: 55, dur: .25, amp: .22, decay: .09, pan: -.3 }); },
   plop: (t, p = 0) => { noiseHit(t, { dur: .2, amp: .12, f: 1200, decay: .05, pan: p }); tone(t, { f0: 300, f1: 160, dur: .12, amp: .1, decay: .05, pan: p }); },
-  crac: t => { [0, .045, .1, .17, .24].forEach((d, i) => noiseHit(t + d, { dur: .08, amp: .3 * (1 - i * .15), type: 'hp', f: 1800, decay: .012, pan: -.3 + i * .05, send: .3 })); tone(t, { f0: 90, f1: 45, dur: .35, amp: .28, decay: .12, pan: -.2 }); },
-  boum: t => { tone(t, { f0: 85, f1: 38, dur: .5, amp: .36, decay: .16, pan: -.35 }); noiseHit(t, { dur: .6, amp: .16, f: 500, decay: .16, pan: -.35, send: .3 }); for (let i = 0; i < 7; i++) noiseHit(t + .05 + rnd() * .4, { dur: .04, amp: .07, type: 'hp', f: 2500, decay: .008, pan: -.5 + rnd() * .4 }); },
+  crac: t => { [0, .045, .1, .17, .24].forEach((d, i) => noiseHit(t + d, { dur: .08, amp: .24 * (1 - i * .15), type: 'hp', f: 1800, decay: .012, pan: -.3 + i * .05, send: .3 })); tone(t, { f0: 90, f1: 45, dur: .35, amp: .2, decay: .12, pan: -.2 }); },
+  boum: t => { tone(t, { f0: 85, f1: 38, dur: .5, amp: .26, decay: .16, pan: -.35 }); noiseHit(t, { dur: .6, amp: .12, f: 500, decay: .16, pan: -.35, send: .3 }); for (let i = 0; i < 7; i++) noiseHit(t + .05 + rnd() * .4, { dur: .04, amp: .07, type: 'hp', f: 2500, decay: .008, pan: -.5 + rnd() * .4 }); },
   whoosh: (t, dur = .7) => noiseHit(t, { dur, amp: .2, type: 'bp', f: 400, q: 1.4, att: dur * .45, decay: dur * .22, send: .35, sweep: u => 300 + 2600 * Math.sin(Math.PI * clamp(u)), pan: u => -.8 + 1.6 * u }),
   oiseau: (t, p = .5) => { for (let i = 0; i < 3; i++) { const s = t + i * .11; const i0 = Math.round(s * SR), total = Math.round(.075 * SR); let ph = 0; for (let k = 0; k < total; k++) { const u = k / total, f = 3100 + 1300 * u + 180 * Math.sin(k / SR * 2 * Math.PI * 38); ph += 2 * Math.PI * f / SR; put(i0 + k, Math.sin(ph) * .025 * Math.sin(Math.PI * u), p, .3, SFX); } } },
   vent: (t, dur = 3) => noiseHit(t, { dur, amp: .11, f: 500, q: .7, att: dur * .4, decay: dur * .5, send: .3, sweep: u => 350 + 250 * Math.sin(u * 7), pan: u => -.6 + .3 * Math.sin(u * 5) }),
@@ -155,6 +155,7 @@ const S = {
   racle: (t, dur = .45, p = 0, f = 2200) => noiseHit(t, { dur, amp: .07, type: 'bp', f, q: 1.3, att: .08, decay: dur * .5, pan: p, send: .15, sweep: u => f * (1 + .25 * Math.sin(u * 40)) }),
   pas: (t, p = 0) => { noiseHit(t, { dur: .1, amp: .06, f: 600, decay: .025, pan: p }); tone(t, { f0: 110, f1: 70, dur: .08, amp: .06, decay: .03, pan: p }); },
   papier: (t, p = -.6) => noiseHit(t, { dur: .12, amp: .05, type: 'hp', f: 2500, att: .01, decay: .04, pan: p }),
+  souffle: (t, dur = 1.5) => noiseHit(t, { dur, amp: .06, type: 'bp', f: 750, q: .8, att: dur * .45, decay: dur * .3, pan: u => -.2 + .4 * u, send: .45, sweep: u => 600 + 500 * Math.sin(Math.PI * u) }),
   pinceau: (t, dur = .9) => noiseHit(t, { dur, amp: .05, type: 'bp', f: 900, q: .9, att: dur * .3, decay: dur * .4, pan: u => -.3 + .6 * u, send: .3 }),
 };
 
@@ -243,6 +244,7 @@ S.pinceau(0.05, 1.3);
 [1.8, 2.7, 3.4].forEach((t, i) => S.oiseau(t, .4 - i * .1));
 [5.6, 5.92, 6.24].forEach((t, i) => S.bois(t, -.2 + i * .25));                            // volets
 [6.9, 7.8].forEach(t => S.oiseau(t, .6));
+[7.2, 9.0].forEach(t => S.souffle(t, 1.6));                                                 // la façade respire
 for (const w of [10, 35, 47.5]) S.whoosh(w - .34, .68);
 for (let i = 0; i < 10; i++) { const st = 10.9 + i * .58, side = hash(i * 7.7 + 3) < .68 ? -1 : 1; S.plip(st, .1); if (i % 2 === 0) S.pouf(st + 2.9, side * .5); }
 S.pinceau(15.1, .8);
@@ -296,12 +298,25 @@ for (let n = 0; n < N; n++) {
   L[n] = hpL(MUS.L[n] + SFX.L[n] * SFXG + wL[n] * WET) * fade;
   R[n] = hpR(MUS.R[n] + SFX.R[n] * SFXG + wR[n] * WET) * fade;
 }
-// niveau : RMS visé ≈ -19 dBFS, puis limiteur doux et crête à -2 dBFS
+// niveau : RMS visé ≈ -19 dBFS, puis limiteur doux et crête vraie à -1,5 dBTP
 let sq = 0; for (let n = 0; n < N; n++) sq += L[n] * L[n] + R[n] * R[n];
 const rms = Math.sqrt(sq / (2 * N)), gain = Math.pow(10, -19 / 20) / rms;
 let peak = 0;
 for (let n = 0; n < N; n++) { L[n] = Math.tanh(L[n] * gain * 1.1) / 1.1; R[n] = Math.tanh(R[n] * gain * 1.1) / 1.1; peak = Math.max(peak, Math.abs(L[n]), Math.abs(R[n])); }
-const norm = Math.pow(10, -2 / 20) / peak;                            // marge pour le codage AAC
+// crête « vraie » (entre les échantillons), estimée par suréchantillonnage ×4 (sinc fenêtré) : marge pour le codage AAC
+function truePeak(x) {
+  const TAPS = 8, ker = [];
+  for (const f of [.25, .5, .75]) { const k = []; for (let j = -TAPS + 1; j <= TAPS; j++) { const d = j - f, w = .5 + .5 * Math.cos(Math.PI * d / TAPS); k.push(d === 0 ? 1 : Math.sin(Math.PI * d) / (Math.PI * d) * w); } ker.push(k); }
+  let m = 0;
+  for (let n = TAPS; n < x.length - TAPS; n++) {
+    m = Math.max(m, Math.abs(x[n]));
+    if (Math.abs(x[n]) < .5 * m) continue;                                // seules les zones fortes peuvent dépasser
+    for (const k of ker) { let v = 0; for (let j = 0; j < k.length; j++) v += x[n - TAPS + 1 + j] * k[j]; m = Math.max(m, Math.abs(v)); }
+  }
+  return m;
+}
+const tp = Math.max(peak, truePeak(L), truePeak(R));
+const norm = Math.pow(10, -1.5 / 20) / tp;
 // écriture WAV 16 bits
 const data = Buffer.alloc(N * 4);
 for (let n = 0; n < N; n++) { data.writeInt16LE(Math.round(clamp(L[n] * norm, -1, 1) * 32767), n * 4); data.writeInt16LE(Math.round(clamp(R[n] * norm, -1, 1) * 32767), n * 4 + 2); }

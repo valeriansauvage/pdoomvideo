@@ -59,7 +59,7 @@
   // 2B · 18.6 – 22.5 : ciment ou chaux ?
   function question(t, lt) {
     const k = ease(seg(t, 18.6, 19.6));
-    camBegin(lerp(960, 900, k), 530, lerp(1.0, 1.03, k), 0);
+    camBegin(lerp(960, 910, k), 530, lerp(1.0, 1.06, k), 0);
     drawLayer('c2_coupe', coupeLayer);
     soleil(150, 175, 60, t, { rays: true });
     solHumide(t);

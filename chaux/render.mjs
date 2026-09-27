@@ -8,7 +8,8 @@
 // Options : --chrome=<chemin de Chrome>, --gpu (utiliser la carte graphique au lieu du rendu logiciel sous Linux)
 import puppeteer from 'puppeteer-core';
 import { spawn } from 'node:child_process';
-import { mkdirSync, writeFileSync, existsSync, statSync, renameSync, readdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync, existsSync, statSync, renameSync, readdirSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { dirname, resolve, join } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
@@ -19,6 +20,10 @@ const fps = +(args.fps || 24);
 const FRAMES_DIR = at('out/frames'), LAYER_DIR = at('out/layers'), MUSIC = at('assets/musique.wav');
 mkdirSync(LAYER_DIR, { recursive: true });
 const out = p => resolve(process.cwd(), p);
+// Empreintes du code pour invalider les calques mis en cache : fichiers partagés + un par chapitre (c1…c6).
+const md5 = files => createHash('md5').update(files.map(f => readFileSync(at(f), 'utf8')).join('\n')).digest('hex').slice(0, 10);
+const SALT = { shared: md5(['src/core.js', 'src/props.js', 'src/cast.js']) };
+for (const f of readdirSync(at('src/ch'))) SALT[f.slice(0, 2)] = md5(['src/ch/' + f]);
 
 function findChrome() {
   if (args.chrome) return args.chrome;
@@ -43,7 +48,7 @@ if (args.encode) {
     '-c:v', 'libx264', '-preset', 'slow', '-tune', 'animation', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', '-shortest'];
   await run('ffmpeg', [...common, '-crf', args.crf || '24', '-maxrate', '5M', '-bufsize', '10M', join(media, 'chaux-1080.mp4')]);
   await run('ffmpeg', [...common, '-vf', 'scale=1280:720:flags=lanczos', '-crf', '25', '-maxrate', '2500k', '-bufsize', '5M', join(media, 'chaux-720.mp4')]);
-  const poster = args.poster || '6.5';
+  const poster = args.poster || '2.9';                                   // le titre est peint dans le ciel
   await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${FRAMES_DIR}/f${String(Math.round(+poster * fps)).padStart(5, '0')}.jpg`, '-vf', 'scale=1280:720:flags=lanczos', '-q:v', '4', join(media, 'affiche.jpg')]);
   console.log('écrit dans ' + media);
   process.exit(0);
@@ -62,7 +67,7 @@ async function openPage(tag = '') {
   if (!args.nocache) await page.exposeFunction('__saveLayer', (key, b64) => { writeFileSync(join(LAYER_DIR, key + '.png'), Buffer.from(b64, 'base64')); });
   await page.goto(pathToFileURL(at(args.studio || 'studio.html')).href + '?render', { waitUntil: 'load' });
   await page.waitForFunction('window.ready === true', { timeout: 120000, polling: 250 });
-  if (!args.nocache) await page.evaluate(files => { window.LAYER_DIR = 'out/layers'; window.LAYER_FILES = files; }, readdirSync(LAYER_DIR).filter(f => f.endsWith('.png')).map(f => f.slice(0, -4)));
+  await page.evaluate((files, salt) => { window.LAYER_DIR = 'out/layers'; window.LAYER_FILES = files; window.LAYER_SALT = salt; }, args.nocache ? [] : readdirSync(LAYER_DIR).filter(f => f.endsWith('.png')).map(f => f.slice(0, -4)), SALT);
   return page;
 }
 const frameOf = async (page, t, type, q) => {

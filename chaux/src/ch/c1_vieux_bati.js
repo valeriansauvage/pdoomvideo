@@ -81,14 +81,6 @@
   function oiseaux(t, x0, y0, sens = 1) {
     for (let i = 0; i < 3; i++) oiseau(x0 + sens * t * 90 + i * 46, y0 + Math.sin(t * 2 + i) * 10 + (i % 2) * 26, 1.2 - i * .15, t, i * .3);
   }
-  // Révélation : une tache de peinture qui s'étend depuis le centre (papier autour)
-  function revelation(t) {
-    const k = ease(seg(t, .05, 1.5)); if (k >= 1) return;
-    const r = lerp(30, 1500, Math.pow(k, 1.5)), pts = [];
-    for (let i = 0; i < 36; i++) { const a = i / 36 * TAU, q = r * (1 + .14 * Math.sin(a * 5 + 1) + .07 * Math.sin(a * 11)); pts.push([860 + Math.cos(a) * q * 1.2, 500 + Math.sin(a) * q * .8]); }
-    irisShape(pts, PAL.paper);
-  }
-
   // ---------- plans ----------
   // 1A · 0 – 4.6 : le village à l'aube, le titre se peint dans le ciel
   function aube(t, lt) {
@@ -110,7 +102,7 @@
     const u = ease(seg(t, 1.7, 2.5));
     if (u > 0 && ta > .05) inkLine(partial([[318, 378], [470, 370], [640, 376], [838, 366]], u), 2.6, mixCol(PAL.ocre, PAL.paper, 1 - ta), 'ink', .5);
     camEnd();
-    revelation(t);
+    revealBlob(t, .05, 1.45, 860, 500, PAL.paper, 1);                // l'image apparaît dans une tache de peinture
   }
 
   // 1B · 4.6 – 10 : la maison de près ; les volets s'ouvrent, le mur respire
@@ -126,15 +118,24 @@
     fumee(MX + 175 * MS, MY - 675 * MS, t, 1.4);
     nuages(t, 120);
     oiseaux(t - 4.6, 1180, 170, -1);
-    // le mur respire : des volutes de vapeur sortent des pierres, au rythme d'une respiration lente
-    const b = seg(t, 7.1, 7.7), SPOTS = [[-340, -160], [20, -150], [340, -190], [-360, -420], [-5, -430], [350, -440], [25, -300]];
+    // le mur respire : de la façade montent des volutes de vapeur (le pictogramme de la buée), au rythme d'un souffle
+    const b = seg(t, 7.1, 7.7), SPOTS = [[-330, -170], [30, -150], [335, -40], [-345, -420], [0, -415], [335, -330], [30, -300]];
     if (b > 0) SPOTS.forEach(([dx, dy], i) => {
-      const px = MX + dx, py = MY + dy, age = frac((t - 7.1) / 1.6 + i * .37), k = b * inOut(age, 0, 1, .3);
-      if (k < .03) return;
-      const yy = py - 30 - age * 110, xx = px + Math.sin(age * 4 + i) * 14;
-      inkLine(partial([[px, py], [px + 8, py - 25], [lerp(px, xx, .6) - 6, lerp(py, yy, .6)], [xx, yy + 16]], ease(age * 1.6)), .8, '#FFFFFF', 'inkfine', .6);
-      vapeur(xx, yy, 20 + age * 10, { alpha: k * .9, face: i === 1 || i === 4, mood: 'happy', seed: i });
+      const age = frac((t - 7.1) / 1.9 + i * .37), k = b * inOut(age, 0, 1, .3);
+      if (k < .04) return;
+      const x0 = MX + dx, y0 = MY + dy - age * 60;
+      for (let j = -1; j <= 1; j++) {
+        const pts = [];
+        for (let q = 0; q <= 8; q++) { const u = q / 8; pts.push([x0 + j * 17 + Math.sin(u * 2 * TAU - t * 5 + j) * 7, y0 - u * (62 + 12 * (1 - Math.abs(j)))]); }
+        inkLine(pts, 3.4 * k, '#FFFFFF', 'ink', .6);
+        inkLine(pts, 1.5 * k, mixCol(PAL.eau, '#FFFFFF', 1 - k), 'inkfine', .6);
+      }
     });
+    // deux petites bouffées heureuses s'envolent au-dessus du toit
+    for (let i = 0; i < 2; i++) {
+      const age = (t - 7.6 - i * .9) / 2.2; if (age < 0 || age > 1) continue;
+      vapeur(MX - 150 + i * 330 + Math.sin(age * 5) * 20, MY - 520 - age * 330, 34, { alpha: inOut(age, 0, 1, .2), face: true, mood: 'happy', seed: i + 3 });
+    }
     camEnd();
   }
 

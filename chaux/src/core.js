@@ -23,7 +23,6 @@ const ease = x => { x = clamp(x); return x * x * (3 - 2 * x); };
 const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
 const easeIn = x => Math.pow(clamp(x), 3);
 const backOut = x => { x = clamp(x); const s = 1.7; return 1 + (s + 1) * Math.pow(x - 1, 3) + s * Math.pow(x - 1, 2); };
-const elasticOut = x => { x = clamp(x); return x === 0 || x === 1 ? x : Math.pow(2, -10 * x) * Math.sin((x * 10 - .75) * (TAU / 3)) + 1; };
 const hash = i => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
 const strHash = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
 // Tremblé du trait, réinitialisé BOIL fois par seconde : le dessin « vit » comme une animation faite main.
@@ -33,22 +32,9 @@ const jit = a => (random() * 2 - 1) * a;
 const bpOf = t => (t - OFF) / BEAT;
 const seg = (t, a, b) => clamp((t - a) / (b - a));                 // progression 0..1 de t dans [a, b]
 const frac = x => x - Math.floor(x);
-const beatN = t => Math.floor(bpOf(t));
 const pulse = (t, k = 6) => Math.exp(-frac(bpOf(t)) * k);          // 1 sur chaque temps, puis décroît
-const wob = (t, f = 1, ph = 0) => Math.sin((t * f + ph) * TAU);
 // apparition (0→1) puis disparition (1→0) : in(t, a, b) pour [a, b] avec des fondus de d secondes
 const inOut = (t, a, b, d = .35) => ease(seg(t, a, a + d)) * (1 - ease(seg(t, b - d, b)));
-// clés : kf(t, [[t0, v0], [t1, v1], ...], easeFn). Les valeurs peuvent être des nombres ou des tableaux.
-function kf(t, keys, e = ease) {
-  if (t <= keys[0][0]) return keys[0][1];
-  for (let i = 1; i < keys.length; i++) {
-    if (t < keys[i][0]) {
-      const [a, va] = keys[i - 1], [b, vb] = keys[i], k = e((t - a) / (b - a));
-      return Array.isArray(va) ? va.map((v, j) => lerp(v, vb[j], k)) : lerp(va, vb, k);
-    }
-  }
-  return keys[keys.length - 1][1];
-}
 function mixCol(a, b, k) {
   const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16), c = i => Math.round(lerp((pa >> i) & 255, (pb >> i) & 255, clamp(k)));
   return '#' + ((1 << 24) + (c(16) << 16) + (c(8) << 8) + c(0)).toString(16).slice(1);
@@ -58,7 +44,11 @@ const shakeXY = (t, amt) => { const f = Math.floor(t * 24); return [(hash(f * 1.
 // ---------- caméra ----------
 // camBegin(cx, cy, zoom, rot) : le point (cx, cy) du monde arrive au centre de l'écran. Toujours suivi de camEnd().
 let CAM = null;
-function camBegin(cx = W / 2, cy = H / 2, zoom = 1, rot = 0) { push(); translate(W / 2, H / 2); rotate(rot); scale(zoom); translate(-cx, -cy); CAM = { cx, cy, zoom, rot }; }
+// Les décors couvrent exactement le cadre : sans rotation et avec zoom ≥ 1, la caméra ne montre jamais au-delà.
+function camBegin(cx = W / 2, cy = H / 2, zoom = 1, rot = 0) {
+  if (zoom >= 1 && !rot) { cx = clamp(cx, W / 2 / zoom, W - W / 2 / zoom); cy = clamp(cy, H / 2 / zoom, H - H / 2 / zoom); }
+  push(); translate(W / 2, H / 2); rotate(rot); scale(zoom); translate(-cx, -cy); CAM = { cx, cy, zoom, rot };
+}
 function camEnd() { pop(); CAM = null; }
 function toScreen(x, y) {
   if (!CAM) return [x, y];
@@ -66,8 +56,7 @@ function toScreen(x, y) {
   return [W / 2 + dx * c - dy * s, H / 2 + dx * s + dy * c];
 }
 
-// ---------- effets plein cadre (hors caméra) ----------
-function flash(k, col = PAL.cream) { if (k > .01) paint(rectPts(-60, -60, W + 120, H + 120), { wash: col, washOp: 255 * clamp(k), ink: null }); }
+// ---------- transitions plein cadre (hors caméra) ----------
 function irisShape(pts, col = PAL.ink, far = 4000) {
   const n = pts.length; let cx = 0, cy = 0; for (const p of pts) { cx += p[0]; cy += p[1]; } cx /= n; cy /= n;
   const out = p => { const dx = p[0] - cx, dy = p[1] - cy, d = Math.hypot(dx, dy) || 1; return [cx + dx / d * far, cy + dy / d * far]; };
@@ -84,7 +73,6 @@ function revealBlob(t, t0, dur, cx, cy, col = PAL.paper, seed = 1) {
   for (let i = 0; i < 36; i++) { const a = i / 36 * TAU, q = r * (1 + .14 * Math.sin(a * 5 + seed) + .07 * Math.sin(a * 11 + seed * 2)); pts.push([cx + Math.cos(a) * q * 1.2, cy + Math.sin(a) * q * .8]); }
   irisShape(pts, col);
 }
-function iris(cx, cy, r, col = PAL.ink) { if (r < 4) paint(rectPts(-60, -60, W + 120, H + 120), { wash: col, ink: null }); else irisShape(ellPts(cx, cy, r, r, 40), col); }
 
 let T = 0, paperG = null, grainC = null, letG = null, outC = null, outX = null;
 let LETTERS = [], CAPTION = null;
@@ -143,18 +131,15 @@ function paint(pts, o = {}) {
 function inkLine(pts, sw = 1, col = PAL.ink, br = 'ink', curv = .5) {
   brush.noFill(); brush.noWash(); brush.noHatch(); brush.set(br, col, sw); brush.spline(pts, curv);
 }
-// Aquarelle « bon marché » pour les éléments animés : quelques aplats translucides légèrement déformés.
-function softWash(pts, col, op = 60, n = 3, spread = 6) {
-  for (let i = 0; i < n; i++) paint(pts.map(p => [p[0] + jit(spread), p[1] + jit(spread)]), { wash: col, washOp: op, ink: null });
-}
-
 // ---------- calques mis en cache ----------
 // layer(clé, fn) : peint fn() une seule fois sur le papier (aquarelle comprise) et renvoie l'image, réutilisable par
 // toutes les images de la vidéo. La clé contient un résumé du code de fn : modifier le dessin invalide le cache.
 // Le cache vit dans la page et sur disque (out/layers) quand on rend avec render.mjs.
 const LAYERS = new Map();
 let LAYER_NEED = null, BUILD = null;
-function layerKey(name, fn) { return name + '_' + strHash(fn.toString()).toString(36); }
+// La clé tient compte du code du calque, des fichiers partagés et du fichier du chapitre (préfixe c1_, c2_…) :
+// render.mjs fournit ces empreintes dans window.LAYER_SALT, pour qu'une retouche du décor repeigne le calque.
+function layerKey(name, fn) { const salt = window.LAYER_SALT || {}; return name + '_' + strHash(fn.toString() + (salt.shared || '') + (salt[name.slice(0, 2)] || '')).toString(36); }
 function layer(name, fn) {
   const key = layerKey(name, fn), hit = LAYERS.get(key);
   if (hit) return hit;

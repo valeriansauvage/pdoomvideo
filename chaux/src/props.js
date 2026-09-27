@@ -219,14 +219,14 @@ function coupeDecor(o = {}) {
   const { x0, x1, top, sol, fond, extX, intX } = COUPE;
   // ciel et jardin à gauche
   paint(rectPts(-40, -40, extX + 40, sol + 40), { wash: o.hiver ? '#CFDCE6' : PAL.ciel, washOp: 255, ink: null });
-  paint(rectPts(-40, -40, extX + 40, sol + 40), { fill: o.hiver ? '#9FB3C8' : '#9CC7DE', fillOp: 90, bleed: .2, tex: .5, border: .2, ink: null });
-  paint([[-40, 700], [200, 640], [420, 668], [extX, 620], [extX, sol], [-40, sol]], { wash: o.hiver ? '#DDE6EC' : '#B9CFA3', washOp: 255, fill: o.hiver ? '#B8C8D6' : PAL.sauge, fillOp: 120, bleed: .1, tex: .6, ink: null });
+  paint(rectPts(-120, -120, x0 + 200, sol + 160), { fill: o.hiver ? '#9FB3C8' : '#9CC7DE', fillOp: 90, bleed: .2, tex: .5, border: .2, ink: null });
+  paint([[-40, 700], [200, 640], [420, 668], [x0 + 40, 612], [x0 + 40, sol + 40], [-40, sol + 40]], { wash: o.hiver ? '#DDE6EC' : '#B9CFA3', washOp: 255, fill: o.hiver ? '#B8C8D6' : PAL.sauge, fillOp: 120, bleed: .1, tex: .6, ink: null });
   paint([[-40, 780], [300, 752], [extX, 770], [extX, sol], [-40, sol]], { wash: o.hiver ? '#EEF2F5' : PAL.sauge, washOp: 255, ink: PAL.ink, sw: .8 });
   if (!o.hiver) { arbre(250, 790, .8, { tex: true, seed: 3 }); fleurs(520, 800, 1.1, [PAL.rose, '#E9C46A', '#FFFFFF'], 6, 4); touffe(640, 800, 1.2); touffe(90, 800, 1); }
   else { paint([[150, 790], [158, 700], [168, 700], [176, 790]], { wash: PAL.boisDk, washOp: 230, ink: PAL.ink, sw: .8 }); for (const [bx, by, a] of [[163, 720, -.8], [163, 740, .7]]) inkLine([[bx, by], [bx + Math.cos(a - 1.57) * 60, by + Math.sin(a - 1.57) * 60]], 1, PAL.boisDk, 'ink', .4); }
   // pièce habitée à droite
   paint(rectPts(intX, -40, W - intX + 40, sol + 40), { wash: o.froid ? '#DCD7C9' : '#F1DDB8', washOp: 255, ink: null });
-  paint(rectPts(intX, -40, W - intX + 40, sol + 40), { fill: o.froid ? '#B8B8A8' : PAL.ocreLt, fillOp: 90, bleed: .15, tex: .6, border: .3, ink: null });
+  paint(rectPts(x0, -160, W - x0 + 160, sol + 300), { fill: o.froid ? '#B8B8A8' : PAL.ocreLt, fillOp: 90, bleed: .15, tex: .6, border: .3, ink: null });
   paint(rectPts(1500, 330, 190, 150, 2), { wash: '#FFFFFF', washOp: 200, ink: PAL.ink, sw: 1 });                                      // cadre
   paint(rectPts(1515, 345, 160, 120, 1), { wash: '#A9C6D9', washOp: 255, ink: null });
   paint([[1515, 465], [1570, 395], [1610, 440], [1640, 405], [1675, 465]], { wash: PAL.sauge, washOp: 255, ink: PAL.ink, sw: .6 });
@@ -242,7 +242,7 @@ function coupeDecor(o = {}) {
   paint([[1665, 520], [1775, 520], [1750, 440], [1690, 440]], { wash: '#F3D48E', washOp: 255, ink: PAL.ink, sw: 1 });
   // sol (terre) sous tout le décor
   paint(rectPts(-40, sol, intX + 40, 260), { wash: '#A07E5E', washOp: 255, ink: null });
-  paint(rectPts(-40, sol, W + 80, 260), { fill: '#7E5E43', fillOp: 110, bleed: .1, tex: .8, border: .4, ink: null });
+  paint(rectPts(-40, sol + 8, intX + 40, 260), { fill: '#7E5E43', fillOp: 110, bleed: .02, tex: .8, border: .4, ink: null });
   paint(rectPts(intX, sol + 80, W - intX + 40, 200), { wash: '#8E6D50', washOp: 255, ink: null });
   inkLine([[-40, sol], [extX, sol]], 1.2, PAL.ink, 'ink', 0);
   for (let i = 0; i < 40; i++) { const px = hash(i * 1.3) * W, py = sol + 30 + hash(i * 2.7) * 170; if (px > x0 - 30 && px < x1 + 30 && py < fond + 10) continue; paint(ellPts(px, py, 6 + hash(i) * 8, 4 + hash(i + 1) * 5, 8), { wash: pick(['#8B6B4E', '#B79B7C', '#6F5440'], i), washOp: 255, ink: PAL.ink, sw: .35 }); }

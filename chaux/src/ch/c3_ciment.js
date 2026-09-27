@@ -93,7 +93,7 @@
   // 3A · 22.5 – 27.8 : CLAC ! le ciment
   function clac(t, lt) {
     const k = ease(seg(t, 22.5, 23.4)), [sx, sy] = shakeXY(t, 10 * Math.exp(-Math.max(0, t - CLAC) * 8) * (t > CLAC ? 1 : 0));
-    camBegin(lerp(900, 960, k) + sx, 530 + sy, lerp(1.03, 1.0, k), 0);
+    camBegin(lerp(910, 960, k) + sx, 530 + sy, lerp(1.06, 1.03, k), 0);
     drawLayer('c2_coupe', coupeLayer);
     soleil(150, 175, 60, t, { rays: true });
     ciment(t);

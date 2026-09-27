@@ -47,11 +47,11 @@ const CUES = {
 
   // Bulles « En savoir plus » : visibles entre debut et fin, cliquables (la vidéo se met en pause).
   bulles: [
-    { debut: 5, fin: 9.8, x: 56, y: 40, titre: 'Qu’appelle-t-on « bâti ancien » ?',
+    { debut: 5, fin: 9.8, x: 50, y: 37, titre: 'Qu’appelle-t-on « bâti ancien » ?',
       texte: 'Les maisons construites avant 1948 environ, en pierre, brique ou terre, montées avec des mortiers de chaux ou de terre. Elles n’ont pas de barrière contre l’humidité : elles la gèrent en la laissant s’évaporer.' },
     { debut: 14.5, fin: 18.6, x: 50, y: 32, titre: 'Pourquoi un mur doit-il respirer ?',
       texte: 'L’eau du sol et celle de la vie intérieure (cuisine, douche, respiration) traversent les murs. Si elle peut s’évaporer, le mur reste sec, sain et plus isolant. On dit qu’il est « perspirant ».' },
-    { debut: 27.9, fin: 31.4, x: 66, y: 44, titre: 'Le salpêtre, c’est quoi ?',
+    { debut: 27.9, fin: 31.4, x: 72, y: 36, titre: 'Le salpêtre, c’est quoi ?',
       texte: 'Des sels minéraux transportés par l’eau. Quand elle s’évapore, ils cristallisent en surface : poudre blanche, peinture qui cloque, enduit et pierre qui s’effritent.' },
     { debut: 38.4, fin: 42.3, x: 50, y: 30, titre: 'Chaux aérienne ou hydraulique ?',
       texte: 'La chaux aérienne (CL) durcit à l’air : très souple et respirante, idéale pour les finitions et les badigeons. La chaux hydraulique naturelle (NHL) prend aussi avec l’eau : plus résistante, elle convient aux enduits de façade.' },

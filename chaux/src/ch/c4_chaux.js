@@ -5,9 +5,9 @@
   const RC = [960, 470], RR = 300;                                        // l'anneau du cycle
   const ST = [                                                            // stations : angle, libellé
     { a: -Math.PI / 2, label: 'pierre calcaire', lx: 0, ly: -128 },
-    { a: 0, label: 'cuisson ~900 °C', lx: 0, ly: 132 },
+    { a: 0, label: 'cuisson ~900 °C', lx: 250, ly: 8 },
     { a: Math.PI / 2, label: 'chaux', lx: 0, ly: 130 },
-    { a: Math.PI, label: 'redevient pierre', lx: 0, ly: 132 },
+    { a: Math.PI, label: 'redevient pierre', lx: -250, ly: 8 },
   ];
   const stPos = i => [RC[0] + Math.cos(ST[i].a) * RR, RC[1] + Math.sin(ST[i].a) * RR];
   const POP = i => 38.55 + i * .8;
@@ -100,7 +100,7 @@
     }
     // le CO₂ quitte le four… et revient se fixer dans le mur
     for (let j = 0; j < 3; j++) { const a = (t - POP(1) - .3 - j * .45) / 1.6; co2(1300 + j * 30 + a * 80, 390 - a * 170, a); }
-    for (let j = 0; j < 3; j++) { const a = (t - POP(3) - .2 - j * .4) / 1.4; co2(lerp(380, 610, a), 300 + j * 55 + Math.sin(a * 6) * 10, a); }
+    for (let j = 0; j < 3; j++) { const a = (t - POP(3) - .2 - j * .4) / 1.4; co2(lerp(360, 600, a), lerp(250 + j * 40, 380, a) + Math.sin(a * 6) * 10, a); }
     // au centre
     letter('Le cycle', 960, 432, 74, PAL.ink, { font: 'title', pop: seg(t, 38.35, 38.8) });
     letter('de la chaux', 960, 512, 64, PAL.ocreDk, { font: 'hand', pop: seg(t, 38.6, 39.0) });

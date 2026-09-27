@@ -27,8 +27,9 @@ body.vc-integre { padding: 0; background: transparent; }
 
 .vc { max-width: 1120px; margin: 0 auto; }
 .vc-player { margin: 0; background: var(--vc-carte); border-radius: var(--vc-rayon); box-shadow: 0 18px 50px -24px rgba(60, 40, 20, .45), 0 0 0 1px var(--vc-ligne); overflow: hidden; }
-.vc-player:fullscreen { display: flex; flex-direction: column; justify-content: center; background: #1d1a18; border-radius: 0; }
-.vc-player:fullscreen .vc-stage { max-height: calc(100vh - 120px); aspect-ratio: 16 / 9; width: auto; margin: 0 auto; }
+.vc-player:fullscreen { display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--vc-carte); border-radius: 0; }
+.vc-player:fullscreen .vc-stage { width: min(100vw, calc((100vh - 130px) * 16 / 9)); }
+.vc-player:fullscreen .vc-controls, .vc-player:fullscreen .vc-chapters { width: min(100vw, calc((100vh - 130px) * 16 / 9)); }
 
 /* ---------- scène ---------- */
 .vc-stage { position: relative; aspect-ratio: 16 / 9; background: var(--vc-fond); overflow: hidden; container-type: inline-size; }
@@ -36,8 +37,8 @@ body.vc-integre { padding: 0; background: transparent; }
 
 /* écran d'accueil */
 .vc-start { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 1.2cqi; border: 0; padding: 0; cursor: pointer;
-  background: linear-gradient(180deg, rgba(251, 247, 239, 0) 30%, rgba(47, 42, 46, .55) 100%), url(media/affiche.jpg) center / cover; color: #fff; font: inherit; text-align: center; }
-.vc-start .vc-play-big { width: clamp(64px, 11cqi, 112px); aspect-ratio: 1; border-radius: 50%; background: var(--vc-accent); display: grid; place-items: center; box-shadow: 0 10px 30px -8px rgba(0, 0, 0, .5), 0 0 0 8px rgba(251, 247, 239, .35); transition: transform .2s, background .2s; margin-top: 10cqi; }
+  background: linear-gradient(180deg, rgba(251, 247, 239, 0) 45%, rgba(47, 42, 46, .5) 100%), url(media/affiche.jpg) center / cover; color: #fff; font: inherit; text-align: center; }
+.vc-start .vc-play-big { width: clamp(64px, 11cqi, 112px); aspect-ratio: 1; border-radius: 50%; background: var(--vc-accent); display: grid; place-items: center; box-shadow: 0 10px 30px -8px rgba(0, 0, 0, .5), 0 0 0 8px rgba(251, 247, 239, .35); transition: transform .2s, background .2s; margin-top: 16cqi; }
 .vc-start .vc-play-big svg { width: 38%; margin-left: 8%; fill: #fff; }
 .vc-start:hover .vc-play-big, .vc-start:focus-visible .vc-play-big { transform: scale(1.06); background: var(--vc-accent-fonce); }
 .vc-start .vc-start-titre { font: 600 clamp(20px, 3.4cqi, 38px)/1.15 var(--vc-titre); text-shadow: 0 2px 12px rgba(0, 0, 0, .45); }
@@ -71,7 +72,8 @@ body.vc-integre { padding: 0; background: transparent; }
 .vc-btn.vc-sec { background: transparent; color: var(--vc-encre); box-shadow: inset 0 0 0 2px var(--vc-ligne); }
 .vc-btn.vc-sec:hover { background: var(--vc-fond); }
 
-/* quiz */
+/* quiz : sur grand écran, la fenêtre se range à droite pour laisser voir les deux seaux */
+@container (min-width: 700px) { #vc-quiz { place-items: center end; padding-right: 4cqi; background: linear-gradient(90deg, rgba(47, 42, 46, 0) 30%, rgba(47, 42, 46, .45)); backdrop-filter: none; } #vc-quiz .vc-box { width: min(520px, 50%); } }
 .vc-choix { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 6px; }
 .vc-choix button { display: grid; justify-items: center; gap: 8px; border: 2px solid var(--vc-ligne); border-radius: 14px; background: #fff; padding: 14px 10px; cursor: pointer; font: 800 clamp(14px, 1.7cqi, 17px)/1.2 var(--vc-texte); color: var(--vc-encre); transition: border-color .2s, transform .15s; }
 .vc-choix button:hover { border-color: var(--vc-accent); transform: translateY(-2px); }
