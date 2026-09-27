@@ -11,9 +11,11 @@ musique originale générée par [`music.mjs`](music.mjs), sans aucun échantill
 
 | Chemin | Rôle |
 |---|---|
-| [`site/`](site/) | **Le dossier à mettre en ligne** : le lecteur interactif et les vidéos |
-| [`site/cues.js`](site/cues.js) | Le minutage unique : chapitres, légendes, quiz, bulles « En savoir plus », boutons de fin |
-| [`site/lecteur.css`](site/lecteur.css) | L'apparence du lecteur (couleurs et polices en variables en haut du fichier) |
+| [`video-chaux/`](video-chaux/) | **Le dossier à mettre en ligne** : le lecteur interactif et les vidéos |
+| [`video-chaux/cues.js`](video-chaux/cues.js) | Le minutage unique : chapitres, légendes, quiz, bulles « En savoir plus », boutons de fin |
+| [`video-chaux/lecteur.css`](video-chaux/lecteur.css) | L'apparence du lecteur (couleurs et polices en variables en haut du fichier) |
+| [`INTEGRATION.md`](INTEGRATION.md) | **Le kit d'intégration** pour la personne (ou le Claude) qui monte le site |
+| [`exemple-integration.html`](exemple-integration.html) | Une page d'exemple qui intègre le lecteur en iframe |
 | [`STORYBOARD.md`](STORYBOARD.md) | Le découpage plan par plan |
 | [`studio.html`](studio.html) | L'atelier : chaque image y est peinte (ouvrir dans Chrome pour la parcourir) |
 | [`src/`](src/) | Le moteur, les personnages (`cast.js`), les décors (`props.js`) et les six chapitres (`src/ch/`) |
@@ -22,33 +24,22 @@ musique originale générée par [`music.mjs`](music.mjs), sans aucun échantill
 
 ## Mettre la vidéo sur le site
 
-Le dossier `site/` est autonome : le lecteur, ses polices, ses vidéos et l'image d'affiche. Il ne dépend
-d'aucun service extérieur (pas de Google Fonts, pas de traceur).
+Tout est décrit dans [`INTEGRATION.md`](INTEGRATION.md) : déposer le dossier `video-chaux/` sur le site, puis insérer
+une iframe (codes HTML et React fournis). On y trouve aussi les couleurs à adapter, le lien du bouton de contact, les
+contraintes d'hébergement, le balisage pour le référencement et une liste de vérifications.
 
-1. **Déposer le dossier** `site/` sur l'hébergement du site, par exemple sous le nom `video-chaux/`.
-   Avec GitHub Pages, on peut aussi l'activer sur ce dépôt : la page sera alors servie à
-   `https://valeriansauvage.github.io/pdoomvideo/chaux/site/`.
-2. **Coller ce bloc** là où la vidéo doit apparaître. Sous WordPress, Wix, Squarespace ou Webflow, c'est le bloc
-   « HTML personnalisé » ou « Intégrer du code ». Remplacer l'adresse par la bonne.
+Pour transmettre le tout d'un bloc, par exemple à une autre conversation Claude, on prépare une archive depuis ce
+dossier :
 
-```html
-<iframe id="video-chaux" src="/video-chaux/index.html"
-        title="Vidéo interactive : la chaux, le souffle du vieux bâti"
-        style="width:100%;height:760px;border:0;display:block" allow="fullscreen" loading="lazy"></iframe>
-<script>
-  // ajuste la hauteur du cadre à celle du lecteur (ordinateur comme mobile)
-  addEventListener('message', e => { if (e.data && e.data.videoChauxHauteur) document.getElementById('video-chaux').style.height = e.data.videoChauxHauteur + 'px'; });
-</script>
+```bash
+cd chaux && zip -r -X video-chaux-kit.zip INTEGRATION.md exemple-integration.html video-chaux
 ```
-
-Pour une simple vidéo, sans interactivité, utiliser `site/media/chaux-1080.mp4` (ou la version 720p, plus légère
-sur mobile) dans une balise `<video controls poster="affiche.jpg">`.
 
 ## Modifier les textes, les couleurs ou le lien de contact
 
-- **Légendes, quiz, bulles, bouton « Demander un diagnostic »** : dans `site/cues.js`. Les textes du lecteur
-  changent immédiatement. Les légendes étant peintes dans la vidéo, il faut ensuite refaire le rendu (voir plus bas).
-- **Couleurs et polices du lecteur** : les variables `--vc-…` en haut de `site/lecteur.css`.
+- **Quiz, bulles, bouton « Demander un diagnostic »** : dans `video-chaux/cues.js`. Le lecteur est mis à jour
+  immédiatement. Les **légendes** étant peintes dans la vidéo, les modifier demande de refaire le rendu (voir plus bas).
+- **Couleurs et polices du lecteur** : les variables `--vc-…` en haut de `video-chaux/lecteur.css`.
 - **Couleurs et polices de la vidéo** : `PAL` et `FONT` en haut de `src/core.js`, puis refaire le rendu.
 
 ## Refaire la vidéo
@@ -59,7 +50,7 @@ Il faut Node.js, Chrome (ou Chromium) et ffmpeg. Depuis la racine du dépôt :
 npm install
 node chaux/music.mjs                               # bande-son → chaux/assets/musique.wav
 node chaux/render.mjs --frames=0:60 --workers=3    # peint les 1 440 images → chaux/out/frames (reprise possible)
-node chaux/render.mjs --encode                     # vidéos 1080p et 720p + affiche → chaux/site/media/
+node chaux/render.mjs --encode                     # vidéos 1080p et 720p + affiche → chaux/video-chaux/media/
 ```
 
 Pour vérifier un passage sans tout refaire : `node chaux/render.mjs --sheet=12,23.2,33.5 --out=chaux/out/planche.jpg`

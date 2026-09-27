@@ -4,7 +4,7 @@
 //   node chaux/render.mjs --stills=3,30 --out=out/stills                           images fixes pleine résolution
 //   node chaux/render.mjs --clip=0:10 --out=out/clip.mp4                           extrait avec le son
 //   node chaux/render.mjs --frames=0:60 --workers=3                                toutes les images → out/frames (reprise possible)
-//   node chaux/render.mjs --encode                                                 images + musique → site/media/*.mp4
+//   node chaux/render.mjs --encode                                                 images + musique → video-chaux/media/*.mp4
 // Options : --chrome=<chemin de Chrome>, --gpu (utiliser la carte graphique au lieu du rendu logiciel sous Linux)
 import puppeteer from 'puppeteer-core';
 import { spawn } from 'node:child_process';
@@ -41,7 +41,7 @@ const run = (cmd, a) => new Promise((ok, bad) => { const p = spawn(cmd, a, { std
 
 if (args.encode) {
   // Deux versions web : 1080p (ordinateur) et 720p (mobile), plus l'affiche (première image du titre).
-  const n = readdirSync(FRAMES_DIR).filter(f => f.endsWith('.jpg')).length, media = at('site/media');
+  const n = readdirSync(FRAMES_DIR).filter(f => f.endsWith('.jpg')).length, media = at('video-chaux/media');
   mkdirSync(media, { recursive: true });
   console.log(`encodage de ${n} images`);
   const common = ['-y', '-loglevel', 'error', '-stats', '-framerate', String(fps), '-i', `${FRAMES_DIR}/f%05d.jpg`, '-i', MUSIC, '-map', '0:v', '-map', '1:a',

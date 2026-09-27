@@ -1,7 +1,7 @@
 # Storyboard – « La chaux, le souffle du vieux bâti »
 
 Vidéo de 60 s, 1920×1080, 24 images/s, style aquarelle et encre (p5.brush), musique originale en ré majeur à 96 BPM
-(une mesure = 2,5 s). Tous les temps viennent de [`site/cues.js`](site/cues.js), lu à la fois par l'atelier de rendu,
+(une mesure = 2,5 s). Tous les temps viennent de [`video-chaux/cues.js`](video-chaux/cues.js), lu à la fois par l'atelier de rendu,
 par le générateur de musique et par le lecteur interactif.
 
 **Message :** un vieux mur doit respirer. Le ciment l'étouffe, la chaux le protège sans l'enfermer. Pour votre maison,

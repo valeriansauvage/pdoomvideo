@@ -7,14 +7,16 @@
   if (integre) {
     document.body.classList.add('vc-integre');
     // intégré dans une iframe : on donne sa hauteur à la page parente pour qu'elle ajuste le cadre
-    const dire = () => parent.postMessage({ videoChauxHauteur: Math.ceil(document.documentElement.scrollHeight) }, '*');
-    new ResizeObserver(dire).observe(document.body); addEventListener('load', dire);
+    // hauteur réelle du contenu (scrollHeight ne descend jamais sous la hauteur actuelle du cadre)
+    const dire = () => parent.postMessage({ videoChauxHauteur: Math.ceil(document.querySelector('.vc').getBoundingClientRect().bottom) + 4 }, '*');
+    new ResizeObserver(dire).observe(document.querySelector('.vc')); addEventListener('load', dire);
   }
 
-  // Vidéo 1080p sur grand écran, 720p sinon (plus légère sur mobile)
-  const grand = Math.min(screen.width, window.innerWidth) * (window.devicePixelRatio || 1) >= 1300;
+  // Vidéo 1080p quand le lecteur est affiché en grand (ordinateur), 720p sinon (plus légère sur mobile et tablette)
+  const grand = window.innerWidth >= 900;
   video.src = grand ? 'media/chaux-1080.mp4' : 'media/chaux-720.mp4';
-  video.addEventListener('error', () => { if (!video.src.includes('1080')) video.src = 'media/chaux-1080.mp4'; }, { once: true });
+  // si une des deux qualités manque sur le serveur, on bascule sur l'autre
+  video.addEventListener('error', () => { video.src = video.src.includes('1080') ? 'media/chaux-720.mp4' : 'media/chaux-1080.mp4'; if (started) video.play().catch(() => {}); }, { once: true });
 
   const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
   const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };

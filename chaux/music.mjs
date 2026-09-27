@@ -1,6 +1,6 @@
 // music.mjs : compose et mixe la bande-son originale de la vidéo (musique + bruitages), entièrement synthétisée.
 //   node chaux/music.mjs            → chaux/assets/musique.wav (48 kHz, stéréo, 16 bits)
-// Ré majeur, 96 BPM (une mesure = 2,5 s), calée sur les chapitres de site/cues.js :
+// Ré majeur, 96 BPM (une mesure = 2,5 s), calée sur les chapitres de video-chaux/cues.js :
 //   vieux bâti (intro douce) · mur qui respire (arpèges + shaker) · ciment (si mineur, pincé et tendu, coupure au CRAC)
 //   · chaux (lumineux, cloches, pulsation) · savoir-faire · fin (accord final qui s'éteint).
 // Aucun échantillon : cordes pincées (Karplus-Strong), nappe additive, cloches, basse, percussions et bruitages
@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CUES = createRequire(import.meta.url)(resolve(HERE, 'site/cues.js'));
+const CUES = createRequire(import.meta.url)(resolve(HERE, 'video-chaux/cues.js'));
 const SR = 48000, DUR = CUES.duree, N = SR * DUR, BEAT = 60 / CUES.bpm, BAR = BEAT * 4;
 const OUT = resolve(HERE, 'assets/musique.wav');
 
