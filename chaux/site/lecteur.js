@@ -44,9 +44,11 @@
   });
 
   // ---------- fenêtres ----------
+  const etroit = () => $('vc-ecran').clientWidth <= 560;                   // la fenêtre s'affiche alors sous la vidéo
   function montrer(layer, focusEl) {
     overlay = layer; layer.hidden = false; requestAnimationFrame(() => layer.classList.add('on'));
-    if (focusEl) setTimeout(() => focusEl.focus(), 60);
+    if (focusEl) setTimeout(() => focusEl.focus({ preventScroll: true }), 60);
+    if (etroit()) setTimeout(() => layer.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 80);
   }
   function cacher(layer) { layer.classList.remove('on'); setTimeout(() => { layer.hidden = true; }, 250); if (overlay === layer) overlay = null; }
 

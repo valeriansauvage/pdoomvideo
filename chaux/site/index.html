@@ -14,15 +14,17 @@
 <body>
 <main class="vc">
   <figure class="vc-player" id="vc-lecteur" aria-label="Vidéo interactive : la chaux, le souffle du vieux bâti">
-    <div class="vc-stage" id="vc-stage">
-      <video id="vc-video" preload="none" playsinline poster="media/affiche.jpg" aria-describedby="vc-texte"></video>
+    <div class="vc-ecran" id="vc-ecran">
+      <div class="vc-stage" id="vc-stage">
+        <video id="vc-video" preload="none" playsinline poster="media/affiche.jpg" aria-describedby="vc-texte"></video>
 
-      <button class="vc-start" id="vc-start" type="button" aria-label="Lancer la vidéo (1 minute)">
-        <span class="vc-play-big" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg></span>
-        <span class="vc-start-sous">Vidéo interactive · 1 minute · avec le son</span>
-      </button>
+        <button class="vc-start" id="vc-start" type="button" aria-label="Lancer la vidéo (1 minute)">
+          <span class="vc-play-big" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg></span>
+          <span class="vc-start-sous">Vidéo interactive · 1 minute · avec le son</span>
+        </button>
 
-      <div id="vc-hotspots"></div>
+        <div id="vc-hotspots"></div>
+      </div>
 
       <div class="vc-layer" id="vc-fiche" hidden role="dialog" aria-modal="true" aria-labelledby="vc-fiche-titre">
         <div class="vc-box">

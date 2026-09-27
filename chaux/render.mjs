@@ -46,8 +46,8 @@ if (args.encode) {
   console.log(`encodage de ${n} images`);
   const common = ['-y', '-loglevel', 'error', '-stats', '-framerate', String(fps), '-i', `${FRAMES_DIR}/f%05d.jpg`, '-i', MUSIC, '-map', '0:v', '-map', '1:a',
     '-c:v', 'libx264', '-preset', 'slow', '-tune', 'animation', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', '-shortest'];
-  await run('ffmpeg', [...common, '-crf', args.crf || '24', '-maxrate', '5M', '-bufsize', '10M', join(media, 'chaux-1080.mp4')]);
-  await run('ffmpeg', [...common, '-vf', 'scale=1280:720:flags=lanczos', '-crf', '25', '-maxrate', '2500k', '-bufsize', '5M', join(media, 'chaux-720.mp4')]);
+  await run('ffmpeg', [...common, '-crf', args.crf || '26', '-maxrate', '4M', '-bufsize', '8M', join(media, 'chaux-1080.mp4')]);
+  await run('ffmpeg', [...common, '-vf', 'scale=1280:720:flags=lanczos', '-crf', '27', '-maxrate', '2M', '-bufsize', '4M', join(media, 'chaux-720.mp4')]);
   const poster = args.poster || '2.9';                                   // le titre est peint dans le ciel
   await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${FRAMES_DIR}/f${String(Math.round(+poster * fps)).padStart(5, '0')}.jpg`, '-vf', 'scale=1280:720:flags=lanczos', '-q:v', '4', join(media, 'affiche.jpg')]);
   console.log('écrit dans ' + media);

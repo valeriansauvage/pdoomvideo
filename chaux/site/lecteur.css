@@ -26,13 +26,15 @@ body { padding: clamp(0px, 2vw, 24px) 16px 24px; }
 body.vc-integre { padding: 0; background: transparent; }
 
 .vc { max-width: 1120px; margin: 0 auto; }
-.vc-player { margin: 0; background: var(--vc-carte); border-radius: var(--vc-rayon); box-shadow: 0 18px 50px -24px rgba(60, 40, 20, .45), 0 0 0 1px var(--vc-ligne); overflow: hidden; }
+.vc-player { container: lecteur / inline-size; margin: 0; background: var(--vc-carte); border-radius: var(--vc-rayon); box-shadow: 0 18px 50px -24px rgba(60, 40, 20, .45), 0 0 0 1px var(--vc-ligne); overflow: hidden; }
 .vc-player:fullscreen { display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--vc-carte); border-radius: 0; }
-.vc-player:fullscreen .vc-stage { width: min(100vw, calc((100vh - 130px) * 16 / 9)); }
+.vc-player:fullscreen .vc-ecran { width: min(100vw, calc((100vh - 130px) * 16 / 9)); }
 .vc-player:fullscreen .vc-controls, .vc-player:fullscreen .vc-chapters { width: min(100vw, calc((100vh - 130px) * 16 / 9)); }
 
 /* ---------- scène ---------- */
-.vc-stage { position: relative; aspect-ratio: 16 / 9; background: var(--vc-fond); overflow: hidden; container-type: inline-size; }
+/* .vc-ecran regroupe la vidéo et les fenêtres posées dessus (fiche, quiz, boutons de fin) */
+.vc-ecran { position: relative; container-type: inline-size; }
+.vc-stage { position: relative; aspect-ratio: 16 / 9; background: var(--vc-fond); overflow: hidden; }
 .vc-stage video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: contain; background: var(--vc-fond); cursor: pointer; }
 
 /* écran d'accueil */
@@ -77,7 +79,7 @@ body.vc-integre { padding: 0; background: transparent; }
 .vc-choix { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 6px; }
 .vc-choix button { display: grid; justify-items: center; gap: 8px; border: 2px solid var(--vc-ligne); border-radius: 14px; background: #fff; padding: 14px 10px; cursor: pointer; font: 800 clamp(14px, 1.7cqi, 17px)/1.2 var(--vc-texte); color: var(--vc-encre); transition: border-color .2s, transform .15s; }
 .vc-choix button:hover { border-color: var(--vc-accent); transform: translateY(-2px); }
-.vc-choix svg { width: clamp(38px, 6cqi, 60px); height: auto; }
+.vc-choix svg { width: clamp(44px, 7cqi, 64px); height: auto; }
 .vc-choix button.bon { border-color: #6E9F58; background: #F1F7EC; }
 .vc-choix button.faux { border-color: #C0643F; background: #FBEFE9; }
 .vc-retour { min-height: 1.5em; margin: 12px 0 0 !important; font-weight: 800; color: var(--vc-accent-fonce) !important; }
@@ -94,6 +96,7 @@ body.vc-integre { padding: 0; background: transparent; }
 .vc-ic { width: 40px; height: 40px; flex: none; border: 0; border-radius: 50%; background: transparent; color: var(--vc-encre); display: grid; place-items: center; cursor: pointer; }
 .vc-ic:hover { background: var(--vc-fond); }
 .vc-ic svg { width: 22px; height: 22px; fill: currentColor; }
+.vc-ic svg[hidden] { display: none; }
 .vc-time { font: 700 13px/1 var(--vc-texte); font-variant-numeric: tabular-nums; color: var(--vc-doux); min-width: 76px; text-align: center; }
 .vc-bar { position: relative; flex: 1; height: 28px; cursor: pointer; touch-action: none; }
 .vc-seg { position: absolute; top: 11px; height: 6px; border-radius: 3px; background: var(--vc-ligne); overflow: hidden; }
@@ -119,12 +122,20 @@ body.vc-integre { padding: 0; background: transparent; }
 :focus-visible { outline: 3px solid var(--vc-eau); outline-offset: 2px; }
 .vc-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-@media (max-width: 640px) {
+/* petits écrans : la fiche, le quiz et les boutons de fin passent sous la vidéo au lieu de la couvrir */
+@container (max-width: 560px) {
   .vc-hotspot .vc-hint { display: none; }
-  .vc-choix { grid-template-columns: 1fr; }
-  .vc-end { left: 50%; transform: translate(-50%, 10px); bottom: 4%; justify-content: center; width: 94%; }
-  .vc-end.on { transform: translate(-50%, 0); }
-  .vc-end .vc-btn { min-height: 38px; padding: 8px 14px; }
+  .vc-layer { position: static; display: block; padding: 10px 12px 0; background: none; backdrop-filter: none; }
+  .vc-layer .vc-box { width: 100%; max-height: none; transform: none; box-shadow: 0 0 0 1px var(--vc-ligne); }
+  .vc-choix { grid-template-columns: 1fr 1fr; }
+  .vc-choix button { padding: 10px 6px; }
+  .vc-end { position: static; transform: none; padding: 10px 12px 0; }
+  .vc-end.on { transform: none; }
+}
+@container lecteur (max-width: 560px) {
+  .vc-controls { flex-wrap: wrap; gap: 4px 8px; padding: 8px 12px 2px; }
+  .vc-bar { order: -1; flex: 1 0 100%; }
+  .vc-time { margin-right: auto; text-align: left; }
 }
 @media (prefers-reduced-motion: reduce) {
   .vc-hotspot .vc-dot::after { animation: none; }
