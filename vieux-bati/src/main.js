@@ -46,7 +46,8 @@ function chapterCard(ctx, si, T) {
     ctx.restore();
   }
   // corner tag
-  const kt = appear(t, 2.6, .5) * (1 - appear(t, sc.end - sc.start - .6, .4));
+  const last = si === TT().scenes.length - 1, lastEnd = last ? sc.lines[sc.lines.length - 1].end - sc.start : 1e9;
+  const kt = appear(t, 2.6, .5) * (1 - appear(t, Math.min(sc.end - sc.start - .6, lastEnd + .3), .4));
   if (kt > 0) {
     ctx.save(); ctx.globalAlpha = kt; ctx.translate(lerp(-40, 0, kt), 0);
     setFont(ctx, 30, FONT.title, 600); const w = ctx.measureText(sc.title).width;
@@ -110,9 +111,11 @@ function frame(ctx, T) {
   chapterCard(ctx, si, T);
   if (!window.NO_SUBS) subtitles(ctx, T);
   // progress bar
-  const D = TT().duration;
+  const D = TT().duration, lastLine = sc[sc.length - 1].lines.slice(-1)[0];
+  ctx.globalAlpha = 1 - appear(T, lastLine.end + .3, .4);
   ctx.fillStyle = 'rgba(43,38,35,.25)'; ctx.fillRect(0, H - 8, W, 8);
   ctx.fillStyle = C.ochre; ctx.fillRect(0, H - 8, W * T / D, 8);
+  ctx.globalAlpha = 1;
   ctx.restore();
 }
 
