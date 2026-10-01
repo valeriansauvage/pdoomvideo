@@ -1,13 +1,13 @@
 // render.mjs : rend les plans FRONTIS dans Chromium sans fenêtre, puis les encode avec ffmpeg.
 //   node frontis/render.mjs --sheet --plan=intro --times=0.4,0.9,1.4 [--mode=plein] [--cols=3] [--cell=640] --out=frontis/out/check/a.jpg
 //   node frontis/render.mjs --frames --plan=intro --mode=plein [--w=3840] [--workers=4]    images PNG → frontis/out/frames/
-//   node frontis/render.mjs --encode --plan=intro [--w=3840]        ProRes 4K et 1080p (fond plein et transparent) + MP4
+//   node frontis/render.mjs --encode --plan=intro [--w=3840]        fichiers des vidéastes (4K et 1080p) + aperçu MP4
 //   node frontis/render.mjs --apercu --teaser=<vidéo du film> [--debut=3.0] [--duree=2.9] [--crop=w:h:x:y]
 //        montage d'essai : ouverture → fondu enchaîné → extrait du film → fondu enchaîné → fin
 // Chrome : --chrome=<chemin> ou variable CHROME si aucun des emplacements habituels ne convient.
 import puppeteer from 'puppeteer-core';
 import { spawn } from 'node:child_process';
-import { mkdirSync, writeFileSync, existsSync, statSync, renameSync, readdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync, existsSync, statSync, renameSync, readdirSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
@@ -18,14 +18,16 @@ const NOMS = { intro: 'OUVERTURE', fin: 'FIN' };
 const LIVRAISON = join(ICI, 'out', 'livraison');
 const framesDir = (plan, mode, w) => join(ICI, 'out', 'frames', `${plan}_${mode}_${w}`);
 
-const run = (cmd, a) => new Promise((ok, bad) => { const p = spawn(cmd, a, { stdio: 'inherit' }); p.on('close', c => (c ? bad(new Error(`${cmd} a échoué (${c})`)) : ok())); });
+const run = (cmd, a, cwd) => new Promise((ok, bad) => { const p = spawn(cmd, a, { stdio: 'inherit', cwd }); p.on('error', bad); p.on('close', c => (c ? bad(new Error(`${cmd} a échoué (${c})`)) : ok())); });
 
 // ---------- encodage ----------
 // RVB → YUV en BT.709 et plage vidéo, pour que le vert et l'orange de la charte arrivent justes dans le montage.
 const COULEUR = ['-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv'];
 const echelle = (w, fmt) => `scale=${w}:-2:flags=lanczos+accurate_rnd+full_chroma_int:out_color_matrix=bt709:out_range=tv,format=${fmt}`;
-const PRORES_422HQ = ['-c:v', 'prores_ks', '-profile:v', '3', '-vendor', 'apl0'];
-const PRORES_4444 = ['-c:v', 'prores_ks', '-profile:v', '4', '-vendor', 'apl0', '-alpha_bits', '16'];
+// ProRes à qualité fixe : à débit nominal, il gaspille des centaines de Mo sur ces aplats. À q 8, l'écart reste d'un
+// demi-décibel (invisible) et chaque fichier passe sous 30 Mo, la limite d'envoi.
+const PRORES_422HQ = ['-c:v', 'prores_ks', '-profile:v', '3', '-vendor', 'apl0', '-qscale:v', '8'];
+const PRORES_4444 = ['-c:v', 'prores_ks', '-profile:v', '4', '-vendor', 'apl0', '-alpha_bits', '16', '-qscale:v', '8'];
 
 async function encoder(plan) {
   mkdirSync(LIVRAISON, { recursive: true });
@@ -35,9 +37,21 @@ async function encoder(plan) {
     const base = join(LIVRAISON, `FRONTIS_${nom}_${res}`);
     console.log(`→ ${base}_…`);
     await run('ffmpeg', ['-y', '-loglevel', 'error', ...src('plein'), '-vf', echelle(w, 'yuv422p10le'), ...PRORES_422HQ, ...COULEUR, `${base}_fond-plein_ProRes422HQ.mov`]);
-    await run('ffmpeg', ['-y', '-loglevel', 'error', ...src('alpha'), '-vf', echelle(w, 'yuva444p10le'), ...PRORES_4444, ...COULEUR, `${base}_fond-transparent_ProRes4444.mov`]);
-    if (w === 1920) await run('ffmpeg', ['-y', '-loglevel', 'error', ...src('plein'), '-vf', echelle(w, 'yuv420p'), '-c:v', 'libx264', '-preset', 'slow', '-crf', '14', ...COULEUR, '-movflags', '+faststart', `${base}_apercu.mp4`]);
+    if (w === 1920) {
+      await run('ffmpeg', ['-y', '-loglevel', 'error', ...src('alpha'), '-vf', echelle(w, 'yuva444p10le'), ...PRORES_4444, ...COULEUR, `${base}_fond-transparent_ProRes4444.mov`]);
+      await run('ffmpeg', ['-y', '-loglevel', 'error', ...src('plein'), '-vf', echelle(w, 'yuv420p'), '-c:v', 'libx264', '-preset', 'slow', '-crf', '14', ...COULEUR, '-movflags', '+faststart', `${base}_apercu.mp4`]);
+    } else await sequencePng(nom, res, src('alpha'));
   }
+}
+
+// En 4K, le ProRes 4444 ne descend pas sous 30 Mo : la version transparente part en séquence PNG sans perte, zippée.
+async function sequencePng(nom, res, entree) {
+  const dossier = `FRONTIS_${nom}_${res}_fond-transparent_PNG`, chemin = join(LIVRAISON, dossier);
+  rmSync(chemin, { recursive: true, force: true }); mkdirSync(chemin);
+  await run('ffmpeg', ['-y', '-loglevel', 'error', ...entree, '-c:v', 'png', '-pred', 'mixed', '-compression_level', '9', '-start_number', '0', join(chemin, `FRONTIS_${nom}_%04d.png`)]);
+  rmSync(`${chemin}.zip`, { force: true });
+  try { await run('zip', ['-q', '-r', '-0', `${dossier}.zip`, dossier], LIVRAISON); rmSync(chemin, { recursive: true }); }
+  catch { console.log(`  zip indisponible : la séquence reste dans ${chemin}`); }
 }
 
 // Montage d'essai pour juger les fondus : ouverture → extrait du film → fin (fondus enchaînés de 0,6 s).
