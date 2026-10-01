@@ -21,6 +21,16 @@ function pill(ctx, s, x, y, o = {}) {
   ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(s, iw / 2, size * .05);
   ctx.restore();
 }
+function chemPill(ctx, s, x, y, o = {}) {
+  const { k = 1, size = 30, bg = C.paper, color = C.ink, border = C.ink, pad = 18 } = o;
+  if (k <= 0) return;
+  ctx.save(); ctx.globalAlpha *= clamp(k * 3); ctx.translate(x, y); const sc = easeOutBack(clamp(k)); ctx.scale(sc, sc);
+  const tw = chem(ctx, s, 0, 0, { size, measure: true }), w = tw + pad * 2, h = size * 1.45;
+  fillRR(ctx, -w / 2 + 5, -h / 2 + 7, w, h, h / 2, 'rgba(0,0,0,.15)');
+  fillRR(ctx, -w / 2, -h / 2, w, h, h / 2, bg, border, 4);
+  chem(ctx, s, 0, -size * .02, { size, color, weight: 600 });
+  ctx.restore();
+}
 function callout(ctx, s, x, y, tx, ty, k, o = {}) {
   if (k <= 0) return;
   ctx.save(); ctx.globalAlpha *= (o.alpha ?? 1) * clamp(k * 2);
@@ -106,13 +116,13 @@ const roughTex = (w, h, base, n, rmin, rmax, seed) => cached(`chx_rough|${w}|${h
 });
 
 // ------------------------------------------------------------------ cycle geometry
-const CY = { x: 800, y: 490, rx: 480, ry: 262 };
+const CY = { x: 830, y: 505, rx: 500, ry: 275 };
 const ell = a => [CY.x + CY.rx * Math.cos(a), CY.y + CY.ry * Math.sin(a)];
 const dsda = a => Math.hypot(CY.rx * Math.sin(a), CY.ry * Math.cos(a));
 const gap = (a, px) => px / dsda(a);
 const P = Math.PI;
 const A_S1 = -P / 2, A_K = -P / 4, A_S2 = 0, A_W = P / 4, A_S3 = P / 2, A_T = 3 * P / 4, A_S4 = P, A_C = 5 * P / 4, A_S1b = 3 * P / 2;
-const MR = 92;  // medallion radius
+const MR = 98;  // medallion radius
 function ellArc(ctx, a0, a1, k, color = C.ochre) {
   if (k <= 0) return;
   const n = 48, ae = a0 + (a1 - a0) * clamp(k), dir0 = Math.sign(a1 - a0);
@@ -211,7 +221,6 @@ function bucket(ctx, x, gy, k, t) {
   if (k <= 0) return;
   ctx.save(); ctx.translate(x, gy); const sc = easeOutBack(clamp(k)); ctx.scale(sc, sc); ctx.globalAlpha *= clamp(k * 3);
   ellipse(ctx, 0, 4, 90, 12, 'rgba(0,0,0,.18)');
-  trowelShape(ctx, 20, -150, .35 + Math.sin(t * 1.5) * .03, .9, 0);
   poly(ctx, [[-74, -120], [74, -120], [60, 0], [-60, 0]], '#7D8C96', C.ink, 5);
   line(ctx, -70, -86, 70, -86, 'rgba(0,0,0,.18)', 4); line(ctx, -66, -40, 66, -40, 'rgba(0,0,0,.18)', 4);
   ellipse(ctx, 0, -120, 74, 18, '#5E6C75', C.ink, 4);
@@ -246,7 +255,6 @@ function oldWall(ctx, t) {
   ctx.fillStyle = 'rgba(0,0,0,.15)'; ctx.save(); ctx.translate(10, 10); ctx.fill(); ctx.restore();
   ctx.save(); ctx.clip();
   ctx.drawImage(stoneTexture(560, 560, 33, { size: 74 }), x0, 300);
-  ctx.drawImage(limeTexture(560, 560, '#EADFC8', 12, .6), 0, 0, 1, 1, 0, 0, 0, 0);
   const r = rng(91);
   for (let i = 0; i < 5; i++) { const bx = x0 + 60 + r() * 420, by = 430 + r() * 340; blob(ctx, bx, by, 40 + r() * 50, i + 20, .35, 11, '#E9DECA', 'rgba(120,100,70,.5)', 3); }
   ctx.restore();
@@ -309,7 +317,7 @@ scene('chaux', (ctx, S) => {
   const t = S.t;
   const at = (i, f = 0) => S.cue(i) + f * (S.cueEnd(i) - S.cue(i));
   const tB = at(1, .12) - .2, tC = at(5) - .4, tD = at(8) - .4;
-  const kAB = smooth(inv(tB - .3, tB + .3, t)), kBC = ease(inv(tC, tC + .7, t)), kCD = ease(inv(tD, tD + .7, t));
+  const kAB = smooth(inv(tB - .3, tB + .3, t)), kBC = ease(inv(tC, tC + .7, t)), kBout = smooth(inv(tC - .15, tC + .3, t)), kCD = ease(inv(tD, tD + .7, t));
   const cam = fn => {
     ctx.save();
     const cs = 1.014 + .006 * Math.sin(t * .19), dx = Math.sin(t * .16) * 7, dy = Math.cos(t * .12) * 4;
@@ -321,7 +329,7 @@ scene('chaux', (ctx, S) => {
   // ---------------------------------------------------------------- A: the question, then lime
   if (kAB < 1) { ctx.save(); ctx.globalAlpha *= 1 - kAB; cam(() => { ctx.translate(-kAB * 140, 0); shotA(ctx, t, S, at); }); ctx.restore(); }
   // ---------------------------------------------------------------- B: lime cycle
-  if (kAB > 0 && kBC < 1) { ctx.save(); ctx.globalAlpha *= kAB * (1 - kBC); cam(() => { const s0 = lerp(1.05, 1, easeOut(kAB)) * lerp(1, .92, kBC); ctx.translate(CY.x, CY.y); ctx.scale(s0, s0); ctx.translate(-CY.x, -CY.y); shotB(ctx, t, S, at); }); ctx.restore(); }
+  if (kAB > 0 && kBout < 1) { ctx.save(); ctx.globalAlpha *= kAB * (1 - kBout); cam(() => { const s0 = lerp(1.05, 1, easeOut(kAB)) * lerp(1, .92, kBC); ctx.translate(CY.x, CY.y); ctx.scale(s0, s0); ctx.translate(-CY.x, -CY.y); shotB(ctx, t, S, at); }); ctx.restore(); }
   // ---------------------------------------------------------------- C: three properties
   if (kBC > 0 && kCD < 1) { ctx.save(); ctx.globalAlpha *= kBC; cam(() => { ctx.translate(-kCD * W * .6, 0); shotC(ctx, t, S, at, kBC); }); ctx.restore(); }
   // ---------------------------------------------------------------- D: three coats
@@ -339,7 +347,7 @@ scene('chaux', (ctx, S) => {
   cam(() => {
     if (t < tD) {
       const kOut = easeIn(inv(tD - .5, tD - .05, t));
-      const x = lerp(lerp(1500, 1700, ease(kAB)), 1775, ease(kBC)), s = lerp(lerp(.95, .8, ease(kAB)), .72, ease(kBC));
+      const x = lerp(lerp(1500, 1760, ease(kAB)), 1775, ease(kBC)), s = lerp(lerp(.95, .8, ease(kAB)), .72, ease(kBC));
       presenter(ctx, { x: x + kOut * 560, y: 1000, s, T: S.T, pose, expr, look: -.55, lookY: t > at(1, .15) && t < at(1, .63) ? -.5 : 0 });
     } else {
       const kIn = easeOut(inv(tD + .1, tD + .75, t));
@@ -361,15 +369,15 @@ function shotA(ctx, t, S, at) {
     text(ctx, '?', 0, 6, { size: 120, font: FONT.title, weight: 700, color: C.terracotta }); ctx.restore(); }
   // centuries
   const kH = appear(t, at(0, .5), .5);
-  hourglass(ctx, 430, 205, kH, t);
-  if (kH > 0) text(ctx, 'depuis des siècles', 430, 318, { size: 44, font: FONT.hand, weight: 700, color: C.ochreDark, alpha: clamp(kH * 2) });
+  hourglass(ctx, 330, 205, kH, t);
+  if (kH > 0) { ctx.save(); ctx.globalAlpha *= clamp(kH * 2); ctx.translate(lerp(560, 600, easeOut(kH)), 205); ctx.rotate(-.04); text(ctx, 'depuis des siècles', 0, 0, { size: 58, font: FONT.hand, weight: 700, color: C.ochreDark, stroke: C.paper, sw: 10 }); ctx.restore(); }
   // lime
   const kS = appear(t, at(0, .62), .55), kBk = appear(t, at(0, .7), .55), kG = appear(t, at(0, .89), .6) * (.75 + .25 * Math.sin(t * 5));
   sack(ctx, 930, gy, kS, kG, t);
   bucket(ctx, 1150, gy, kBk, t);
   const kT = appear(t, at(0, .89), .5);
-  pill(ctx, 'La chaux', 1030, 470, { k: kT, size: 60, color: '#FFFFFF', bg: C.ochre, border: C.ink });
-  for (let i = 0; i < 6; i++) { const p = (t * .8 + i / 6) % 1; sparkle(ctx, 1030 + Math.cos(i * 1.05) * (150 + p * 40), 600 + Math.sin(i * 1.05) * (110 + p * 30), 14 * Math.sin(p * Math.PI), kT * Math.sin(p * Math.PI)); }
+  pill(ctx, 'La chaux', 1040, 470, { k: kT, size: 66, color: '#FFFFFF', bg: C.ochre, border: C.ink });
+  for (let i = 0; i < 7; i++) { const p = (t * .8 + i / 7) % 1, a = -Math.PI * (.05 + .9 * i / 6); sparkle(ctx, 1040 + Math.cos(a) * (230 + p * 30), 760 + Math.sin(a) * (175 + p * 20), 16 * Math.sin(p * Math.PI), kT * Math.sin(p * Math.PI)); }
 }
 
 // ================================================================== B: the lime cycle
@@ -402,26 +410,29 @@ function shotB(ctx, t, S, at) {
   }
   // agents on the arcs
   const heat = .55 + .45 * appear(t, tTemp, .6);
-  kiln(ctx, K[0], K[1] - 6, appear(t, tK, .55), heat, t);
-  thermo(ctx, K[0] + 108, K[1] - 34, appear(t, tTemp, .5), lerp(.3, .95, appear(t, tTemp, 1.2)), t);
-  pill(ctx, '~900 °C', K[0] + 112, K[1] + 58, { k: appear(t, tTemp + .1, .5), size: 34, color: '#FFFFFF', bg: C.danger, border: C.ink });
-  pill(ctx, 'four', K[0] - 6, K[1] - 116, { k: appear(t, tK + .2, .5), size: 28 });
+  ctx.save(); ctx.translate(K[0], K[1] - 4); ctx.scale(1.22, 1.22); kiln(ctx, 0, 0, appear(t, tK, .55), heat, t); ctx.restore();
+  thermo(ctx, K[0] + 106, K[1] - 36, appear(t, tTemp, .5), lerp(.3, .95, appear(t, tTemp, 1.2)), t);
+  pill(ctx, '~900 °C', K[0] + 210, K[1] - 40, { k: appear(t, tTemp + .1, .5), size: 34, color: '#FFFFFF', bg: C.danger, border: C.ink });
+  pill(ctx, 'four', K[0] - 8, K[1] + 112, { k: appear(t, tK + .2, .5), size: 30 });
   waterPour(ctx, Wt[0] + 6, Wt[1] + 8, appear(t, tW, .55), t);
   pill(ctx, '+ eau', Wt[0] + 116, Wt[1] + 10, { k: appear(t, tW + .15, .5), size: 32, color: '#FFFFFF', bg: C.water, border: C.ink });
   // trowel spreading
   const kTr = appear(t, tT, .5);
-  if (kTr > 0) { ctx.save(); ctx.globalAlpha *= clamp(kTr * 3); const sw = Math.sin((t - tT) * 3.2); trowelShape(ctx, T[0] + sw * 16, T[1] + 6, -.5 + sw * .12, .85 * easeOutBack(kTr), 1); ctx.restore(); }
-  // CO₂ of the air, drifting towards the wall
+  if (kTr > 0) { ctx.save(); ctx.globalAlpha *= clamp(kTr * 3); const sw = Math.sin((t - tT) * 3.2); trowelShape(ctx, T[0] + 6 + sw * 14, T[1] + 22, .5 + sw * .1, .9 * easeOutBack(kTr), 1); ctx.restore(); }
+  // CO₂ of the air: a few molecules float in the air, a steady stream dives into the render on the wall
   const kC = appear(t, tCO2, .6);
   if (kC > 0) {
-    for (let i = 0; i < 7; i++) {
-      const ph = hash(i * 3.7) * TAU, rr = 30 + hash(i * 1.9) * 58;
-      const sx = Cc[0] + Math.cos(ph + t * .5) * rr, sy = Cc[1] + Math.sin(ph + t * .45) * rr * .6;
-      const pull = clamp((t - tCO2 - .6 - i * .25) / 1.6), px = lerp(sx, S4[0] + 50, easeIn(pull)), py = lerp(sy, S4[1] - 30 + (i - 3) * 12, easeIn(pull));
-      const cyc = ((t - tCO2) * .5 + i / 7) % 1;
-      co2(ctx, pull < 1 ? px : lerp(Cc[0] - 60 + i * 18, S4[0] + 50, cyc), pull < 1 ? py : lerp(Cc[1] - 40, S4[1] - 40 + i * 10, cyc), .9, Math.sin(t * 1.3 + i) * .7, kC * (pull < 1 ? 1 : 1 - smooth((cyc - .75) / .25)));
+    const IDLE = [[-150, -20], [-70, 40], [30, -66], [96, 2], [-10, -10]];
+    IDLE.forEach(([ox, oy], i) => { const ph = i * 1.7; co2(ctx, Cc[0] + ox + Math.sin(t * .8 + ph) * 14, Cc[1] + oy + Math.cos(t * .7 + ph) * 10, .95, Math.sin(t * .9 + ph) * .8, kC * appear(t, tCO2 + i * .12, .4)); });
+    const dt = .45, life = 2.3, j1 = Math.floor((t - tCO2) / dt);
+    for (let j = Math.max(0, j1 - 8); j <= j1; j++) {
+      const tj = tCO2 + j * dt, a = t - tj; if (a < 0 || a > life) continue;
+      const u = a / life, r1 = hash(j * 2.7 + 3), r2 = hash(j * 5.1 + 1);
+      const sx = Cc[0] - 150 + r1 * 250, sy = Cc[1] - 70 + r2 * 110, ex = S4[0] + 34, ey = S4[1] - 40 + r1 * 60;
+      const v = easeIn(u), x = lerp(sx, ex, v) + Math.sin(a * 3 + j) * 8 * (1 - v), y = lerp(sy, ey, v);
+      co2(ctx, x, y, lerp(.9, .6, v), a * 2 + j, kC * clamp(a / .25) * (1 - smooth((u - .82) / .18)));
     }
-    pill(ctx, 'CO₂ de l’air', Cc[0] - 70, Cc[1] - 98, { k: appear(t, tCO2 + .3, .5), size: 30, color: '#FFFFFF', bg: '#4A4A50', border: C.ink });
+    chemPill(ctx, 'CO₂ de l\u2019air', Cc[0] - 60, Cc[1] - 104, { k: appear(t, tCO2 + .3, .5), size: 32, color: '#FFFFFF', bg: '#4A4A50', border: C.ink });
   }
   // stations
   const glow1 = appear(t, tClose + .6, .5) * (1 - appear(t, tCarb + 1.5, .8));
@@ -433,29 +444,29 @@ function shotB(ctx, t, S, at) {
     wallBit(ctx, -14, -16, .9, t, appear(t, tS4 + .2, 1.2), kCarb, appear(t, tCO2 + .5, .5), tCO2 + .5);
     chem(ctx, 'Ca(OH)₂', 0, 58, { size: 26, color: C.ochreDark, alpha: 1 - kCarb }); chem(ctx, 'CaCO₃', 0, 58, { size: 28, color: C.good, alpha: kCarb });
   });
-  pill(ctx, 'Calcaire', S1[0], S1[1] - MR - 26, { k: appear(t, tS1 + .2, .5), size: 34 });
-  pill(ctx, 'Chaux vive', S2[0] + MR + 102, S2[1], { k: appear(t, tS2 + .2, .5), size: 32 });
-  pill(ctx, 'Chaux éteinte', S3[0] + MR + 130, S3[1] + 40, { k: appear(t, tS3 + .2, .5), size: 32 });
-  pill(ctx, 'Sur le mur', S4[0], S4[1] + MR + 30, { k: appear(t, tS4 + .2, .5), size: 30 });
+  pill(ctx, 'Calcaire', S1[0], S1[1] - MR - 27, { k: appear(t, tS1 + .2, .5), size: 34 });
+  pill(ctx, 'Chaux vive', S2[0] + MR + 104, S2[1] - 62, { k: appear(t, tS2 + .2, .5), size: 32 });
+  pill(ctx, 'Chaux éteinte', S3[0] + MR + 132, S3[1] + 40, { k: appear(t, tS3 + .2, .5), size: 32 });
+  pill(ctx, 'Sur le mur', S4[0] - MR - 88, S4[1], { k: appear(t, tS4 + .2, .5), size: 30 });
   // centre: carbonatation → « = de la pierre ! » → façade
   const kFo = appear(t, tCarb, .6) * (1 - appear(t, tFac - .2, .5));
   if (kFo > 0) {
-    pill(ctx, 'Carbonatation', CY.x, CY.y - 78, { k: kFo, size: 40, color: '#FFFFFF', bg: C.good, border: C.ink });
-    ctx.save(); ctx.globalAlpha *= clamp(kFo * 2); const sc = lerp(.8, 1, easeOutBack(kFo)); ctx.translate(CY.x, CY.y + 4); ctx.scale(sc, sc);
+    pill(ctx, 'Carbonatation', CY.x, CY.y - 84, { k: kFo, size: 42, color: '#FFFFFF', bg: C.good, border: C.ink });
+    ctx.save(); ctx.globalAlpha *= clamp(kFo * 2); const sc = lerp(.8, 1, easeOutBack(kFo)); ctx.translate(CY.x, CY.y + 2); ctx.scale(sc, sc);
     chem(ctx, [['Ca(OH)₂', C.ink], [' + ', C.ink], ['CO₂', '#4A4A50'], [' → ', C.ink], ['CaCO₃', C.good], [' + H₂O', C.water]], 0, 0, { size: 42 });
     ctx.restore();
   }
   const kP = appear(t, tStone, .5);
   if (kP > 0) {
-    const y = lerp(CY.y + 92, CY.y + 100, appear(t, tFac, .5));
+    const y = lerp(CY.y + 94, CY.y + 110, appear(t, tFac, .5));
     ctx.save(); ctx.translate(CY.x, y); const sc = easeOutBack(kP) * (1 + .03 * Math.sin(t * 4)); ctx.scale(sc, sc); ctx.globalAlpha *= clamp(kP * 3);
     text(ctx, '= de la pierre !', 0, 0, { size: 66, font: FONT.title, weight: 700, color: C.ochreDark, stroke: '#FFFDF8', sw: 14 });
     ctx.restore();
   }
   const kH = appear(t, tFac, .6);
   if (kH > 0) {
-    ctx.save(); ctx.globalAlpha *= clamp(kH * 3); ctx.translate(CY.x, CY.y + 24); const sc = easeOutBack(kH); ctx.scale(sc, sc); ctx.translate(-CY.x, -(CY.y + 24));
-    house(ctx, CY.x, CY.y + 24, 230, { finish: 'lime', color: '#EFE3C8', patina: .3, sparkle: 1, t, smoke: false, seed: 4 });
+    ctx.save(); ctx.globalAlpha *= clamp(kH * 3); ctx.translate(CY.x, CY.y + 46); const sc = easeOutBack(kH); ctx.scale(sc, sc); ctx.translate(-CY.x, -(CY.y + 46));
+    house(ctx, CY.x, CY.y + 46, 200, { finish: 'lime', color: '#EFE3C8', patina: .3, sparkle: 1, t, smoke: false, seed: 4 });
     ctx.restore();
   }
 }
@@ -488,7 +499,7 @@ function bendStrip(ctx, x0, y0, w, h, dy, tex) {
 }
 function cardFlex(ctx, t, at) {
   const x0 = CARD_X[0] + 50, w = 390, tex = stoneTexture(390, 86, 61, { size: 40 });
-  const tMove = at(5, .25), amp = 13 * appear(t, tMove, .8), ph = (t - tMove) * 2.8;
+  const tMove = at(5, .25), amp = 16 * appear(t, tMove, .8), ph = (t - tMove) * 2.8;
   const dy = u => amp * Math.sin(ph) * Math.sin(Math.PI * u) + amp * .35 * Math.sin(ph * 1.3 + 1) * Math.sin(2 * Math.PI * u);
   const kCr = appear(t, at(5, .55), 1.2), kV1 = appear(t, at(5, .82), .5), kV2 = appear(t, at(5, .82) + .25, .5);
   const strips = [[CARD_Y + 230, 'Chaux', '#F4EFE4', C.good], [CARD_Y + 470, 'Ciment', '#A9ACAE', C.danger]];
@@ -527,7 +538,7 @@ function cardFlex(ctx, t, at) {
   }
 }
 function cardBreath(ctx, t, at) {
-  const cx0 = CARD_X[1], top = CARD_Y + 150, bot = CARD_Y + 600;
+  const cx0 = CARD_X[1], top = CARD_Y + 146, bot = CARD_Y + 560;
   const xs = cx0 + 150, xr = cx0 + 320, xe = cx0 + 350;  // stone 150..320, lime render 320..350
   ctx.save(); rr(ctx, cx0 + 24, top, CARD_W - 48, bot - top, 18); ctx.clip();
   ctx.fillStyle = '#F8E6CC'; ctx.fillRect(cx0, top, xs - cx0, bot - top);
@@ -562,7 +573,7 @@ function cardBreath(ctx, t, at) {
   pill(ctx, 'chaux', xr + 15, top + 26, { k: appear(t, at(6) + .2, .5), size: 22, pad: 10 });
 }
 function cardPH(ctx, t, at) {
-  const cx0 = CARD_X[2], bx = cx0 + 45, bw = CARD_W - 90, by = CARD_Y + 230, bh = 44;
+  const cx0 = CARD_X[2], bx = cx0 + 45, bw = CARD_W - 90, by = CARD_Y + 200, bh = 44;
   const kBar = appear(t, at(7) + .1, .6);
   if (kBar > 0) {
     ctx.save(); ctx.globalAlpha *= kBar;
@@ -571,37 +582,40 @@ function cardPH(ctx, t, at) {
     fillRR(ctx, bx + 4, by + 6, bw, bh, bh / 2, 'rgba(0,0,0,.15)');
     fillRR(ctx, bx, by, bw, bh, bh / 2, g, C.ink, 4);
     for (const v of [0, 7, 14]) { const x = bx + 14 + v / 14 * (bw - 28); line(ctx, x, by + bh, x, by + bh + 12, C.ink, 3); text(ctx, String(v), x, by + bh + 34, { size: 28, font: FONT.title, weight: 600 }); }
-    text(ctx, 'acide', bx + 30, by - 26, { size: 34, font: FONT.hand, weight: 700, color: C.danger });
-    text(ctx, 'neutre', bx + bw / 2, by - 26, { size: 34, font: FONT.hand, weight: 700, color: C.good });
+    text(ctx, 'acide', bx + 40, by - 26, { size: 36, font: FONT.hand, weight: 700, color: C.danger });
+    text(ctx, 'neutre', bx + bw / 2, by - 26, { size: 36, font: FONT.hand, weight: 700, color: C.good });
+    text(ctx, 'basique', bx + bw - 50, by - 26, { size: 36, font: FONT.hand, weight: 700, color: '#3E5FB0' });
     ctx.restore();
   }
   const kM = appear(t, at(7, .33), 1.1, easeOutBack), v = lerp(7, 12.5, kM), mx = bx + 14 + v / 14 * (bw - 28);
   if (kBar > 0) {
     ctx.save(); ctx.globalAlpha *= kBar;
-    poly(ctx, [[mx, by + bh + 4], [mx - 16, by + bh + 30], [mx + 16, by + bh + 30]], C.ink);
+    poly(ctx, [[mx, by + bh + 2], [mx - 17, by + bh + 30], [mx + 17, by + bh + 30]], C.ink);
     ctx.restore();
-    pill(ctx, 'pH 12-13', clamp(mx, bx + 90, bx + bw - 80), by + bh + 76, { k: appear(t, at(7, .36), .5), size: 34, color: '#FFFFFF', bg: '#3E5FB0', border: C.ink });
-    if (t > at(7, .4)) text(ctx, 'très basique', clamp(mx, bx + 90, bx + bw - 80), by + bh + 132, { size: 38, font: FONT.hand, weight: 700, color: '#3E5FB0', alpha: appear(t, at(7, .4), .5) });
+    const lx = clamp(mx, bx + 90, bx + bw - 80);
+    pill(ctx, 'pH 12-13', lx, by + bh + 78, { k: appear(t, at(7, .36), .5), size: 36, color: '#FFFFFF', bg: '#3E5FB0', border: C.ink });
+    if (t > at(7, .4)) text(ctx, 'très basique', lx, by + bh + 136, { size: 42, font: FONT.hand, weight: 700, color: '#3E5FB0', alpha: appear(t, at(7, .4), .5) });
   }
-  // lime surface + mould spore that bounces off
-  const sy = CARD_Y + 560, sx0 = cx0 + 50, sw = CARD_W - 100;
+  // lime surface + a mould spore that tries to settle and bounces off
+  const sy = CARD_Y + 566, sx0 = cx0 + 40, sw = CARD_W - 80;
   const kSurf = appear(t, at(7, .55), .5);
   if (kSurf > 0) {
     ctx.save(); ctx.globalAlpha *= kSurf;
-    ctx.drawImage(limeTexture(sw, 50, '#F1E9D8', 13), sx0, sy); ctx.strokeStyle = C.ink; ctx.lineWidth = 4; ctx.strokeRect(sx0, sy, sw, 50);
-    text(ctx, 'enduit chaux', sx0 + sw / 2, sy + 26, { size: 24, font: FONT.title, weight: 600, color: C.inkSoft });
+    ctx.drawImage(limeTexture(sw, 48, '#F1E9D8', 13), sx0, sy); ctx.strokeStyle = C.ink; ctx.lineWidth = 4; ctx.strokeRect(sx0, sy, sw, 48);
+    text(ctx, 'enduit chaux', sx0 + sw / 2, sy + 25, { size: 24, font: FONT.title, weight: 600, color: C.inkSoft });
     ctx.restore();
   }
-  const t0 = at(7, .62), tHit = at(7, .7);
+  const t0 = at(7, .62), tHit = at(7, .72);
   if (t > t0) {
+    const hx = cx0 + 175;
     let x, y, sad = 0, rot = 0;
-    if (t < tHit) { const p = easeIn(inv(t0, tHit, t)); x = lerp(cx0 + 190, cx0 + 250, p); y = lerp(CARD_Y + 420, sy - 30, p); }
-    else { const p = clamp((t - tHit) / .9); x = lerp(cx0 + 250, cx0 + 370, p); y = sy - 30 - Math.sin(p * Math.PI * .9) * 130 - p * 20; sad = clamp((t - tHit) * 3); rot = p * 1.2; }
-    if (t > tHit && t < tHit + .4) { const k = (t - tHit) / .4; for (let i = 0; i < 6; i++) { const a = Math.PI + i * Math.PI / 5; line(ctx, cx0 + 250 + Math.cos(a) * 30 * (1 + k), sy - 6 + Math.sin(a) * 20 * (1 + k), cx0 + 250 + Math.cos(a) * 50 * (1 + k), sy - 6 + Math.sin(a) * 34 * (1 + k), rgba('#F2B843', 1 - k), 5); } }
+    if (t < tHit) { const p = easeIn(inv(t0, tHit, t)); x = lerp(cx0 + 130, hx, p); y = lerp(CARD_Y + 440, sy - 30, p) + Math.sin(t * 6) * 3 * (1 - p); }
+    else { const p = easeOut(clamp((t - tHit) / .8)); x = lerp(hx, cx0 + 95, p); y = sy - 30 - Math.sin(p * Math.PI * .9) * 110 - p * 36; sad = clamp((t - tHit) * 3); rot = p * 1.2; }
+    if (t > tHit && t < tHit + .45) { const k = (t - tHit) / .45; for (let i = 0; i < 7; i++) { const a = Math.PI * (1.05 + i * .15); line(ctx, hx + Math.cos(a) * 30 * (1 + k), sy - 4 + Math.sin(a) * 22 * (1 + k), hx + Math.cos(a) * 52 * (1 + k), sy - 4 + Math.sin(a) * 38 * (1 + k), rgba('#F2B843', 1 - k), 5); } }
     spore(ctx, x, y, 30, t, sad, rot);
-    const kX = appear(t, tHit + .55, .5);
-    if (kX > 0) { ctx.save(); ctx.globalAlpha *= clamp(kX * 2); circle(ctx, x, y, 46, null, C.danger, 8); const e = easeOut(kX); line(ctx, x - 32, y - 32, lerp(x - 32, x + 32, e), lerp(y - 32, y + 32, e), C.danger, 8); ctx.restore(); }
-    pill(ctx, 'moisissures', cx0 + 150, CARD_Y + 410, { k: appear(t, t0 + .1, .5) * (1 - appear(t, tHit + 1.4, .5)), size: 26, color: C.moldDark, border: C.moldDark, bg: '#EEF2E6' });
+    const kX = appear(t, tHit + .6, .5);
+    if (kX > 0) { ctx.save(); ctx.globalAlpha *= clamp(kX * 2); circle(ctx, x, y, 48, null, C.danger, 8); const e = easeOut(kX); line(ctx, x - 33, y - 33, lerp(x - 33, x + 33, e), lerp(y - 33, y + 33, e), C.danger, 8); ctx.restore(); }
+    pill(ctx, 'moisissure', cx0 + 140, CARD_Y + 384, { k: appear(t, t0 + .05, .5), size: 26, color: C.moldDark, border: C.moldDark, bg: '#EEF2E6' });
   }
 }
 function spore(ctx, x, y, r, t, sad, rot) {
@@ -625,7 +639,7 @@ function shotD(ctx, t, S, at) {
   ];
   const desc = ['d’accroche, rugueux', 'épais, il dresse le mur', 'fine, teintée'];
   const kX = appear(t, at(8, .76), .7, ease);   // exploded view
-  const sandI = Math.floor(clamp((t - at(8, .81)) / .35, 0, 3.999)), kSand = appear(t, at(8, .81) - .1, .5);
+  const sandI = [0, 1, 2, 3, 0][Math.floor(clamp((t - at(8, .81)) / .34, 0, 4))], kSand = appear(t, at(8, .81) - .1, .5);
   const sandCol = t > at(8, .81) ? SANDS[sandI][1] : null;
   // header
   pill(ctx, '3 couches', 1000, 128, { k: appear(t, at(8, .15), .5), size: 44, color: '#FFFFFF', bg: C.ochre, border: C.ink });
@@ -652,8 +666,8 @@ function shotD(ctx, t, S, at) {
     ctx.restore();
     // trowel sweeping down the fresh coat
     const kTr = clamp((t - ta) / .95) * (1 - appear(t, ta + .95, .3));
-    if (kTr > 0 && kA < 1) trowelShape(ctx, xx + w + 34, yb - 10, -Math.PI / 2 + .25 + Math.sin(t * 10) * .04, .95, .6);
-    else if (kTr > 0) { ctx.save(); ctx.globalAlpha *= kTr; trowelShape(ctx, xx + w + 34 + (1 - kTr) * 60, bot - 10 - (1 - kTr) * 80, -Math.PI / 2 + .25, .95, 0); ctx.restore(); }
+    if (kTr > 0 && kA < 1) trowelShape(ctx, xx + w + 3, yb - 30, Math.PI / 2 - .18 + Math.sin(t * 10) * .04, .95, .6);
+    else if (kTr > 0) { ctx.save(); ctx.globalAlpha *= kTr; trowelShape(ctx, xx + w + 3 + (1 - kTr) * 70, bot - 30 - (1 - kTr) * 60, Math.PI / 2 - .18, .95, 0); ctx.restore(); }
     // label
     const ly = [300, 470, 640][i], lx = 1180;
     const kL = appear(t, ta + .25, .5);
@@ -662,23 +676,23 @@ function shotD(ctx, t, S, at) {
   });
   // local sands
   if (kSand > 0) {
-    text(ctx, 'sables locaux', 1395, 742, { size: 48, font: FONT.hand, weight: 700, color: C.ochreDark, alpha: clamp(kSand * 2) });
+    text(ctx, 'sables locaux', 1460, 722, { size: 54, font: FONT.hand, weight: 700, color: C.ochreDark, alpha: clamp(kSand * 2), stroke: C.paper, sw: 8 });
     SANDS.forEach(([nm, c], i) => {
-      const k = appear(t, at(8, .81) - .1 + i * .12, .45), x = 1170 + i * 150, y = 850, act = sandI === i && t > at(8, .81) ? 1 : 0;
+      const k = appear(t, at(8, .81) - .1 + i * .12, .45), x = 1250 + i * 140, y = 850, act = sandI === i && t > at(8, .81) ? 1 : 0;
       if (k <= 0) return;
       ctx.save(); ctx.translate(x, y); const sc = easeOutBack(k) * (1 + .12 * act); ctx.scale(sc, sc); ctx.globalAlpha *= clamp(k * 3);
       ellipse(ctx, 4, 4, 64, 12, 'rgba(0,0,0,.18)');
-      ctx.beginPath(); ctx.moveTo(-60, 0); ctx.quadraticCurveTo(-30, -70, 0, -72); ctx.quadraticCurveTo(30, -70, 60, 0); ctx.closePath();
-      ctx.fillStyle = c; ctx.fill(); ctx.save(); ctx.clip(); ctx.drawImage(roughTex(124, 76, c, 12, .8, 2, 50 + i), -62, -74); ctx.restore();
+      ctx.beginPath(); ctx.moveTo(-56, 0); ctx.quadraticCurveTo(-28, -64, 0, -66); ctx.quadraticCurveTo(28, -64, 56, 0); ctx.closePath();
+      ctx.fillStyle = c; ctx.fill(); ctx.save(); ctx.clip(); ctx.drawImage(roughTex(116, 70, c, 12, .8, 2, 50 + i), -58, -68); ctx.restore();
       ctx.strokeStyle = act ? C.ochreDark : C.ink; ctx.lineWidth = act ? 6 : 4; ctx.stroke();
       ctx.restore();
       text(ctx, nm, x, y + 30, { size: 30, font: FONT.title, weight: 600, alpha: clamp(k * 2) * .9 });
     });
     // dashed arrow from the active sand to the finish coat
     if (t > at(8, .81)) {
-      const x = 1170 + sandI * 150, fx = 866 + kX * 90 + 13;
+      const x = 1250 + sandI * 140, fx = 866 + kX * 90 + 13;
       ctx.save(); ctx.setLineDash([12, 10]); ctx.lineDashOffset = -t * 40;
-      arrow(ctx, x, 770, fx + 30, 700, { color: C.ochreDark, lw: 6, head: 18, curve: .25 });
+      arrow(ctx, x - 10, 772, fx + 34, 772, { color: C.ochreDark, lw: 6, head: 18, curve: .1 });
       ctx.setLineDash([]); ctx.restore();
     }
   }

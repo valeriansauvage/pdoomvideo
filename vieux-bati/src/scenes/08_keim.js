@@ -112,13 +112,13 @@
 
   // ---------- beat 0: palette → coloured façades ----------
   const KM_HOUSES = [
-    { x: 1080, col: '#86A9BD', sh: '#EFE6D2', blob: 2, seed: 3, ty: 700 },
-    { x: 660, col: '#E3B15A', sh: '#5F8FA8', blob: 1, seed: 2, ty: 690 },
-    { x: 240, col: '#D47B55', sh: '#6F8F8A', blob: 0, seed: 1, ty: 700 },
+    { x: 1095, col: '#86A9BD', sh: '#EFE6D2', blob: 2, seed: 3, ty: 715 },
+    { x: 665, col: '#E3B15A', sh: '#5F8FA8', blob: 1, seed: 2, ty: 705 },
+    { x: 235, col: '#D47B55', sh: '#6F8F8A', blob: 0, seed: 1, ty: 715 },
   ];
-  const KM_DABS = [[-210, -30], [-168, -84], [-96, -104], [-26, -86], [-200, 46]];
+  const KM_DABS = [[-210, -30], [-168, -84], [-96, -104], [-26, -86], [-200, 46]], KM_PALS = .8;
   function km_palette(c, x, y, rot, used, t) {
-    c.save(); c.translate(x, y); c.rotate(rot);
+    c.save(); c.translate(x, y); c.rotate(rot); c.scale(KM_PALS, KM_PALS);
     c.save(); c.translate(-110, -10);
     c.beginPath(); c.ellipse(0, 0, 168, 112, -.08, 0, TAU); c.moveTo(110 + 20, 10); c.arc(110, 10, 20, 0, TAU);
     ellipse(c, 8, 12, 168, 112, 'rgba(0,0,0,.18)', null, 0, -.08);
@@ -133,7 +133,7 @@
     });
     c.restore();
   }
-  function km_dabPos(hand, rot, i) { const [dx, dy] = KM_DABS[i], cs = Math.cos(rot), sn = Math.sin(rot); return [hand[0] + dx * cs - dy * sn, hand[1] + dx * sn + dy * cs]; }
+  function km_dabPos(hand, rot, i) { const dx = KM_DABS[i][0] * KM_PALS, dy = KM_DABS[i][1] * KM_PALS, cs = Math.cos(rot), sn = Math.sin(rot); return [hand[0] + dx * cs - dy * sn, hand[1] + dx * sn + dy * cs]; }
   function km_splash(c, x, y, r, col, k, seed) {
     if (k <= 0) return;
     c.save(); c.globalAlpha *= clamp(k * 4);
@@ -143,7 +143,7 @@
     c.restore();
   }
   function km_shotA(c, S, M) {
-    const t = S.t, c0 = S.cue(0), e0 = S.cueEnd(0), f = k => lerp(c0, e0, k), gy = 870, hw = 400, hh = hw * .62;
+    const t = S.t, c0 = S.cue(0), e0 = S.cueEnd(0), f = k => lerp(c0, e0, k), gy = 870, hw = 420, hh = hw * .62;
     c.save(); km_drift(c, t, 0, S.cue(1), 700, 640, .035);
     skyBg(c, t, { groundY: gy });
     ground(c, gy);
@@ -152,7 +152,7 @@
       const tl = f(.3 + i * .1) + .6, sp = easeOut(inv(tl + .05, tl + 1.1, t));
       if (sp > 0) {
         c.save(); c.beginPath(); c.rect(h.x - hw / 2, gy - hh, hw, hh); c.clip();
-        c.beginPath(); km_wob(c, h.x + 10, h.ty - 10, 330 * sp, h.seed * 5 + 1, .22, 12); c.clip();
+        c.beginPath(); km_wob(c, h.x + 10, h.ty - 10, 360 * sp, h.seed * 5 + 1, .22, 12); c.clip();
         house(c, h.x, gy, hw, { finish: 'lime', color: h.col, shutters: h.sh, t, seed: h.seed, smoke: false });
         c.restore();
       }
@@ -170,7 +170,7 @@
     });
     // texts
     const kq = appear(t, Math.max(2.75, f(.25)), .5);
-    if (kq > 0) { c.save(); c.globalAlpha = kq; c.translate(1330, 360); c.rotate(-.06); text(c, 'De la couleur ?', 0, 0, { size: 64, font: FONT.hand, weight: 700, color: C.terracotta }); c.restore(); }
+    if (kq > 0) { c.save(); c.globalAlpha = kq; c.translate(1360, 350); c.rotate(-.06); text(c, 'De la couleur ?', 0, 0, { size: 64, font: FONT.hand, weight: 700, color: C.terracotta }); c.restore(); }
     label(c, 'Peintures au silicate', 680, 175, { k: appear(t, f(.68), .6), size: 64, bg: '#FFF1DA' });
     const km2 = appear(t, f(.42), .5);
     if (km2 > 0) { c.save(); c.globalAlpha = km2; text(c, 'une solution minérale', 680, 262, { size: 56, font: FONT.hand, weight: 700, color: C.inkSoft }); c.restore(); }
@@ -278,8 +278,8 @@
     c.restore();
     km_flask(c, 1345, 860, appear(t, f(.42), .6), t, appear(t, f(.72), .8));
     c.restore();
-    label(c, 'silicate de potassium', 1345, 445, { k: appear(t, f(.52), .5), size: 42, bg: '#E6FBF6' });
-    label(c, '= verre liquide', 1345, 360, { k: appear(t, f(.74), .5), size: 46, bg: '#FFFFFF' });
+    label(c, 'silicate de potassium', 1345, 362, { k: appear(t, f(.52), .5), size: 42, bg: '#E6FBF6' });
+    label(c, '= verre liquide', 1345, 448, { k: appear(t, f(.74), .5), size: 46, bg: '#FFFFFF' });
   }
 
   // ---------- beats 2–4: side-by-side cross-sections ----------
@@ -325,13 +325,19 @@
     for (let i = N; i >= 0; i--) { const xx = lerp(x - 10, hinge, i / N); c.lineTo(xx, top(xx) + th); }
     c.closePath(); c.fillStyle = KM.paint; c.fill(); c.strokeStyle = C.ink; c.lineWidth = 4; c.lineJoin = 'round'; c.stroke();
     c.beginPath(); for (let i = 0; i <= N; i++) { const xx = lerp(x, hinge - 10, i / N); i ? c.lineTo(xx, top(xx) + 7) : c.moveTo(xx, top(xx) + 7); } c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 4; c.stroke();
-    if (st.crack > 0) { const cx0 = bx, cy0 = top(bx); c.save(); c.globalAlpha *= clamp(st.crack * 3); poly(c, [[cx0 - 26, cy0 + 4], [cx0 - 10, cy0 - 8], [cx0 + 2, cy0 + 2], [cx0 + 18, cy0 - 10], [cx0 + 30, cy0 + 2]], null, C.ink, 4); c.restore(); }
+    if (st.crack > 0) {
+      const cy0 = top(bx), k = clamp(st.crack); c.save(); c.globalAlpha *= clamp(k * 3);
+      poly(c, [[bx - 34, cy0 + 8], [bx - 16, cy0 - 2], [bx - 4, cy0 + 10], [bx + 10, cy0 - 2], [bx + 32, cy0 + 8], [bx + 14, cy0 + 16], [bx - 2, cy0 + 20], [bx - 16, cy0 + 14]], '#3A2A22', C.ink, 2);
+      c.save(); c.translate(bx + 26, cy0 + 2); c.rotate(-.7 * k); fillRR(c, 0, -12, 40, 14, 3, KM.paint, C.ink, 3); c.restore();
+      c.save(); c.translate(bx - 26, cy0 + 2); c.rotate(.6 * k); fillRR(c, -38, -12, 38, 14, 3, KM.paint, C.ink, 3); c.restore();
+      c.restore();
+    }
     // peeling flap (sticker corner)
     const L = x + w + 20 - hinge, a = -st.peel * .5;
     c.save(); c.translate(hinge, ys); c.rotate(a);
-    if (st.peel > 0) { c.save(); c.rotate(-a); c.beginPath(); c.moveTo(0, 0); c.lineTo(L * Math.cos(a), L * Math.sin(a)); c.lineTo(L, 0); c.closePath(); c.fillStyle = 'rgba(60,40,30,.18)'; c.fill(); c.restore(); }
+    if (st.peel > 0) { c.save(); c.rotate(-a); c.beginPath(); c.moveTo(0, 0); c.lineTo(L * Math.cos(a), L * Math.sin(a)); c.lineTo(L, 0); c.closePath(); c.fillStyle = 'rgba(60,40,30,.1)'; c.fill(); c.restore(); }
     fillRR(c, -2, -th, L, th, [0, 0, 10, 0], KM.paint, C.ink, 4);
-    if (st.peel > 0) fillRR(c, 0, -6, L - 6, 6, 3, '#EBC2AE');
+    if (st.peel > 0) { fillRR(c, 0, -6, L - 6, 6, 3, '#EBC2AE'); const cr = 13 * st.peel; circle(c, L - 22, -th - cr * .6, cr, KM.paint, C.ink, 3.5); circle(c, L - 22, -th - cr * .6, cr * .45, '#EBC2AE', C.ink, 2); }
     line(c, 6, -th + 7, L - 16, -th + 7, 'rgba(255,255,255,.55)', 4);
     c.restore();
     c.restore();
@@ -408,28 +414,28 @@
       label(c, 'Film : autocollant', KM_PL.x + KM_PL.w * .42, 392, { k: appear(t, f2(.3), .5), size: 40, bg: '#FFFFFF' });
       label(c, 'Fait corps avec le support', KM_PR.x + KM_PR.w / 2, 392, { k: appear(t, f2(.72), .5), size: 40, bg: '#FFFFFF' });
     } else {
-      label(c, 'la vapeur est bloquée', KM_PL.x + KM_PL.w * .42, 380, { k: appear(t, f4(.36), .5), size: 40, bg: '#FFFFFF' });
+      label(c, 'la vapeur est bloquée', KM_PL.x + KM_PL.w / 2, 744, { k: appear(t, f4(.36), .5), size: 40, bg: '#FFFFFF' });
       label(c, 'la vapeur passe', KM_PR.x + KM_PR.w / 2, 392, { k: appear(t, f4(.24), .5), size: 40, bg: '#FFFFFF' });
       km_badge(c, KM_PL.x + KM_PL.w - 40, 232, appear(t, f4(.8), .5), false, 34);
       km_badge(c, KM_PR.x + KM_PR.w - 40, 232, appear(t, f4(.3), .5), true, 34);
       const kc = appear(t, f4(.62), .5);
-      if (kc > 0) { c.save(); c.globalAlpha = kc; c.translate(KM_PL.x + KM_PL.w * .4, 600); c.rotate(-.05); text(c, 'cloque !', 0, 0, { size: 56, font: FONT.hand, weight: 700, color: C.danger, stroke: '#FFFFFF', sw: 8 }); c.restore(); }
+      if (kc > 0) { c.save(); c.globalAlpha = kc; c.translate(KM_PL.x + KM_PL.w * .4, 372); c.rotate(-.05); text(c, 'cloque !', 0, 0, { size: 60, font: FONT.hand, weight: 700, color: C.danger, stroke: '#FFFFFF', sw: 9 }); c.restore(); }
     }
   }
 
   // ---------- beat 3: silicatisation, zoomed in ----------
-  const KM_MG = (() => { const out = [], r = rng(42); let row = 0; for (let y = 470; y < 1180; y += 148, row++) for (let x = (row % 2) * 86 - 40; x < W + 120; x += 172) out.push([x + (r() - .5) * 36, y + (r() - .5) * 26, 70 + r() * 14, 100 + Math.floor(r() * 900)]); return out; })();
-  const KM_PORES = (() => { const out = []; for (let i = 0; i < KM_MG.length; i++) for (let j = i + 1; j < KM_MG.length; j++) { const A = KM_MG[i], B = KM_MG[j], d = Math.hypot(B[0] - A[0], B[1] - A[1]); if (d < A[2] + B[2] + 40) { const u = (A[2] + (d - A[2] - B[2]) / 2) / d; const px = A[0] + (B[0] - A[0]) * u, py = A[1] + (B[1] - A[1]) * u; if (py < 860 && px > 30 && px < 1540) out.push({ x: px, y: py, a: i, b: j }); } } return out; })();
-  const KM_PIG = Array.from({ length: 34 }, (_, i) => ({ x: 30 + hash(i * 5 + 1) * 1860, y: 318 + hash(i * 9 + 2) * 52, s: 9 + hash(i * 3) * 6, col: i % 3 === 0 ? KM.ochre : i % 3 === 1 ? KM.paint : '#A84A2C', pore: i < KM_PORES.length * 2 && i % 2 === 0 ? KM_PORES[(i / 2 * 7) % KM_PORES.length] : null }));
+  const KM_MG = (() => { const out = [], r = rng(42); [505, 690, 875, 1060].forEach((y, row) => { for (let x = (row % 2) * 110 - 60; x < W + 160; x += 220) out.push([x + (r() - .5) * 30, y + (r() - .5) * 24, 86 + r() * 10, 100 + Math.floor(r() * 900)]); }); return out; })();
+  const KM_PORES = (() => { const out = []; for (let i = 0; i < KM_MG.length; i++) for (let j = i + 1; j < KM_MG.length; j++) { const A = KM_MG[i], B = KM_MG[j], d = Math.hypot(B[0] - A[0], B[1] - A[1]); if (d < A[2] + B[2] + 80) { const u = (A[2] + (d - A[2] - B[2]) / 2) / d; const px = A[0] + (B[0] - A[0]) * u, py = A[1] + (B[1] - A[1]) * u; if (py < 880 && px > 20 && px < 1900 && !(px > 1560 && py > 560)) out.push({ x: px, y: py, a: i, b: j, gap: d - A[2] - B[2] }); } } return out; })();
+  const KM_PIG = (() => { const top = KM_PORES.filter(p => p.y < 760); return Array.from({ length: 44 }, (_, i) => ({ x: 20 + hash(i * 5 + 1) * 1880, y: 318 + hash(i * 9 + 2) * 50, s: 11 + hash(i * 3) * 6, col: [KM.paint, KM.ochre, '#A84A2C', KM.paint][i % 4], pore: i % 2 === 0 && i / 2 < top.length ? top[(i / 2 * 5) % top.length] : null, j: hash(i * 17) })); })();
   function km_grainImg(r, seed) {
     const s = Math.ceil(r * 2.4);
     return cached(`km_grain|${r.toFixed(1)}|${seed}`, s, s, g => {
-      const cx = s / 2, cy = s / 2; const col = ['#CBBDA5', '#BDB09C', '#D6C9B2', '#B3A58E'][seed % 4];
-      g.beginPath(); km_wob(g, cx, cy, r, seed, .1, 11);
-      const gr = g.createRadialGradient(cx - r * .35, cy - r * .4, r * .1, cx, cy, r * 1.1); gr.addColorStop(0, mixColor(col, '#FFFFFF', .35)); gr.addColorStop(1, mixColor(col, '#000000', .12));
+      const cx = s / 2, cy = s / 2; const col = ['#D3C5AC', '#C2B49E', '#DCCFB8', '#BBAA92'][seed % 4];
+      g.beginPath(); km_wob(g, cx, cy, r, seed, .09, 11);
+      const gr = g.createRadialGradient(cx - r * .35, cy - r * .4, r * .1, cx, cy, r * 1.1); gr.addColorStop(0, mixColor(col, '#FFFFFF', .4)); gr.addColorStop(1, mixColor(col, '#000000', .1));
       g.fillStyle = gr; g.fill(); g.save(); g.clip(); const R = rng(seed);
-      for (let i = 0; i < r * 1.4; i++) { g.fillStyle = R() < .5 ? 'rgba(255,255,255,.18)' : 'rgba(70,55,40,.14)'; g.fillRect(cx + (R() - .5) * 2 * r, cy + (R() - .5) * 2 * r, 2 + R() * 4, 2 + R() * 3); }
-      g.restore(); g.beginPath(); km_wob(g, cx, cy, r, seed, .1, 11); g.strokeStyle = C.ink; g.lineWidth = 4; g.stroke();
+      for (let i = 0; i < r * 1.5; i++) { g.fillStyle = R() < .5 ? 'rgba(255,255,255,.2)' : 'rgba(70,55,40,.14)'; g.fillRect(cx + (R() - .5) * 2 * r, cy + (R() - .5) * 2 * r, 2 + R() * 4, 2 + R() * 3); }
+      g.restore(); g.beginPath(); km_wob(g, cx, cy, r, seed, .09, 11); g.strokeStyle = C.ink; g.lineWidth = 4; g.stroke();
     });
   }
   function km_crystalPath(c, x, y, a, L, wd) {
@@ -438,58 +444,68 @@
   }
   function km_shotD(c, S) {
     const t = S.t, c3 = S.cue(3), e3 = S.cueEnd(3), f = k => lerp(c3, e3, k);
-    const tPen0 = c3 + .1, tPen1 = f(.33), tCry0 = f(.3), tCry1 = f(.52), tSolid = f(.66);
+    const tPen0 = c3 + .1, tPen1 = f(.34), tCry0 = f(.28), tCry1 = f(.5), tSolid = f(.64);
     const sky = c.createLinearGradient(0, 0, 0, 400); sky.addColorStop(0, '#CDE6F5'); sky.addColorStop(1, '#F3F9FC'); c.fillStyle = sky; c.fillRect(0, 0, W, H);
     c.save(); km_drift(c, t, c3 - .9, S.cue(4), 800, 520, .035);
-    // substrate background (lime binder between grains)
-    c.fillStyle = '#E8DFCF'; c.fillRect(0, 380, W, H - 380);
-    // silicate liquid filling the pores from the top
-    const pen = ease(inv(tPen0, tPen1, t)), front = 380 + pen * 560, solid = smooth(inv(tSolid, tSolid + 1.2, t));
-    const liq = mixColor('#9FE3D7', '#C7D9CF', solid);
-    c.save(); c.beginPath(); c.moveTo(0, 300); for (let i = 0; i <= 48; i++) { const x = i * W / 48; c.lineTo(x, 300); } for (let i = 48; i >= 0; i--) { const x = i * W / 48; c.lineTo(x, front + 30 * Math.sin(x * .013 + 1) + 40 * Math.pow(Math.max(0, Math.sin(x * .021)), 3)); } c.closePath();
-    c.fillStyle = liq; c.fill(); c.restore();
-    // top paint layer (liquid silicate + pigments), thinning as it soaks in
-    const layerTop = 300 + pen * 46;
-    c.fillStyle = rgba(liq, .85); c.fillRect(0, layerTop, W, 400 - layerTop);
-    c.beginPath(); c.moveTo(0, layerTop); for (let i = 0; i <= 48; i++) c.lineTo(i * W / 48, layerTop + Math.sin(t * 2 + i * .8) * 3 * (1 - solid)); c.strokeStyle = rgba(KM.glassD, .9); c.lineWidth = 4; c.stroke();
-    // crystals (bonds) — drawn below the grains so they sprout from their surfaces
-    const cg = k => easeOut(inv(lerp(tCry0, tCry1, k), lerp(tCry0, tCry1, k) + 1.1, t));
+    const pen = ease(inv(tPen0, tPen1, t)), solid = smooth(inv(tSolid, tSolid + 1.4, t));
+    const frontY = x => 380 + pen * 640 + 26 * Math.sin(x * .013 + 1) + 46 * Math.pow(Math.max(0, Math.sin(x * .021)), 3) * pen;
+    // dry pores, then the liquid silicate soaking down between the grains
+    c.fillStyle = '#EDE3D1'; c.fillRect(0, 380, W, H - 380);
+    const lg = c.createLinearGradient(0, 300, 0, 620);
+    lg.addColorStop(0, mixColor('#EDB9A1', '#E3A88D', solid)); lg.addColorStop(.3, mixColor('#C9D9C8', '#E2C3AE', solid)); lg.addColorStop(1, mixColor('#A3E4D8', '#D8E6DC', solid));
+    c.beginPath(); c.moveTo(0, 300); c.lineTo(W, 300); for (let i = 48; i >= 0; i--) { const x = i * W / 48; c.lineTo(x, frontY(x)); } c.closePath(); c.fillStyle = lg; c.fill();
+    // the paint layer on top (silicate + pigments) thins as it soaks in
+    const layerTop = lerp(300, 384, pen);
+    c.beginPath(); c.moveTo(0, layerTop); for (let i = 0; i <= 48; i++) c.lineTo(i * W / 48, layerTop + Math.sin(t * 2 + i * .8) * 3 * (1 - solid)); c.strokeStyle = rgba(KM.glassD, .9 * (1 - solid)); c.lineWidth = 4; c.stroke();
+    // grains of the mineral support
+    KM_MG.forEach(([x, y, r, seed]) => { if (y - r > H) return; const img = km_grainImg(r, seed); c.drawImage(img, x - img.width / 2, y - img.height / 2); });
+    // colour soaking into the top of the stone
+    const soak = .5 * smooth(inv(tPen0 + .4, tPen1 + .6, t));
+    if (soak > 0) {
+      c.save(); c.beginPath(); c.moveTo(0, 290); c.lineTo(W, 290); for (let i = 48; i >= 0; i--) { const x = i * W / 48; c.lineTo(x, Math.min(frontY(x), 700)); } c.closePath(); c.clip();
+      c.beginPath(); KM_MG.forEach(([x, y, r, seed]) => { if (y < 780) km_wob(c, x, y, r, seed, .09, 11); }); c.clip();
+      c.globalCompositeOperation = 'multiply'; const sg = c.createLinearGradient(0, 300, 0, 700); sg.addColorStop(0, rgba(KM.paint, soak * 1.2)); sg.addColorStop(.45, rgba(KM.paint, soak * .7)); sg.addColorStop(1, rgba(KM.paint, 0)); c.fillStyle = sg; c.fillRect(0, 290, W, 410);
+      c.restore();
+    }
+    // crystal bridges between grains (silicatisation)
+    const cg = k => easeOut(inv(lerp(tCry0, tCry1, k), lerp(tCry0, tCry1, k) + 1.2, t));
     c.beginPath(); let anyC = false;
     KM_PORES.forEach((p, i) => {
-      const g = cg(hash(i * 13) * .8); if (g <= 0) return; anyC = true;
-      for (const gi of [p.a, p.b]) { const G = KM_MG[gi], a0 = Math.atan2(p.y - G[1], p.x - G[0]); for (let j = -1; j <= 1; j++) { const a = a0 + j * .28, bx = G[0] + Math.cos(a) * G[2] * .9, by = G[1] + Math.sin(a) * G[2] * .9; const L = (Math.hypot(p.x - bx, p.y - by) + 14) * g * (.8 + .3 * hash(i + j + gi)); km_crystalPath(c, bx, by, Math.atan2(p.y - by, p.x - bx) + j * .12, L, 9); } }
+      if (p.y > frontY(p.x)) return; const g = cg(clamp((p.y - 400) / 500) * .7 + hash(i * 13) * .3); if (g <= 0) return; anyC = true;
+      for (const gi of [p.a, p.b]) {
+        const G = KM_MG[gi], a0 = Math.atan2(p.y - G[1], p.x - G[0]);
+        for (let j = -1; j <= 1; j++) { const a = a0 + j * .2, bx = G[0] + Math.cos(a) * G[2] * .97, by = G[1] + Math.sin(a) * G[2] * .97; const L = (Math.hypot(p.x - bx, p.y - by) + 10) * g * (.85 + .3 * hash(i * 3 + j + gi)); km_crystalPath(c, bx, by, Math.atan2(p.y - by, p.x - bx) + j * .1, L, 10 + 3 * hash(i + j)); }
+      }
     });
     if (anyC) { c.fillStyle = KM.cryst; c.fill(); c.strokeStyle = KM.crystLine; c.lineWidth = 2.5; c.lineJoin = 'round'; c.stroke(); }
-    // grains
-    KM_MG.forEach(([x, y, r, seed]) => { if (y - r > H) return; const img = km_grainImg(r, seed); c.drawImage(img, x - img.width / 2, y - img.height / 2); });
-    // pigments: in the top layer, some carried down into the pores
-    c.beginPath();
-    KM_PIG.forEach((p, i) => {
-      let x = p.x, y = p.y + pen * 30;
-      if (p.pore) { const k = ease(inv(lerp(tPen0, tPen1, (p.pore.y - 380) / 560) - .3, lerp(tPen0, tPen1, (p.pore.y - 380) / 560) + .5, t)); x = lerp(p.x, p.pore.x, k); y = lerp(p.y, p.pore.y, k); }
+    // pigments: in the paint layer, half of them carried down into the top pores
+    KM_PIG.forEach(p => {
+      let x = p.x, y = lerp(p.y, 372 + p.j * 16, pen);
+      if (p.pore) { const td = lerp(tPen0, tPen1, clamp((p.pore.y - 380) / 640)); const k = ease(inv(td - .5, td + .6, t)); x = lerp(p.x, p.pore.x + (p.j - .5) * 14, k); y = lerp(p.y, p.pore.y + (p.j - .5) * 10, k); }
       p.wx = x; p.wy = y;
     });
-    KM_PIG.forEach((p, i) => { c.save(); c.translate(p.wx, p.wy); c.rotate(i); c.beginPath(); km_wob(c, 0, 0, p.s, i + 7, .2, 6); c.fillStyle = p.col; c.fill(); c.strokeStyle = C.ink; c.lineWidth = 2.5; c.stroke(); c.restore(); });
-    // pigment ↔ grain bonds (small crystals around each pigment once the reaction starts)
     c.beginPath(); let anyB = false;
-    KM_PIG.forEach((p, i) => { const g = cg(.2 + hash(i * 3) * .8); if (g <= 0) return; anyB = true; for (let j = 0; j < 3; j++) { const a = j / 3 * TAU + i + Math.PI / 2; km_crystalPath(c, p.wx + Math.cos(a) * p.s * .8, p.wy + Math.sin(a) * p.s * .8, a, 16 * g, 6); } });
+    KM_PIG.forEach((p, i) => { const g = cg(.15 + p.j * .85); if (g <= 0) return; anyB = true; for (let j = 0; j < 4; j++) { const a = j / 4 * TAU + i * .7; km_crystalPath(c, p.wx + Math.cos(a) * p.s * .7, p.wy + Math.sin(a) * p.s * .7, a, 22 * g, 7); } });
     if (anyB) { c.fillStyle = KM.cryst; c.fill(); c.strokeStyle = KM.crystLine; c.lineWidth = 2; c.stroke(); }
-    // "one stone" glint sweep
-    if (solid > 0 && solid < 1) { const gx = lerp(-300, W + 300, solid); const gg = c.createLinearGradient(gx - 160, 0, gx + 160, 0); gg.addColorStop(0, 'rgba(255,255,255,0)'); gg.addColorStop(.5, 'rgba(255,255,255,.55)'); gg.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = gg; c.fillRect(gx - 160, 300, 320, H - 300); }
-    if (t > tCry1) for (let i = 0; i < 7; i++) { const q = (t * .7 + i * .29) % 1, p = KM_PORES[(i * 5) % KM_PORES.length]; km_sparkle(c, p.x, p.y, 16 * Math.sin(q * Math.PI), Math.sin(q * Math.PI)); }
+    KM_PIG.forEach((p, i) => { c.save(); c.translate(p.wx, p.wy); c.rotate(i); c.beginPath(); km_wob(c, 0, 0, p.s, i + 7, .22, 6); c.fillStyle = p.col; c.fill(); c.strokeStyle = C.ink; c.lineWidth = 3; c.stroke(); ellipse(c, -p.s * .3, -p.s * .3, p.s * .3, p.s * .2, 'rgba(255,255,255,.4)'); c.restore(); });
+    // the whole thing is now one stone: a glint sweeps across
+    if (solid > 0 && solid < 1) { const gx = lerp(-300, W + 300, solid); const gg = c.createLinearGradient(gx - 170, 0, gx + 170, 0); gg.addColorStop(0, 'rgba(255,255,255,0)'); gg.addColorStop(.5, 'rgba(255,255,255,.6)'); gg.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = gg; c.fillRect(gx - 170, 290, 340, H - 290); }
+    if (t > tCry1) for (let i = 0; i < 8; i++) { const q = (t * .7 + i * .29) % 1, p = KM_PORES[(i * 7) % KM_PORES.length]; if (p.y < 760) km_sparkle(c, p.x, p.y, 18 * Math.sin(q * Math.PI), Math.sin(q * Math.PI)); }
     c.restore();
     // labels
-    const kOut = 1 - appear(t, f(.4), .3);
+    const kOut = 1 - appear(t, f(.3), .3);
     label(c, 'silicate liquide + pigments', 520, 220, { k: appear(t, c3 + .4, .5) * kOut, size: 40, bg: '#E6FBF6' });
-    km_arrow(c, 520, 252, 560, 320, appear(t, c3 + .6, .4) * kOut, .2);
-    label(c, 'support minéral', 1220, 220, { k: appear(t, c3 + 1.2, .5) * kOut, size: 40, bg: '#FFFFFF' });
-    km_arrow(c, 1220, 252, 1250, 420, appear(t, c3 + 1.4, .4) * kOut, -.2);
+    km_arrow(c, 520, 252, 560, 332, appear(t, c3 + .6, .4) * kOut, .2);
+    label(c, 'support minéral', 1240, 220, { k: appear(t, c3 + 1.2, .5) * kOut, size: 40, bg: '#FFFFFF' });
+    km_arrow(c, 1240, 252, 1270, 450, appear(t, c3 + 1.4, .4) * kOut, -.2);
+    const kl = appear(t, f(.33), .5) * (1 - appear(t, f(.62), .3));
+    label(c, 'liaisons cristallines', 470, 232, { k: kl, size: 40, bg: KM.cryst });
+    km_arrow(c, 470, 264, 486, 468, kl, .15);
     const kt = appear(t, f(.44), .6);
-    if (kt > 0) { c.save(); c.translate(800, 150); const pulse = 1 + .035 * Math.sin(t * 5) * appear(t, f(.5), .4); c.scale(pulse, pulse); label(c, 'Silicatisation', 0, 0, { k: kt, size: 64, bg: '#FFE7B8' }); c.restore(); }
-    label(c, 'liaisons cristallines', 520, 600, { k: appear(t, f(.36), .5) * (1 - appear(t, f(.62), .3)), size: 36, bg: KM.cryst });
+    if (kt > 0) { c.save(); c.translate(960, 140); const pulse = 1 + .035 * Math.sin(t * 5) * appear(t, f(.5), .4); c.scale(pulse, pulse); label(c, 'Silicatisation', 0, 0, { k: kt, size: 66, bg: '#FFE7B8' }); c.restore(); }
     const kf = appear(t, f(.66), .6);
-    label(c, 'la couleur fait partie de la pierre', 800, 246, { k: kf, size: 42, bg: '#FFFFFF' });
-    km_badge(c, 800 + 376, 244, appear(t, f(.72), .5), true, 30);
+    label(c, 'la couleur fait partie de la pierre', 960, 238, { k: kf, size: 44, bg: '#FFFFFF' });
+    km_badge(c, 960 + 394, 236, appear(t, f(.72), .5), true, 30);
   }
 
   // ---------- beat 5: UV and mineral pigments ----------
@@ -532,7 +548,7 @@
     if (kU > 0) {
       const sw = Math.sin(t * 3) * .5 + .5;
       c.save(); c.globalAlpha = .25 * kU * (.7 + .3 * sw); circle(c, 860, 180, 150, KM.uvL); c.restore();
-      for (const [x2, y2] of [[380, 360], [470, 350], [1250, 350], [1340, 360]]) km_uvRay(c, 860 + (x2 - 860) * .12, 180 + 70, x2, y2, appear(t, tUV + .1, .7), t);
+      for (const [x2, y2] of [[380, 374], [480, 374], [1240, 374], [1340, 374]]) km_uvRay(c, 860 + (x2 - 860) * .12, 180 + 70, x2, y2, appear(t, tUV + .1, .7), t);
     }
     km_swatch(c, 230, 380, 460, 300, fade, true, t);
     km_swatch(c, 1030, 380, 460, 300, 0, false, t);
@@ -600,8 +616,8 @@
       c.restore();
     }
     label(c, 'peintes vers 1890 — toujours là', 860, 140, { k: appear(t, f(.66), .6), size: 50, bg: '#FFF1DA' });
-    label(c, 'Suisse', 250, 535, { k: appear(t, f(.34), .4), size: 32 });
-    label(c, 'Norvège', 400, 535, { k: appear(t, f(.46), .4), size: 32 });
+    label(c, 'Suisse', 296, 552, { k: appear(t, f(.34), .4), size: 32 });
+    label(c, 'Norvège', 444, 552, { k: appear(t, f(.46), .4), size: 32 });
   }
 
   // ---------- beat 7: sol-silicate & lime wash on a fresh lime render ----------
@@ -620,13 +636,15 @@
   }
   function km_stroke(c, x0, x1, y, wd, col, k, seed, alpha = .92) {
     if (k <= 0) return;
-    const xe = lerp(x0, x1, k);
-    c.save(); c.globalAlpha *= alpha; c.beginPath(); c.moveTo(x0, y - wd / 2);
-    for (let i = 0; i <= 30; i++) { const x = lerp(x0, xe, i / 30); c.lineTo(x, y - wd / 2 + Math.sin(x * .05 + seed) * 5); }
-    for (let i = 30; i >= 0; i--) { const x = lerp(x0, xe, i / 30); c.lineTo(x, y + wd / 2 + Math.sin(x * .04 + seed * 2) * 6); }
-    c.closePath(); c.fillStyle = col; c.fill(); c.clip();
-    for (let i = 0; i < 9; i++) { const yy = y - wd / 2 + 8 + i * (wd - 16) / 8; line(c, x0, yy, xe, yy + Math.sin(i) * 2, i % 2 ? 'rgba(255,255,255,.18)' : 'rgba(0,0,0,.07)', 3); }
-    c.restore();
+    const xe = lerp(x0, x1, k), n = 36, topY = x => y - wd / 2 + Math.sin(x * .05 + seed) * 5, botY = x => y + wd / 2 + Math.sin(x * .04 + seed * 2) * 6;
+    c.save(); c.globalAlpha *= alpha; c.beginPath();
+    for (let i = 0; i <= n; i++) { const x = lerp(x0, xe, i / n); i ? c.lineTo(x, topY(x)) : c.moveTo(x, topY(x)); }
+    for (let j = 1; j < 9; j++) c.lineTo(xe + (j % 2 ? 12 : -2) + 5 * Math.sin(j * 2.3 + seed), lerp(topY(xe), botY(xe), j / 9));
+    for (let i = n; i >= 0; i--) { const x = lerp(x0, xe, i / n); c.lineTo(x, botY(x)); }
+    c.quadraticCurveTo(x0 - 30, y, x0, topY(x0)); c.closePath();
+    c.fillStyle = col; c.fill(); c.save(); c.clip();
+    for (let i = 0; i < 10; i++) { const yy = y - wd / 2 + 6 + i * (wd - 12) / 9; line(c, x0 - 30, yy, xe + 14, yy + Math.sin(i * 1.7) * 2, i % 2 ? 'rgba(255,255,255,.2)' : 'rgba(0,0,0,.07)', 3); }
+    c.restore(); c.restore();
   }
   function km_brush(c, x, y, col) {
     c.save(); c.translate(x, y); c.rotate(-.5);
@@ -639,24 +657,24 @@
   function km_shotH(c, S) {
     const t = S.t, c7 = S.cue(7), e7 = S.cueEnd(7), f = k => lerp(c7, e7, k);
     c.save(); km_drift(c, t, c7 - .5, S.d, 800, 520, .025);
-    c.drawImage(limeTexture(W, 800, '#F1EADB', 11, .25), 0, 0);
+    c.drawImage(limeTexture(W, 800, '#F3EDE1', 11, 0), 0, 0);
     const vg = c.createRadialGradient(W / 2, 420, 300, W / 2, 420, 1100); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(90,70,40,.18)'); c.fillStyle = vg; c.fillRect(0, 0, W, 800);
     // floor / scaffold plank
     c.fillStyle = '#CDB89A'; c.fillRect(0, 800, W, H - 800); line(c, 0, 800, W, 800, C.ink, 5);
     fillRR(c, 150, 796, 1300, 36, 6, C.wood, C.ink, 5); line(c, 160, 812, 1440, 812, C.woodDark, 3);
     const s1a = f(.33), s1b = f(.52), s2a = f(.64), s2b = f(.84);
     const k1 = ease(inv(s1a, s1b, t)), k2 = ease(inv(s2a, s2b, t));
-    km_stroke(c, 240, 880, 380, 110, '#C77E66', k1, 1);
-    km_stroke(c, 700, 1340, 560, 110, '#EAD39E', k2, 2, .85);
-    km_pot(c, 520, 800, 250, 230, ['Sol-', 'silicate'], '#C77E66', null, appear(t, f(.28), .5), t);
-    km_pot(c, 1000, 800, 250, 230, ['Badigeon', 'de chaux'], '#F3EEE3', null, appear(t, f(.58), .5), t);
+    km_stroke(c, 220, 860, 300, 116, '#C77E66', k1, 1);
+    km_stroke(c, 700, 1340, 440, 116, '#E8CF97', k2, 2, .9);
+    km_pot(c, 520, 800, 236, 196, ['Sol-', 'silicate'], '#C77E66', null, appear(t, f(.28), .5), t);
+    km_pot(c, 1000, 800, 236, 196, ['Badigeon', 'de chaux'], '#F3EEE3', null, appear(t, f(.58), .5), t);
     // the brush travels along the strokes
     let bxy = null, bcol = '#C77E66';
-    if (t > s1a - .4 && t < s1b + .3) bxy = [lerp(240, 880, k1), 380 + Math.sin(t * 8) * 4];
-    else if (t > s2a - .4 && t < s2b + .3) { bxy = [lerp(700, 1340, k2), 560 + Math.sin(t * 8) * 4]; bcol = '#EAD39E'; }
+    if (t > s1a - .4 && t < s1b + .3) bxy = [lerp(220, 860, k1), 300 + Math.sin(t * 8) * 4];
+    else if (t > s2a - .4 && t < s2b + .3) { bxy = [lerp(700, 1340, k2), 440 + Math.sin(t * 8) * 4]; bcol = '#E8CF97'; }
     if (bxy) km_brush(c, bxy[0] + 20, bxy[1] - 10, bcol);
     c.restore();
-    label(c, 'enduit chaux récent', 520, 190, { k: appear(t, c7 - .2, .5), size: 46, bg: '#FFFFFF' });
+    label(c, 'enduit chaux récent', 660, 160, { k: appear(t, c7 - .2, .5), size: 46, bg: '#FFFFFF' });
   }
 
   // ---------- the scene ----------
@@ -678,7 +696,7 @@
     else if (t > f(3, .4) && t < f(3, .55)) expr = 'surprised';
     else if (t > f(4, .6) && t < ce(4)) expr = 'serious';
     else if (t > f(1, .7) && t < c(2) - .4) expr = 'surprised';
-    const fullX = km_key(t, [[0, 1640], [T1, 1640], [T1 + .9, 1710], [T2 - .05, 1710], [T2 + .6, 2330], [T5 - .1, 2330], [T5 + .8, 1730], [T6, 1730], [T6 + .9, 1700]]);
+    const fullX = km_key(t, [[0, 1700], [T1, 1700], [T1 + .9, 1710], [T2 - .05, 1710], [T2 + .6, 2330], [T5 - .1, 2330], [T5 + .8, 1730], [T6, 1730], [T6 + .9, 1700]]);
     const M = { x: fullX, y: 1010, s: .92, T: S.T, pose, expr, look: -.6, trowel: !usePal && t > T5 };
     const palK = 1 - appear(t, T1 - .25, .4);
     if (usePal && palK > 0) { M.hand = km_hand(M, -1); M.rot = -.25 + Math.sin(t * 1.3) * .03; }
