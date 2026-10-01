@@ -1,8 +1,8 @@
 # FRONTIS · plans d'ouverture et de fin
 
 Deux plans animés pour le teaser FRONTIS : un carton d'ouverture, et le même carton pour clore le film.
-Sur le fond crème de la charte, la maison du logo se construit (les murs montent, le toit se pose), FRONTIS et sa
-signature surgissent, puis les savoir-faire : **Enduits à la chaux · Couverture & zinguerie**.
+Sur le fond crème de la charte, la maison du logo se construit (le tracé vert monte du sol, le trait orange du toit se
+pose), FRONTIS et sa signature surgissent, puis les savoir-faire : **Enduits à la chaux · Couverture & zinguerie**.
 
 ## Les fichiers livrés
 
@@ -25,7 +25,7 @@ Premiere Pro, Final Cut Pro et DaVinci Resolve.
 | Temps | À l'image |
 |---|---|
 | 0 → 0,35 s | Fond crème seul |
-| 0,35 → 3,7 s | Les murs montent, le toit se pose, FRONTIS et sa signature, puis les savoir-faire |
+| 0,35 → 3,7 s | La maison se construit, FRONTIS et sa signature surgissent, puis les savoir-faire |
 | 3,7 → 5 s | Le carton complet tient |
 
 Placer un fondu enchaîné de 0,5 à 0,8 s entre la fin du fichier et le premier plan du film (le portail).
@@ -43,7 +43,7 @@ Le carton est complet dès 3,7 s : on peut raccourcir le plan et lancer le fondu
 Pour garder le carton plus longtemps à l'écran, faire un arrêt sur image entre 4,1 et 6 s, avant le fondu au noir.
 
 **Version fond transparent** : à poser au-dessus d'une image du film, pour fondre le logo dans le plan. Le texte du logo
-est foncé : la réserver aux images claires (ciel, façade enduite).
+est gris foncé : la réserver aux images claires (ciel, façade enduite).
 
 ## Refaire le rendu
 
@@ -52,7 +52,8 @@ quelques minutes. Il faut Node.js, Chrome et ffmpeg.
 
 | Fichier | Rôle |
 |---|---|
-| [`src/logo.js`](src/logo.js) | Le logo en calques (murs, toit, mot FRONTIS, signature) |
+| [`assets/logo/logo.png`](assets/logo/logo.png) | Le logo officiel FRONTIS |
+| [`src/logo.js`](src/logo.js) | Le logo découpé en calques animables (maison, toit, mot FRONTIS, signature) |
 | [`src/carton.js`](src/carton.js) | L'animation des deux plans, les savoir-faire et les durées |
 | [`studio.html`](studio.html) | Aperçu interactif ; à ouvrir par un petit serveur local, par exemple `npx http-server frontis` |
 | [`render.mjs`](render.mjs) | Rendu image par image dans Chrome, puis encodage ffmpeg |
@@ -66,10 +67,9 @@ node frontis/render.mjs --encode --plan=fin --w=3840
 node frontis/render.mjs --sheet --plan=intro --times=1,2,3,4.9 --out=frontis/out/check/planche.jpg   # planche de contrôle
 ```
 
-**Le logo** est lu dans `assets/logo/logo.svg` (de préférence) ou `assets/logo/logo.png`, puis découpé tout seul :
-l'icône est le premier bloc à gauche ; dans l'icône, l'orange forme le toit et le reste les murs ; à droite, la première
-ligne de texte est le mot FRONTIS et la suite la signature. Un PNG sur fond blanc est détouré automatiquement. Sans
-fichier, un logo provisoire redessiné d'après la charte est utilisé, et la mention « logo provisoire » apparaît à l'image.
+**Le logo** est lu dans `assets/logo/logo.svg` s'il existe, sinon `assets/logo/logo.png`, puis découpé tout seul :
+l'icône est le premier bloc à gauche ; dans l'icône, l'orange forme le toit et le reste la maison ; à droite, la
+première ligne de texte est le mot FRONTIS et la suite la signature. Un PNG sur fond blanc est détouré automatiquement.
 
-**Charte** : vert foncé `#24523A`, vert vif `#3FA24C`, orange `#D9622B`, crème `#F3EFE4` ; Archivo Black et
-Barlow Condensed (licence SIL OFL, fichiers dans `assets/fonts/`).
+**Couleurs et police** : fond crème de la charte `#F3EFE4` ; gris `#333333` et orange `#EA6B49` repris du logo pour les
+savoir-faire et le filet ; Barlow Condensed SemiBold (licence SIL OFL, dans `assets/fonts/`).

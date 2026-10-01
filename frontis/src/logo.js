@@ -1,81 +1,11 @@
-// logo.js : le logo FRONTIS découpé en calques animables : murs, toit, mot « FRONTIS » et signature.
-// Le fichier officiel posé dans assets/logo/ est découpé tout seul (voir logoDepuisFichier). Sans lui, on dessine un logo
-// PROVISOIRE d'après la charte, et la mention « logo provisoire » s'affiche à l'image pour qu'il ne parte pas par erreur.
-const CHARTE = { vertFonce: '#24523A', vertVif: '#3FA24C', orange: '#D9622B', creme: '#F3EFE4', encre: '#23221F' };
-const FONTES = { titre: '"Archivo Black"', sous: '"Barlow Condensed"' };
-
-// Un calque est une image posée dans le repère du logo : { img, x, y, w, h }, en pixels de maquette (cadre de 1920 × 1080).
-// k = pixels réels par pixel de maquette, pour que l'image reste nette en 4K.
-function calque(x, y, w, h, k, draw) {
-  const c = document.createElement('canvas');
-  c.width = Math.ceil(w * k); c.height = Math.ceil(h * k);
-  const g = c.getContext('2d');
-  g.scale(k, k); g.translate(-x, -y); draw(g);
-  return { img: c, x, y, w, h };
-}
-
-// Capitales espacées lettre à lettre. Le crénage est perdu, ce qui ne se voit pas sur des capitales très espacées.
-function largeurEspacee(g, txt, esp) { let w = 0; for (const ch of txt) w += g.measureText(ch).width + esp; return w - esp; }
-function texteEspace(g, txt, x, y, esp) { for (const ch of txt) { g.fillText(ch, x, y); x += g.measureText(ch).width + esp; } }
-
-function poly(g, pts) { g.beginPath(); pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.closePath(); }
-
-// Logo provisoire : maison au pignon vert sous un toit orange en chevron, porte en creux ; FRONTIS en Archivo Black,
-// signature « ISOLATION | RAVALEMENT | TOITURES » en Barlow Condensed, justifiée sur la largeur du mot.
-function logoProvisoire(k) {
-  const m = document.createElement('canvas').getContext('2d');
-  const cx = 72, demi = 72, pente = Math.tan(40 * Math.PI / 180), ep = 18 / Math.cos(40 * Math.PI / 180);
-  const egout = demi * pente;
-  const toit = [[cx, 0], [cx + demi, egout], [cx + demi, egout + ep], [cx, ep], [cx - demi, egout + ep], [cx - demi, egout]];
-  const jeu = 10, mw = 54, haut = ep + jeu, sol = 168;
-  const murs = [[cx, haut], [cx + mw, haut + mw * pente], [cx + mw, sol], [cx - mw, sol], [cx - mw, haut + mw * pente]];
-
-  m.font = `100px ${FONTES.titre}`;
-  const capT = m.measureText('H').actualBoundingBoxAscent / 100;
-  m.font = `600 100px ${FONTES.sous}`;
-  const capS = m.measureText('H').actualBoundingBoxAscent / 100;
-
-  const x0 = 144 + 40, capMot = 96, capSig = 21;
-  const fMot = `${capMot / capT}px ${FONTES.titre}`, fSig = `600 ${capSig / capS}px ${FONTES.sous}`;
-  m.font = fMot;
-  const mm = m.measureText('FRONTIS'), motW = mm.actualBoundingBoxLeft + mm.actualBoundingBoxRight;
-  const baseSig = sol, baseMot = sol - capSig - 22;
-  const sig = ['ISOLATION', 'RAVALEMENT', 'TOITURES'];
-  m.font = fSig;
-  // signature justifiée sur la largeur du mot : esp entre les lettres, 2 esp de part et d'autre de chaque barre orange
-  const brut = sig.reduce((w, s) => w + largeurEspacee(m, s, 0), 0), barre = 3, autour = 2;
-  const esp = (motW - brut - (sig.length - 1) * barre) / (sig.join('').length - sig.length + (sig.length - 1) * 2 * autour);
-
-  const L = {};
-  L.toit = calque(0, 0, 144, egout + ep, k, g => { poly(g, toit); g.fillStyle = CHARTE.orange; g.fill(); });
-  L.murs = calque(cx - mw, haut, 2 * mw, sol - haut, k, g => {
-    poly(g, murs); g.fillStyle = CHARTE.vertVif; g.fill();
-    g.globalCompositeOperation = 'destination-out';
-    const pl = 30, ph = 54;
-    g.beginPath(); g.moveTo(cx - pl / 2, sol); g.lineTo(cx - pl / 2, sol - ph + pl / 2);
-    g.arc(cx, sol - ph + pl / 2, pl / 2, Math.PI, 0); g.lineTo(cx + pl / 2, sol); g.closePath(); g.fill();
-  });
-  L.mot = calque(x0, baseMot - capMot - 4, motW, capMot + 8, k, g => {
-    g.font = fMot; g.fillStyle = CHARTE.encre; g.fillText('FRONTIS', x0 + mm.actualBoundingBoxLeft, baseMot);
-  });
-  L.signature = calque(x0, baseSig - capSig - 6, motW, capSig + 12, k, g => {
-    g.font = fSig; let x = x0;
-    sig.forEach((s, i) => {
-      g.fillStyle = CHARTE.vertFonce; texteEspace(g, s, x, baseSig, esp); x += largeurEspacee(g, s, esp);
-      if (i < sig.length - 1) { x += autour * esp; g.fillStyle = CHARTE.orange; g.fillRect(x, baseSig - capSig - 2, barre, capSig + 4); x += barre + autour * esp; }
-    });
-  });
-  return { calques: L, w: x0 + motW, h: sol, provisoire: true };
-}
-
-// ---------- logo officiel ----------
-// Le fichier posé dans assets/logo/ (logo.svg de préférence, sinon logo.png) est découpé automatiquement :
+// logo.js : le logo FRONTIS (frontis/assets/logo/) découpé en calques animables : murs, toit, mot « FRONTIS », signature.
 //   - l'icône est le premier bloc à gauche, séparé du texte par une colonne vide ;
 //   - dans l'icône, les pixels orange forment le toit, tout le reste les murs ;
 //   - le texte est coupé à la première ligne vide : au-dessus le mot FRONTIS, en dessous la signature.
-// Un PNG sur fond blanc (sans transparence) est détouré : le blanc devient transparent, bords adoucis compris.
+// Un SVG est préféré s'il est fourni. Un PNG sur fond blanc (sans transparence) est détouré automatiquement.
+// Un calque est une image posée dans le repère du logo : { img, x, y, w, h }, en unités de logo.
 const FICHIERS_LOGO = ['assets/logo/logo.svg', 'assets/logo/logo.png'];
-const HAUTEUR_LOGO = 168;                                    // hauteur du logo en pixels de maquette, comme le provisoire
+const HAUTEUR_LOGO = 168;                                    // hauteur du logo en unités de logo (le carton le met à l'échelle)
 
 function chargerImage(url) {
   return new Promise(ok => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ok(null); im.src = url; });
@@ -142,10 +72,11 @@ function plages(proj, vide) {
   return out;
 }
 
-async function logoDepuisFichier(k) {
+// k = pixels rendus par unité de logo.
+async function chargerLogo(k) {
   let img = null;
   for (const url of FICHIERS_LOGO) if ((img = await chargerImage(url))) break;
-  if (!img) return null;
+  if (!img) throw new Error('logo introuvable : déposer logo.svg ou logo.png dans frontis/assets/logo/');
   // 1. analyse : détourage, repérage de l'icône (premier bloc à gauche) et des lignes de texte
   const iw = img.naturalWidth, ih = img.naturalHeight;
   if (!iw || !ih) throw new Error('logo : dimensions du fichier introuvables (SVG sans width/height ?)');
@@ -182,7 +113,7 @@ async function logoDepuisFichier(k) {
     mot: decoupe(texte[0], mot[0], texte[1], mot[1], () => true),
   };
   L.signature = sig ? decoupe(texte[0], sig[0], texte[1], sig[1], () => true) : { img: document.createElement('canvas'), x: 0, y: 0, w: 0, h: 0 };
-  return { calques: L, w: (texte[1] - icone[0]) * e, h: HAUTEUR_LOGO, provisoire: false };
+  return { calques: L, w: (texte[1] - icone[0]) * e, h: HAUTEUR_LOGO };
 }
 
 function rogner(c, k) {
@@ -195,4 +126,3 @@ function rogner(c, k) {
   return { img: out, x: c.x + x0 / k, y: c.y + y0 / k, w: out.width / k, h: out.height / k };
 }
 
-async function chargerLogo(k) { return (await logoDepuisFichier(k)) || logoProvisoire(k); }

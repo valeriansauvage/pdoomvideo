@@ -1,5 +1,5 @@
 // carton.js : le plan d'ouverture et le plan de fin FRONTIS, qui sont le même carton.
-//   ouverture : fond crème, les murs de la maison montent, le toit se pose, FRONTIS se révèle, puis les savoir-faire ;
+//   ouverture : fond crème, les murs de la maison montent, le toit se pose, FRONTIS et sa signature surgissent, puis les savoir-faire ;
 //               le carton tient pour laisser la place au fondu enchaîné vers la première image du film.
 //   fin : quelques images de fond crème dans lesquelles le film vient se fondre, le même carton se construit,
 //         tient, puis fondu au noir.
@@ -9,7 +9,9 @@ const PLANS = {
   fin: { nom: 'FIN', dur: 7.0, debut: 0.75, noir: [6.0, 7.0] },
 };
 const SAVOIR_FAIRE = ['Enduits à la chaux', 'Couverture & zinguerie'];
-const W = 1920, H = 1080, CY = 450, E = 1.18;   // maquette en 1920 × 1080 (rendu réel jusqu'en 4K) ; CY = centre du logo, E = échelle du logo
+const COULEURS = { creme: '#F3EFE4', texte: '#333333', orange: '#EA6B49' };   // crème de la charte ; gris et orange du logo
+const FONTE = '"Barlow Condensed"';
+const W = 1920, H = 1080, CY = 450, LARGEUR_LOGO = 900;   // maquette 1920 × 1080 (rendu jusqu'en 4K) ; CY = centre du logo
 
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const seg = (t, a, b) => clamp((t - a) / (b - a));
@@ -17,10 +19,14 @@ const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
 const easeInOut = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
 const backOut = (x, s = 1.4) => { x = clamp(x) - 1; return 1 + (s + 1) * x * x * x + s * x * x; };
 
-let CAN, G, K, LOGO;
+let CAN, G, K, E, LOGO;                                       // E : unités de logo → pixels de maquette
+
+// Capitales espacées lettre à lettre. Le crénage est perdu, ce qui ne se voit pas sur des capitales très espacées.
+function largeurEspacee(g, txt, esp) { let w = 0; for (const ch of txt) w += g.measureText(ch).width + esp; return w - esp; }
+function texteEspace(g, txt, x, y, esp) { for (const ch of txt) { g.fillText(ch, x, y); x += g.measureText(ch).width + esp; } }
 
 function fond(g) {
-  g.fillStyle = CHARTE.creme; g.fillRect(0, 0, W, H);
+  g.fillStyle = COULEURS.creme; g.fillRect(0, 0, W, H);
   const r = g.createRadialGradient(W / 2, CY + 60, 80, W / 2, CY + 60, 1250);
   r.addColorStop(0, 'rgba(255, 253, 247, .4)'); r.addColorStop(.5, 'rgba(255, 253, 247, 0)'); r.addColorStop(1, 'rgba(110, 92, 60, .07)');
   g.fillStyle = r; g.fillRect(0, 0, W, H);
@@ -44,7 +50,7 @@ function surgir(c, k, a) {
 function losange(x, y, k, a) {
   if (k <= 0) return;
   const r = 6.5 * backOut(k, 2.2);
-  G.globalAlpha = a; G.fillStyle = CHARTE.orange;
+  G.globalAlpha = a; G.fillStyle = COULEURS.orange;
   G.beginPath(); G.moveTo(x, y - r); G.lineTo(x + r, y); G.lineTo(x, y + r); G.lineTo(x - r, y); G.closePath(); G.fill();
   G.globalAlpha = 1;
 }
@@ -71,27 +77,21 @@ function carton(s, a) {
   // 4. un filet orange s'ouvre depuis le centre, puis les savoir-faire arrivent un par un
   const yFilet = CY + LOGO.h * E / 2 + 72, yTexte = yFilet + 68;
   const kf = easeInOut(seg(s, 2.1, 2.6));
-  if (kf > 0) { G.globalAlpha = a; G.fillStyle = CHARTE.orange; const lw = 76 * kf; G.fillRect(W / 2 - lw / 2, yFilet - 1.5, lw, 3); G.globalAlpha = 1; }
-  G.font = `600 42px ${FONTES.sous}`;
-  const esp = 9, ecart = 38, cap = G.measureText('H').actualBoundingBoxAscent;
+  if (kf > 0) { G.globalAlpha = a; G.fillStyle = COULEURS.orange; const lw = 76 * kf; G.fillRect(W / 2 - lw / 2, yFilet - 1.5, lw, 3); G.globalAlpha = 1; }
+  G.font = `600 38px ${FONTE}`;
+  const esp = 8, ecart = 34, cap = G.measureText('H').actualBoundingBoxAscent;
   const items = SAVOIR_FAIRE.map(t => t.toUpperCase()), larg = items.map(t => largeurEspacee(G, t, esp));
   let x = W / 2 - (larg.reduce((p, q) => p + q, 0) + (items.length - 1) * 2 * ecart) / 2;
   items.forEach((txt, i) => {
     const t0 = 2.45 + i * .3, e = easeOut(seg(s, t0, t0 + .6));
     if (e > 0) {                                                                 // surgit de sa ligne de base, lui aussi
       G.save(); G.beginPath(); G.rect(x - 10, yTexte - cap - 30, larg[i] + 20, cap + 36); G.clip();
-      G.globalAlpha = a * clamp(e * 2.5); G.fillStyle = CHARTE.vertFonce; texteEspace(G, txt, x, yTexte + (cap + 8) * (1 - e), esp);
+      G.globalAlpha = a * clamp(e * 2.5); G.fillStyle = COULEURS.texte; texteEspace(G, txt, x, yTexte + (cap + 8) * (1 - e), esp);
       G.restore();
     }
     x += larg[i];
     if (i < items.length - 1) { x += ecart; losange(x, yTexte - cap / 2, seg(s, t0 + .2, t0 + .5), a); x += ecart; }
   });
-}
-
-function mentionProvisoire() {
-  G.setTransform(K, 0, 0, K, 0, 0); G.globalAlpha = 1;
-  G.font = `600 20px ${FONTES.sous}`; G.fillStyle = CHARTE.orange;
-  texteEspace(G, 'LOGO PROVISOIRE · EN ATTENTE DU FICHIER OFFICIEL', 48, 64, 3);
 }
 
 // Peint l'image du plan au temps t. mode : 'plein' (fond crème, fondu au noir) ou 'alpha' (fond transparent).
@@ -105,7 +105,6 @@ function image(plan, t, mode = 'plein') {
   const noir = P.noir ? easeInOut(seg(t, P.noir[0], P.noir[1])) : 0;
   carton(t - P.debut, mode === 'alpha' ? 1 - noir : 1);
   if (mode === 'plein' && noir > 0) { G.setTransform(1, 0, 0, 1, 0, 0); G.fillStyle = `rgba(0, 0, 0, ${noir})`; G.fillRect(0, 0, CAN.width, CAN.height); }
-  if (LOGO.provisoire) mentionProvisoire();
 }
 
 // ---------- branchements : rendu hors écran (render.mjs) et studio interactif ----------
@@ -127,9 +126,9 @@ window.renderSheet = (plan, mode, times, cols = 3, cell = 640) => {
   const q = new URLSearchParams(location.search), w = +(q.get('w') || 1920);
   CAN = document.getElementById('out'); CAN.width = w; CAN.height = Math.round(w * 9 / 16);
   G = CAN.getContext('2d'); K = CAN.width / W;
-  const fontes = await Promise.all([`100px ${FONTES.titre}`, `600 100px ${FONTES.sous}`].map(f => document.fonts.load(f)));
-  if (fontes.some(f => !f.length)) throw new Error('police introuvable : vérifier assets/fonts/');
-  LOGO = await chargerLogo(K * E * 1.05);                                      // un peu de marge pour la poussée
+  if (!(await document.fonts.load(`600 100px ${FONTE}`)).length) throw new Error('police introuvable : vérifier assets/fonts/');
+  E = LARGEUR_LOGO / (await chargerLogo(1)).w;                                  // le logo occupe LARGEUR_LOGO de large
+  LOGO = await chargerLogo(K * E * 1.05);                                       // calques nets, avec une marge pour la poussée
   window.PLANS = PLANS; window.ready = true;
 
   // studio : choix du plan et du fond, curseur de temps, lecture
