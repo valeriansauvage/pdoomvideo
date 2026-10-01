@@ -708,6 +708,10 @@ scene('eau', (ctx, S) => {
   else if (t >= S.cue(4) && t < S.cue(5)) expr = 'worried';
   const look = t < S.cue(0) ? .2 : .8;
   const lookY = t > A(5, .26) && t < A(5, .42) ? -.8 : 0;
-  presenter(ctx, { x: lerp(420, 255, kIris), y: 1000, s: lerp(1, .9, kIris), T: S.T, pose, expr, look, lookY, bounce: appear(t, A(3, .46), .5, x => x) < 1 ? appear(t, A(3, .46), .5, x => x) : 0 });
+  // starts where the previous chapter left her (x 215, s .8), ends where the next one picks her up (x 205, s .86)
+  const k0 = ease(inv(.3, 2.5, t));
+  const mx = lerp(lerp(215, 420, k0), 205, kIris), my = lerp(lerp(1010, 1000, k0), 1000, kIris), ms = lerp(lerp(.8, 1, k0), .86, kIris);
+  const hop = appear(t, A(3, .46), .5, x => x);
+  presenter(ctx, { x: mx, y: my, s: ms, T: S.T, pose, expr, look, lookY, bounce: hop < 1 ? hop : 0 });
 });
 })();

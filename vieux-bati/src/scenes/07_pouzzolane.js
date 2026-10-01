@@ -623,10 +623,10 @@
     ctx.drawImage(img, 600 - img.width / 2, 820 - img.height + 30 * .86);
     ctx.restore();
     // labels
-    label(ctx, 'Panthéon — 2000 ans', 600, 180, { k: appear(t, f(.18), .5), size: 46 });
+    label(ctx, 'Panthéon — an 125', 600, 180, { k: appear(t, f(.18), .5), size: 46 });
     label(ctx, 'Ports romains', 1240, 500, { k: appear(t, f(.42), .5), size: 46 });
-    pz_okBadge(ctx, 860, 178, appear(t, f(.66), .5), 28);
-    pz_okBadge(ctx, 1420, 498, appear(t, f(.72), .5), 28);
+    pz_okBadge(ctx, 870, 178, appear(t, f(.66), .5), 28);
+    pz_okBadge(ctx, 1436, 498, appear(t, f(.72), .5), 28);
     if (lens) lens();
   }
   // magnifying glass that flies over the Pantheon dome before the iris transition
@@ -875,7 +875,7 @@
     // ---- Margot ----
     const f0 = k => lerp(c(0), ce(0), k), f1 = k => lerp(c(1), ce(1), k), f2 = k => lerp(c(2), ce(2), k), f4 = k => lerp(c(4), ce(4), k), f6 = k => lerp(c(6), ce(6), k);
     const pose = poseAt(t, [[0, 'idle'], [c(0) + .1, 'explain'], [f0(.45), 'pointL'], [f0(.8), 'open'],
-      [c(1) - .2, 'pointL'], [f1(.6), 'explain'], [c(2), 'explain'], [f2(.6), 'point'], [c(3), 'pointL'], [lerp(c(3), ce(3), .6), 'open'],
+      [c(1) - .2, 'pointL'], [f1(.6), 'explain'], [c(2), 'explain'], [f2(.6), 'pointL'], [c(3), 'pointL'], [lerp(c(3), ce(3), .6), 'open'],
       [c(4), 'think'], [f4(.5), 'explain'], [f4(.78), 'cheer'], [c(5), 'count'], [lerp(c(5), ce(5), .7), 'open'],
       [c(6), 'pointL'], [f6(.65), 'pointUp'], [ce(6), 'open']]);
     let expr = 'happy';

@@ -75,7 +75,7 @@ function pla_soilTex() {
   });
 }
 function pla_room() {          // interior: wallpaper, floor, frame, side table + kettle
-  return cached('pla|room|v3', 600, 880, g => {
+  return cached('pla|room|v5', 600, 880, g => {
     g.fillStyle = '#F2DDBA'; g.fillRect(0, 0, 600, 860);
     g.fillStyle = 'rgba(176,127,37,.09)'; for (let x = 10; x < 600; x += 44) g.fillRect(x, 0, 18, 860);
     g.fillStyle = 'rgba(200,100,59,.12)';
@@ -84,14 +84,15 @@ function pla_room() {          // interior: wallpaper, floor, frame, side table 
     fillRR(g, 0, 860, 600, 20, 0, C.wood, null); for (let x = 30; x < 600; x += 80) line(g, x, 862, x, 878, C.woodDark, 2); line(g, 0, 860, 600, 860, C.ink, 4); line(g, 0, 880, 600, 880, C.ink, 3);
     fillRR(g, 446, 286, 96, 76, 4, 'rgba(0,0,0,.12)'); fillRR(g, 440, 280, 96, 76, 4, C.ochre, C.ink, 4); fillRR(g, 449, 289, 78, 58, 2, '#BFDDEE', C.ink, 2);
     poly(g, [[452, 344], [474, 312], [492, 330], [506, 318], [524, 344]], '#7E9C6A'); circle(g, 506, 302, 6, '#F6C84C');
-    fillRR(g, 420, 756, 140, 16, 5, C.wood, C.ink, 4); line(g, 436, 772, 436, 858, C.ink, 7); line(g, 544, 772, 544, 858, C.ink, 7);
-    line(g, 436, 772, 436, 858, C.woodDark, 3); line(g, 544, 772, 544, 858, C.woodDark, 3);
-    poly(g, [[518, 724], [544, 702], [550, 706], [530, 734]], '#C8643B', C.ink, 3);
-    ellipse(g, 486, 734, 40, 24, '#C8643B', C.ink, 4);
-    fillRR(g, 448, 734, 76, 22, [0, 0, 10, 10], '#C8643B', C.ink, 4);
-    ellipse(g, 486, 712, 22, 7, '#B0522E', C.ink, 3); circle(g, 486, 703, 6, C.ink);
-    g.beginPath(); g.arc(486, 724, 30, Math.PI * 1.15, Math.PI * 1.85); g.strokeStyle = C.ink; g.lineWidth = 6; g.stroke();
-    line(g, 466, 728, 474, 744, 'rgba(255,255,255,.6)', 4);
+    g.translate(16, 0);
+    fillRR(g, 430, 800, 132, 16, 5, C.wood, C.ink, 4); line(g, 446, 816, 446, 858, C.ink, 7); line(g, 546, 816, 546, 858, C.ink, 7);
+    line(g, 446, 816, 446, 858, C.woodDark, 3); line(g, 546, 816, 546, 858, C.woodDark, 3);
+    poly(g, [[518, 768], [544, 746], [550, 750], [530, 778]], '#C8643B', C.ink, 3);
+    ellipse(g, 486, 778, 40, 24, '#C8643B', C.ink, 4);
+    fillRR(g, 448, 778, 76, 22, [0, 0, 10, 10], '#C8643B', C.ink, 4);
+    ellipse(g, 486, 756, 22, 7, '#B0522E', C.ink, 3); circle(g, 486, 747, 6, C.ink);
+    g.beginPath(); g.arc(486, 768, 30, Math.PI * 1.15, Math.PI * 1.85); g.strokeStyle = C.ink; g.lineWidth = 6; g.stroke();
+    line(g, 466, 772, 474, 788, 'rgba(255,255,255,.6)', 4);
   });
 }
 function pla_wallTex() {       // dense rubble stone + inner plaster + old lime render with pores (2× res for the zooms)
@@ -253,7 +254,9 @@ function pla_cam(S, A) {
     [S.cue(2) + .75, 2.05, 1014, 380, 930, 480],
     [S.cue(3) - .4, 2.07, 1014, 382, 930, 480],
     [S.cue(3) + .5, 1, 960, 540, 960, 540],
-    [S.cue(5) - .35, 1, 960, 540, 960, 540],
+    [S.cue(4) - .1, 1, 960, 540, 960, 540],
+    [S.cue(4) + .7, 1.16, 1000, 520, 1000, 520],
+    [S.cue(5) - .35, 1.17, 1000, 520, 1000, 520],
     [S.cue(5) + .6, 1.42, 1004, 450, 900, 450],
     [S.cue(7) - .35, 1.43, 1004, 450, 900, 450],
     [S.cue(7) + .65, 1.22, 980, 500, 880, 480],
@@ -261,7 +264,7 @@ function pla_cam(S, A) {
   ];
   let i = 0; while (i < K.length - 2 && t >= K[i + 1][0]) i++;
   const a = K[i], b = K[i + 1], k = ease(inv(a[0], b[0], t)), L = j => lerp(a[j], b[j], k);
-  const z = L(1) * (1 + .008 * Math.sin(t * .35));
+  const z = L(1) * (1.006 + .006 * Math.sin(t * .35));
   return { z, fx: L(2), fy: L(3), sx: L(4), sy: L(5), X: x => L(4) + (x - L(2)) * z, Y: y => L(5) + (y - L(3)) * z };
 }
 
@@ -340,7 +343,7 @@ function pla_setA(ctx, S, A) {
   // c3+: vapour from the house crosses the wall up to the face
   if (t > T.vap - .4) for (let n = 0; n < 160; n++) {
     const ts = T.vap - .4 + n * .21; if (ts > t) break; if (thin(n, ts)) continue; const a = t - ts;
-    const kettle = n % 3 === 0, x0 = kettle ? 536 : 380 + hash(n * 1.7) * 190, y0 = kettle ? 700 : 240 + hash(n * 2.9) * 520;
+    const kettle = n % 3 === 0, x0 = kettle ? 556 : 380 + hash(n * 1.7) * 190, y0 = kettle ? 742 : 240 + hash(n * 2.9) * 500;
     const ye = clamp(y0 + (hash(n * 5.1) - .5) * 160 - (kettle ? 140 : 0), P.top + 50, P.gy - 50), d1 = (P.in0 - x0) / 120;
     if (a < d1) { const k = a / d1; parts.push({ x: lerp(x0, P.in0, k), y: lerp(y0, ye, smooth(k)) + Math.sin(a * 3 + n) * 6, r: lerp(15, 10, k), al: Math.min(1, a * 3), k: 'vap' }); continue; }
     const a2 = a - d1, v = 100, xs = P.fx - 11, xw = P.in0 + a2 * v, yw = ye + Math.sin(a2 * 2.1 + n) * 9;
@@ -370,6 +373,19 @@ function pla_setA(ctx, S, A) {
   const kX = windowed(t, T.block - .1, T.acc + 1.2, .3);        // red crosses where moisture hits the film from behind
   if (kX > 0) for (const p of parts) if (p.hitX != null && p.hk >= 0 && p.hk <= 1) { ctx.save(); ctx.globalAlpha = kX * Math.sin(p.hk * Math.PI); cross(ctx, p.hitX - 20, p.y, 26, C.danger); ctx.restore(); }
 
+  // c4: big U-turn arrows — moisture reaches the film from behind and is sent back
+  const kU = windowed(t, T.block + .1, T.acc + .7, .3);
+  if (kU > 0) [[300, 0], [500, .18], [660, .36]].forEach(([y, d]) => {
+    const k = easeOut(inv(T.block + .1 + d, T.block + .9 + d, t)); if (k <= 0) return;
+    const x0 = 820, x1 = P.fx - 34, r = 26, segs = 28, pts = [];
+    for (let i = 0; i <= segs; i++) { const u = i / segs; let p;
+      if (u < .5) p = [lerp(x0, x1, u / .5), y]; else if (u < .7) { const a = -Math.PI / 2 + (u - .5) / .2 * Math.PI; p = [x1 + Math.cos(a) * r, y + r + Math.sin(a) * r]; } else p = [lerp(x1, x0 + 30, (u - .7) / .3), y + 2 * r]; pts.push(p); }
+    const n = Math.max(2, Math.round(segs * k)), pe = pts[n - 1], pb = pts[n - 2], a = Math.atan2(pe[1] - pb[1], pe[0] - pb[0]);
+    ctx.save(); ctx.globalAlpha *= kU; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); pts.slice(0, n).forEach((p, i) => i ? ctx.lineTo(...p) : ctx.moveTo(...p)); ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 15; ctx.stroke(); ctx.strokeStyle = C.danger; ctx.lineWidth = 8; ctx.stroke();
+    poly(ctx, [[pe[0] + Math.cos(a) * 12, pe[1] + Math.sin(a) * 12], [pe[0] + Math.cos(a + 2.4) * 22, pe[1] + Math.sin(a + 2.4) * 22], [pe[0] + Math.cos(a - 2.4) * 22, pe[1] + Math.sin(a - 2.4) * 22]], C.danger, '#FFFFFF', 3);
+    ctx.restore();
+  });
   // ---- liquid trapped under the film (pooling layer + blisters)
   if (acc > 0 || amp.some(a => a > 0)) {
     const wcol = mixColor('#3E9BDA', '#D6F0FA', ice), wcol2 = mixColor('#2A6FB0', '#A9DDF0', ice);
@@ -448,10 +464,10 @@ function pla_setA(ctx, S, A) {
     if (kCr > 0) pla_bigCrack(ctx, pla_crackPts(91, P.fx + P.cem, 700, 80, Math.PI * .85), clamp(kCr * 1.3 - .2), 3.5);
     ctx.restore();
   }
-  if (kCr > 0) for (let n = 0; n < 9; n++) {          // fragments spalling off the face
-    const ts = T.burst + .2 + n * .17, a = t - ts; if (a < 0 || a > 1.4) continue;
-    const y0 = cracks[n % 5][1], x = P.fx + 34 + a * (120 + hash(n) * 100), y = y0 + a * a * 700 - a * 120;
-    ctx.save(); ctx.translate(x, Math.min(y, P.gy)); ctx.rotate(a * 6 + n); poly(ctx, [[-10, -7], [9, -9], [11, 6], [-7, 9]], n % 2 ? '#EDE3CC' : C.stone, C.ink, 2.5); ctx.restore();
+  if (kCr > 0) for (let n = 0; n < 14; n++) {         // fragments spalling off the face
+    const ts = T.burst + .15 + n * .14, a = t - ts; if (a < 0 || a > 1.4) continue;
+    const y0 = cracks[n % 5][1] + (hash(n * 3) - .5) * 40, x = P.fx + 30 + a * (130 + hash(n) * 120), y = y0 + a * a * 800 - a * 160, sz = 1 + hash(n * 7) * .9;
+    ctx.save(); ctx.translate(x, Math.min(y, P.gy - 4)); ctx.rotate(a * 6 + n); ctx.scale(sz, sz); poly(ctx, [[-13, -9], [11, -12], [14, 7], [-9, 12]], n % 2 ? '#EDE3CC' : C.stone, C.ink, 2.5); ctx.restore();
   }
 
   // ---- outside: rain bounces off the film
@@ -460,14 +476,14 @@ function pla_setA(ctx, S, A) {
     const xs = P.fx + P.film + P.rpe + 3;
     for (let i = 0; i < 80; i++) {
       const per = .75, ph = hash(i * 1.37) * per, cyc = Math.floor((t + ph) / per), a = t + ph - cyc * per;
-      const x0 = xs + 10 + hash(i * 7.1 + cyc * 3.9) * 880, vx = -230, vy = 1050, y0 = -60;
+      const x0 = xs + 10 + Math.pow(hash(i * 7.1 + cyc * 3.9), 1.8) * 880, vx = -230, vy = 1050, y0 = -60;
       const ah = (x0 - xs) / -vx, yh = y0 + vy * ah, hitWall = yh < P.gy, aEnd = hitWall ? ah : (P.gy - y0) / vy;
       ctx.save(); ctx.globalAlpha = kRain;
       if (a < aEnd) { const x = x0 + vx * a, y = y0 + vy * a; line(ctx, x, y, x - vx * .035, y - vy * .035, rgba(C.water, .85), 4); }
       else if (a < aEnd + .35) {
         const b = a - aEnd, hx = hitWall ? xs : x0 + vx * aEnd, hy = hitWall ? yh : P.gy;
-        if (hitWall) { ctx.beginPath(); ctx.arc(hx, hy, 6 + b * 50, -1.1, 1.1); ctx.strokeStyle = rgba('#FFFFFF', 1 - b / .35); ctx.lineWidth = 3; ctx.stroke(); }
-        for (let j = 0; j < 3; j++) { const vx2 = hitWall ? 110 + j * 60 : (j - 1) * 70, vy2 = -170 - j * 50; circle(ctx, hx + vx2 * b, hy + vy2 * b + 900 * b * b, 5, rgba(C.water, .95 * (1 - b / .35))); }
+        if (hitWall) { ctx.beginPath(); ctx.arc(hx, hy, 8 + b * 60, -1.2, 1.2); ctx.strokeStyle = rgba('#FFFFFF', 1 - b / .35); ctx.lineWidth = 4; ctx.stroke(); }
+        for (let j = 0; j < 4; j++) { const vx2 = hitWall ? 100 + j * 55 : (j - 1.5) * 60, vy2 = -150 - j * 45; circle(ctx, hx + vx2 * b, hy + vy2 * b + 900 * b * b, hitWall ? 6 : 4, rgba(C.water, .95 * (1 - b / .35)), hitWall ? rgba('#FFFFFF', .8 * (1 - b / .35)) : null, 1.5); }
       }
       ctx.restore();
     }
@@ -494,10 +510,10 @@ function pla_setA(ctx, S, A) {
   const kCemL = windowed(t, T.cem0 + .1, S.cue(2) - .2, .4);
   if (kCemL > 0) {
     pla_pill(ctx, 'Enduit ciment', 1350, 560, kCemL, { size: 48, tx: X(P.fx + P.cem + 8), ty: Y(700) });
-    text(ctx, 'dur', 1240, 660, { size: 56, font: FONT.hand, weight: 700, color: C.inkSoft, alpha: appear(t, T.dur, .4) * kCemL });
-    text(ctx, 'peu perméable', 1450, 668, { size: 56, font: FONT.hand, weight: 700, color: C.inkSoft, alpha: appear(t, T.perm, .4) * kCemL });
+    text(ctx, 'dur', 1290, 670, { size: 56, font: FONT.hand, weight: 700, color: C.inkSoft, alpha: appear(t, T.dur, .4) * kCemL });
+    text(ctx, 'peu perméable', 1470, 690, { size: 56, font: FONT.hand, weight: 700, color: C.inkSoft, alpha: appear(t, T.perm, .4) * kCemL });
     const ks = appear(t, T.cem0, .5) * kCemL;
-    if (ks > 0) { ctx.save(); ctx.translate(1700, 790); ctx.scale(easeOutBack(ks), easeOutBack(ks)); ctx.globalAlpha *= clamp(ks * 3); poly(ctx, [[-72, -84], [72, -84], [84, 72], [-84, 72]], '#C9CDD0', C.ink, 5); line(ctx, -62, -84, -52, -100, C.ink, 5); line(ctx, 62, -84, 52, -100, C.ink, 5); text(ctx, 'CIMENT', 0, 4, { size: 34, font: FONT.title, weight: 700, color: C.cementDark }); ctx.restore(); }
+    if (ks > 0) { ctx.save(); ctx.translate(1750, 800); ctx.scale(easeOutBack(ks), easeOutBack(ks)); ctx.globalAlpha *= clamp(ks * 3); poly(ctx, [[-72, -84], [72, -84], [84, 72], [-84, 72]], '#C9CDD0', C.ink, 5); line(ctx, -62, -84, -52, -100, C.ink, 5); line(ctx, 62, -84, 52, -100, C.ink, 5); text(ctx, 'CIMENT', 0, 4, { size: 34, font: FONT.title, weight: 700, color: C.cementDark }); ctx.restore(); }
   }
   const kFilm = windowed(t, T.film, S.cue(3) - .1, .35);
   if (kFilm > 0) {
@@ -505,8 +521,7 @@ function pla_setA(ctx, S, A) {
     pla_pill(ctx, 'une peau fermée', X(P.fx) + 390, Y(560), windowed(t, T.skin, S.cue(3) - .1, .35), { size: 46, bg: '#FFFFFF', icon: ICON_LOCK });
   }
   const k3 = 1 - appear(t, S.cue(5) - .2, .4);
-  pla_pill(ctx, 'la pluie ne rentre plus', X(1390), Y(190), appear(t, A(3, .1), .45) * k3 * (1 - appear(t, T.sol - .2, .4)), { size: 40, icon: ICON_OK });
-  pla_pill(ctx, 'pluie', X(1290), Y(190), appear(t, T.sol - .1, .45) * k3 * (1 - appear(t, T.block + .8, .4)), { size: 40, icon: ICON_OK });
+  pla_pill(ctx, 'la pluie ne rentre plus', X(1400), Y(190), appear(t, A(3, .1), .45) * k3 * (1 - appear(t, T.block + .8, .4)), { size: 42, icon: ICON_OK });
   const kSol = appear(t, T.sol, .45) * k3;
   if (kSol > 0) { arrow(ctx, X(700), Y(1000), X(700), Y(720), { color: '#2A6FB0', lw: 12, head: 30, k: kSol }); pla_pill(ctx, 'eau du sol', X(830), Y(790), kSol, { size: 42, bg: '#FFFFFF' }); }
   const kVap = appear(t, T.vap, .45) * k3;
@@ -548,15 +563,26 @@ function pla_wallClip(ctx) {     // clip to the façade wall minus windows & doo
   for (const [x, y, w, h] of pla_holes()) ctx.rect(x, y, w, h);
   ctx.clip('evenodd');
 }
-function pla_damageTex() {        // what is really behind the paint: crumbling render, damp, salt
-  return cached('pla|damage|v3', HB.w, HB.h, g => {
-    g.drawImage(stoneTexture(HB.w, Math.round(HB.h), 8, { size: 64 }), 0, 0);
-    const r = rng(12);
-    for (let i = 0; i < 120; i++) { const x = r() * HB.w, y = r() * HB.h, s = 18 + r() * 46; blob(g, x, y, s, i + 5, .4, 9, r() < .55 ? '#DCCFB3' : '#E8DDC6', 'rgba(110,90,60,.45)', 2); }
-    for (let i = 0; i < 900; i++) { g.fillStyle = r() < .5 ? 'rgba(255,250,235,.55)' : 'rgba(120,100,70,.25)'; g.fillRect(r() * HB.w, r() * HB.h, 2 + r() * 3, 2 + r() * 3); }
-    const dg = g.createLinearGradient(0, HB.h * .45, 0, HB.h); dg.addColorStop(0, 'rgba(50,70,90,0)'); dg.addColorStop(1, 'rgba(50,70,90,.45)'); g.fillStyle = dg; g.fillRect(0, 0, HB.w, HB.h);
-    for (let i = 0; i < 40; i++) blob(g, r() * HB.w, HB.h * (.6 + r() * .38), 4 + r() * 10, i, .5, 7, 'rgba(255,255,255,.85)');
-    for (let i = 0; i < 9; i++) { const c = pla_crackPts(500 + i, r() * HB.w, r() * HB.h * .5, 120 + r() * 120, Math.PI / 2 + (r() - .5)); pla_crack(g, c, 1, 'rgba(60,45,35,.75)', 3); }
+function pla_damageTex() {        // what is really behind the paint: the old lime render crumbling to powder, damp, salt
+  return cached('pla|damage|v5', HB.w, HB.h, g => {
+    const w = HB.w, h = Math.round(HB.h), r = rng(12);
+    g.drawImage(stoneTexture(w, h, 8, { size: 64 }), 0, 0);
+    g.fillStyle = 'rgba(70,52,34,.38)'; g.fillRect(0, 0, w, h);                // cavities look deep and damp
+    const R = document.createElement('canvas'); R.width = w; R.height = h; const q = R.getContext('2d');
+    q.fillStyle = '#E2D3B4'; q.fillRect(0, 0, w, h);
+    for (let i = 0; i < 1600; i++) { q.fillStyle = r() < .55 ? 'rgba(255,250,235,.75)' : 'rgba(150,125,90,.3)'; const sz = 1.5 + r() * 4; q.fillRect(r() * w, r() * h, sz, sz); }
+    const holes = []; for (let i = 0; i < 30; i++) holes.push([r() * w, r() * h, 20 + r() * 46, i]);
+    q.globalCompositeOperation = 'destination-out';
+    for (const [x, y, sz, i] of holes) blob(q, x, y, sz, i + 9, .45, 10, '#000');
+    q.globalCompositeOperation = 'source-over';
+    for (const [x, y, sz, i] of holes) blob(q, x, y, sz, i + 9, .45, 10, null, 'rgba(105,80,50,.7)', 3);
+    g.drawImage(R, 0, 0);
+    for (const [x, y, sz] of holes) for (let j = 0; j < 22; j++) {            // powder crumbs gathering at the bottom of each hole
+      const a = Math.PI * (.15 + .7 * r()), d = sz * (.55 + .35 * r()); circle(g, x + Math.cos(a) * d, y + Math.sin(a) * d, 2 + r() * 3.5, '#F4ECDA', 'rgba(120,100,70,.5)', 1);
+    }
+    const dg = g.createLinearGradient(0, h * .45, 0, h); dg.addColorStop(0, 'rgba(50,70,90,0)'); dg.addColorStop(1, 'rgba(50,70,90,.42)'); g.fillStyle = dg; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 46; i++) blob(g, r() * w, h * (.62 + r() * .36), 4 + r() * 10, i, .5, 7, 'rgba(255,255,255,.88)');
+    for (let i = 0; i < 9; i++) { const c = pla_crackPts(500 + i, r() * w, r() * h * .5, 120 + r() * 120, Math.PI / 2 + (r() - .5)); pla_crack(g, c, 1, 'rgba(60,45,35,.75)', 3); }
   });
 }
 function pla_pieces() {           // jittered grid of paint plaques covering the wall
@@ -582,10 +608,10 @@ function pla_setB(ctx, S, A) {
     const xs = lerp(HB.cx, HB.x + HB.w, ease(kScan));
     ctx.save(); ctx.globalAlpha = xrOut; pla_wallClip(ctx); ctx.beginPath(); ctx.rect(HB.cx, HB.y, xs - HB.cx, HB.h); ctx.clip();
     ctx.drawImage(pla_damageTex(), HB.x, HB.y);
-    ctx.fillStyle = 'rgba(242,230,206,.28)'; ctx.fillRect(HB.cx, HB.y, HB.w / 2, HB.h);          // ghost of the paint
-    ctx.fillStyle = 'rgba(70,150,210,.14)'; ctx.fillRect(HB.cx, HB.y, HB.w / 2, HB.h);
-    for (let y = HB.y; y < HB.gy; y += 9) { ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(HB.cx, y, HB.w / 2, 3); }
-    for (let i = 0; i < 80; i++) { const x = HB.cx + 10 + hash(i * 3.1) * (HB.w / 2 - 20), sp = 40 + hash(i) * 50, y = HB.y + ((hash(i * 7.3) * HB.h + (t - T.scan) * sp) % HB.h); circle(ctx, x + Math.sin(t * 2 + i) * 3, y, 2.5 + hash(i * 2) * 3, 'rgba(245,236,212,.95)', 'rgba(120,100,70,.55)', 1); }
+    ctx.fillStyle = 'rgba(242,230,206,.12)'; ctx.fillRect(HB.cx, HB.y, HB.w / 2, HB.h);          // ghost of the paint
+    ctx.fillStyle = 'rgba(70,150,210,.08)'; ctx.fillRect(HB.cx, HB.y, HB.w / 2, HB.h);
+    for (let y = HB.y; y < HB.gy; y += 9) { ctx.fillStyle = 'rgba(255,255,255,.07)'; ctx.fillRect(HB.cx, y, HB.w / 2, 3); }
+    for (let i = 0; i < 110; i++) { const x = HB.cx + 10 + hash(i * 3.1) * (HB.w / 2 - 20), sp = 45 + hash(i) * 60, y = HB.y + ((hash(i * 7.3) * HB.h + (t - T.scan) * sp) % HB.h); circle(ctx, x + Math.sin(t * 2 + i) * 3, y, 3 + hash(i * 2) * 3.5, 'rgba(247,239,218,.97)', 'rgba(120,100,70,.6)', 1.2); }
     ctx.restore();
     ctx.save(); ctx.globalAlpha = xrOut; ctx.setLineDash([16, 10]); ctx.strokeStyle = '#46A8E8'; ctx.lineWidth = 5; ctx.strokeRect(HB.cx + 3, HB.y + 3, xs - HB.cx - 6, HB.h - 6); ctx.restore();
     if (kScan < 1) { ctx.save(); ctx.globalAlpha = xrOut; line(ctx, xs, HB.y - 10, xs, HB.gy + 6, '#46A8E8', 9); ctx.restore(); }
@@ -619,8 +645,8 @@ function pla_setB(ctx, S, A) {
     ctx.save(); ctx.translate(pc.cx + dx, pc.cy + dy); ctx.rotate(rot); ctx.translate(-pc.cx, -pc.cy);
     ctx.save(); ctx.translate(8, 10); shape(); ctx.clip(); ctx.translate(-8, -10); pla_wallClip(ctx);
     ctx.fillStyle = '#C2AA7E'; ctx.fillRect(HB.x, HB.y, HB.w, HB.h); ctx.restore();                  // powdery render on the back
-    ctx.save(); shape(); ctx.clip(); pla_wallClip(ctx); plasticFill(ctx, HB.x, HB.y, HB.w, HB.h, PAINT_C, { gloss: 1 }); ctx.restore();
-    shape(); ctx.strokeStyle = 'rgba(43,38,35,.6)'; ctx.lineWidth = 3; ctx.stroke();
+    ctx.save(); shape(); ctx.clip(); pla_wallClip(ctx); plasticFill(ctx, HB.x, HB.y, HB.w, HB.h, PAINT_C, { gloss: 1 });
+    shape(); ctx.strokeStyle = 'rgba(43,38,35,.55)'; ctx.lineWidth = 6; ctx.stroke(); ctx.restore();
     ctx.restore();
   }
   for (const pc of pieces) {                           // dust
@@ -644,13 +670,11 @@ scene('plastique', (ctx, S) => {
       [S.cue(4), 'stop'], [S.cue(5), 'explain'], [A(5, .34), 'point'], [A(5, .53), 'shrug'], [A(5, .83), 'point'], [S.cue(6), 'explain'], [A(6, .42), 'point'],
       [S.cue(7), 'shrug'], [A(7, .45), 'point'], [A(7, .83), 'explain']]);
     let expr = 'happy';
-    if (t > S.cue(2)) expr = 'serious';
-    if (t > A(3, .6)) expr = 'worried';
+    if (t > S.cue(1)) expr = 'serious';
+    if (t > S.cue(2)) expr = 'worried';
     if (t > A(5, .83) && t < A(5, .83) + 1.2) expr = 'surprised';
-    if (t > S.cue(6) && t < S.cue(7)) expr = 'serious';
-    if (t > S.cue(7)) expr = 'worried';
     const shiver = appear(t, S.cue(7) + .2, .4) * (1 - appear(t, A(7, .45), .4));
-    presenter(ctx, { x: 250 + Math.sin(t * 38) * 2.5 * shiver, y: 1000, s: .86, T: S.T, pose, expr, look: .9, lookY: t > A(0, .13) && t < A(0, .24) ? -.8 : 0 });
+    presenter(ctx, { x: 205 + Math.sin(t * 38) * 2.5 * shiver, y: 1000, s: .86, T: S.T, pose, expr, look: .9, lookY: t > A(0, .13) && t < A(0, .24) ? -.8 : 0 });
     ctx.restore();
   }
   if (kTr > 0) {
