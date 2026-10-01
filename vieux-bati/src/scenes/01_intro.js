@@ -7,14 +7,20 @@
 // The scale depends on absolute time only, so both scenes draw the identical image during the crossfade.
 function intro_closeupScale(T) { return 1 + .035 * Math.max(0, T - 29); }
 function intro_stoneCloseup(ctx, T, { alpha = 1, vignette = 1, cx = W / 2, cy = H / 2, scale = null } = {}) {
-  const tex = stoneTexture(W, H, 11, { size: 150 });
   const sc = scale ?? intro_closeupScale(T);
+  const plain = () => stoneTexture(W, H, 11, { size: 150 });
+  const vign = () => cached('intro|closeupVignette', W, H, g => {      // texture + vignette baked once
+    g.drawImage(plain(), 0, 0);
+    const v = g.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H);
+    v.addColorStop(0, 'rgba(45,35,25,0)'); v.addColorStop(1, 'rgba(45,35,25,.38)');
+    g.fillStyle = v; g.fillRect(0, 0, W, H);
+  });
+  const x = cx - W / 2 * sc, y = cy - H / 2 * sc, w = W * sc, h = H * sc;
   ctx.save(); ctx.globalAlpha *= alpha;
-  ctx.drawImage(tex, cx - W / 2 * sc, cy - H / 2 * sc, W * sc, H * sc);
-  if (vignette > 0) {
-    const g = ctx.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H);
-    g.addColorStop(0, 'rgba(45,35,25,0)'); g.addColorStop(1, `rgba(45,35,25,${.38 * vignette})`);
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  if (vignette >= 1) ctx.drawImage(vign(), x, y, w, h);
+  else {
+    ctx.drawImage(plain(), x, y, w, h);
+    if (vignette > 0) { ctx.globalAlpha *= vignette; ctx.drawImage(vign(), x, y, w, h); }
   }
   ctx.restore();
 }
@@ -397,7 +403,7 @@ scene('intro', (ctx, S) => {
   if (t >= tEnd) { intro_stoneCloseup(ctx, T); return; }
 
   // ---- timeline (all keyed on narration cues) ----
-  const kOut = inv(2.95, 3.75, t);                                  // title leaves as Margot arrives
+  const kOut = inv(S.cue(0) - .25, S.cue(0) + .55, t);             // title leaves as Margot arrives
   const tHouse = S.cue(1) - .05, t1880 = L(1, .63);
   const tWipe0 = L(3, .12), tWipe1 = L(3, .4), tIso = L(3, .585), tWin = L(3, .715);
   const tZoom = L(5, .26), tIris = L(5, .62);
@@ -474,15 +480,15 @@ scene('intro', (ctx, S) => {
   intro_moldInset(ctx, 178, 300, 150, appear(t, L(4, .6), .5) * fadeHouseUI, inv(L(4, .64), S.cueEnd(4) + .4, t), winTL, t);
 
   // ---- Margot ----
-  const xIn = lerp(2150, 1180, smooth(inv(3.05, 4.25, t)));
+  const tIn = S.cue(0) - .15, xIn = lerp(2150, 1180, smooth(inv(tIn, tIn + 1.2, t)));
   const xMove = lerp(0, 500, smooth(inv(S.cue(1) - .55, S.cue(1) + .25, t)));
   const xExit = 700 * easeIn(inv(L(5, .86), tEnd - .1, t));
   const mx = xIn + xMove + xExit;
-  const hop = t < 4.25 ? clamp((t - 3.05) / 1.2) * 3 : (t > S.cue(1) - .55 && t < S.cue(1) + .25) ? (t - (S.cue(1) - .55)) / .8 * 2 : 0;
-  const pose = poseAt(t, [[0, 'idle'], [3.2, 'wave'], [L(0, .55), 'explain'], [S.cue(1) + .15, 'pointL'], [t1880, 'explain'],
+  const hop = t < tIn + 1.2 ? clamp((t - tIn) / 1.2) * 3 : (t > S.cue(1) - .55 && t < S.cue(1) + .25) ? (t - (S.cue(1) - .55)) / .8 * 2 : 0;
+  const pose = poseAt(t, [[0, 'idle'], [S.cue(0), 'wave'], [L(0, .55), 'explain'], [S.cue(1) + .15, 'pointL'], [t1880, 'explain'],
     [S.cue(2), 'open'], [L(2, .55), 'explain'], [S.cue(3), 'pointL'], [L(3, .34), 'count'], [L(3, .9), 'shrug'],
     [S.cue(4), 'pointL'], [L(4, .6), 'open'], [S.cue(5), 'think'], [L(5, .45), 'pointL']]);
-  if (t > 3.2 && t < L(0, .6)) { const wv = Math.sin(t * 10) * smooth(inv(3.3, 3.6, t)) * (1 - smooth(inv(L(0, .45), L(0, .6), t))); pose.R = [pose.R[0] + wv * 10, pose.R[1] + wv * 22]; }
+  if (t > S.cue(0) && t < L(0, .6)) { const wv = Math.sin(t * 10) * smooth(inv(S.cue(0) + .1, S.cue(0) + .4, t)) * (1 - smooth(inv(L(0, .45), L(0, .6), t))); pose.R = [pose.R[0] + wv * 10, pose.R[1] + wv * 22]; }
   const expr = t < S.cue(3) ? 'happy' : t < L(3, .3) ? 'wink' : t < L(3, .9) ? 'happy' : t < S.cue(4) ? 'serious' : t < L(5, .45) ? 'worried' : 'serious';
   const look = (t > S.cue(1) && t < S.cue(2)) || (t > S.cue(3) && t < L(3, .3)) || t > S.cue(4) ? -.8 : 0;
   if (mx < 2100) presenter(ctx, { x: mx, y: 1000, s: .95, pose, T, look, expr, bounce: hop });

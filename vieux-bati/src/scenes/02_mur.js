@@ -407,8 +407,6 @@ scene('mur', (ctx, S) => {
 
   const kSec = smooth(inv(tMerge, tMerge + .8, t));                       // the section fades in
   const wallTop = lerp(H + 20, -20, easeOut(inv(tMerge + .1, tMerge + 1.15, t)));
-  // camera: a slow push-in on the wall once the section is there
-  const zc = 1;   // (no camera push-in: resampling every cached layer would double the frame cost)
 
   // ---- intensities ----
   const rainK = appear(t, tRain - .3, .8) * (1 - .72 * smooth(inv(tOut + .3, tOut + 1.6, t))) * (1 - smooth(inv(S.cue(5), S.cue(5) + 1.2, t)));
@@ -422,17 +420,14 @@ scene('mur', (ctx, S) => {
 
   // ---- background: paper (beat 0) under the section ----
   if (kSec < 1) paperBg(ctx);
-  if (kSec > 0) {
+  if (kSec > 0) {      // (no camera moves here on purpose: resampling every cached layer would double the frame cost)
     ctx.save(); ctx.globalAlpha *= kSec;
-    ctx.translate(G.CX, 470); ctx.scale(zc, zc); ctx.translate(-G.CX, -470);
     mur_interior(ctx);
     mur_exterior(ctx, t, wx);
     mur_soil(ctx, soilK);
     ctx.restore();
   }
-  // ---- the section's wall and everything happening in it (camera) ----
-  ctx.save();
-  ctx.translate(G.CX, 470); ctx.scale(zc, zc); ctx.translate(-G.CX, -470);
+  // ---- the section's wall and everything happening in it ----
   if (wallTop < H) {
     mur_wall(ctx, wallTop);
     ctx.save(); ctx.beginPath(); ctx.rect(0, wallTop, W, H); ctx.clip();
@@ -465,9 +460,8 @@ scene('mur', (ctx, S) => {
     for (let i = 0; i < 7; i++) { const x = 690 + ((i * 120 + t * 90) % 760); if (x > 660 + 800 * kFlow - 40) continue; ctx.globalAlpha = .8 * kFlow * Math.sin(Math.PI * (x - 690) / 760); ctx.beginPath(); ctx.moveTo(x - 12, 452); ctx.lineTo(x + 6, 470); ctx.lineTo(x - 12, 488); ctx.stroke(); }
     ctx.restore();
   }
-  ctx.restore();
 
-  // ---- labels (screen space) ----
+  // ---- labels ----
   // beat 1
   mur_noLabel(ctx, 'Pas de coupure de capillarité', 1555, 690, appear(t, tNo[0] + .1, .45) * fadeNo);
   mur_noLabel(ctx, 'Pas de pare-vapeur', 545, 330, appear(t, tNo[1] + .1, .45) * fadeNo);
