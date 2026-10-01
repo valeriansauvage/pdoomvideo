@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Le vieux bâti doit respirer</title>
+<style>
+  @font-face { font-family: 'Fredoka'; font-weight: 600; src: url(assets/fonts/fredoka-latin-600-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Fredoka'; font-weight: 700; src: url(assets/fonts/fredoka-latin-700-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Nunito'; font-weight: 700; src: url(assets/fonts/nunito-latin-700-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Nunito'; font-weight: 800; src: url(assets/fonts/nunito-latin-800-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Caveat'; font-weight: 700; src: url(assets/fonts/caveat-latin-700-normal.woff2) format('woff2'); }
+  html, body { margin: 0; background: #1b1820; color: #eee; font: 13px system-ui, sans-serif; }
+  main { padding: 12px; display: grid; gap: 8px; }
+  #out { width: min(100%, 1280px); aspect-ratio: 16 / 9; height: auto; background: #F4EBDD; }
+  .bar { display: flex; gap: 10px; align-items: center; max-width: 1280px; }
+  #scrub { flex: 1; }
+</style>
+</head>
+<body>
+<main>
+  <canvas id="out" width="1920" height="1080"></canvas>
+  <div class="bar"><button id="play">▶︎ / ❚❚</button><input id="scrub" type="range" min="0" max="500" step="0.04" value="0"><span id="tt">…</span></div>
+  <audio id="aud" src="out/mix.wav" preload="auto"></audio>
+</main>
+<script src="src/timing.js"></script>
+<script src="src/core.js"></script>
+<script src="src/props.js"></script>
+<script src="src/presenter.js"></script>
+<script src="src/main.js"></script>
+<script src="src/scenes/01_intro.js"></script>
+<script src="src/scenes/02_mur.js"></script>
+<script src="src/scenes/03_eau.js"></script>
+<script src="src/scenes/04_plastique.js"></script>
+<script src="src/scenes/05_isolation.js"></script>
+<script src="src/scenes/06_chaux.js"></script>
+<script src="src/scenes/07_pouzzolane.js"></script>
+<script src="src/scenes/08_keim.js"></script>
+<script src="src/scenes/09_vieillir.js"></script>
+<script src="src/scenes/10_conclusion.js"></script>
+</body>
+</html>
