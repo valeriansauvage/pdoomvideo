@@ -17,7 +17,7 @@ const STYLES = {
   creme: { fond: 'creme' },
   portail: { fond: 'portail', clair: true },
   image: { clair: true, voile: 'halo' },
-  flou: { clair: true, voile: 'plein' },
+  flou: { clair: true, voile: 'plein', sansOmbre: true },   // le voile suffit ; l'ombre doublerait le poids des fichiers
 };
 const SAVOIR_FAIRE = ['Ravalement traditionnel', 'Isolation thermique par l’extérieur', 'Couverture'];
 const COULEURS = { creme: '#F3EFE4', texte: '#333333', orange: '#EA6B49', clair: '#FFFFFF' };   // crème de la charte ; gris et orange du logo
@@ -83,9 +83,9 @@ function surgir(c, k, a) {
 }
 
 // Le carton à l'instant s (secondes depuis le début de la construction), opacité générale a ; clair : logo sur fond sombre.
-function carton(s, a, clair) {
+function carton(s, a, clair, ombrer) {
   const L = LOGO.calques;
-  ombre(clair);
+  ombre(ombrer);
   G.save(); G.translate(W / 2 - LOGO.w * E / 2, CY - LOGO.h * E / 2); G.scale(E, E);   // repère du logo
 
   // 1. le tracé vert monte depuis le sol, comme une maçonnerie
@@ -131,7 +131,7 @@ function image(plan, t, style = 'creme') {
   if (S.voile) voile(S.voile, easeInOut(seg(s, -.3, .9)) * a);
   const z = 1 + .025 * easeInOut(t / P.dur);                                   // très lente poussée vers le logo
   G.setTransform(K * z, 0, 0, K * z, CAN.width / 2 * (1 - z), CAN.height / 2 * (1 - z));
-  carton(s, a, S.clair);
+  carton(s, a, S.clair, S.clair && !S.sansOmbre);
   const noir = P.noir ? easeInOut(seg(t, P.noir[0], P.noir[1])) : 0;
   if (noir > 0) { G.setTransform(1, 0, 0, 1, 0, 0); G.fillStyle = `rgba(0, 0, 0, ${noir})`; G.fillRect(0, 0, CAN.width, CAN.height); }
 }
