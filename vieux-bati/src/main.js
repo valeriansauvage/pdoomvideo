@@ -23,6 +23,12 @@ function sceneState(si, T) {
 function drawScene(ctx, si, T) {
   const sc = TT().scenes[si], fn = SCENES[sc.id];
   ctx.save();
+  // gentle per-shot camera: a slow push-in and drift that peaks mid-scene and returns to neutral at both ends,
+  // so cuts and crossfades stay seamless (always scaled ≥ 1, so the frame edges never show)
+  const d = sc.end - sc.start, u = clamp((T - sc.start) / d), k = Math.sin(Math.PI * u);
+  const z = 1 + .035 * k, px = W / 2 + Math.sin(si * 2.1 + 1) * 140, py = H * .45;
+  ctx.translate(px, py); ctx.scale(z, z); ctx.rotate(.004 * k * Math.sin(si * 1.7)); ctx.translate(-px + 12 * k * Math.sin(T * .21 + si), -py + 6 * k * Math.cos(T * .17 + si));
+  EVT.scene = sc.id; EVT.st = sc.start; EVT.T = T;
   if (fn) fn(ctx, sceneState(si, T));
   else { paperBg(ctx); text(ctx, `[${sc.id}]`, W / 2, H / 2, { size: 80 }); presenter(ctx, { x: 1500, y: 1000, T, pose: 'explain' }); }
   ctx.restore();
@@ -87,10 +93,11 @@ function subtitles(ctx, T) {
 
 // ---- frame ----
 let _A, _B;
-function offscreen() { const c = document.createElement('canvas'); c.width = W; c.height = H; return c; }
+function offscreen() { const c = document.createElement('canvas'); c.width = W; c.height = H; c.__boil = true; return c; }
 function frame(ctx, T) {
   const sc = TT().scenes; let si = sc.findIndex(s => T < s.end); if (si < 0) si = sc.length - 1;
   const start = sc[si].start;
+  BOIL.T = T; BOIL.on = true;
   ctx.save(); ctx.clearRect(0, 0, W, H);
   if (si > 0 && T < start + XFADE / 2) {
     // crossfade from previous scene
@@ -108,6 +115,9 @@ function frame(ctx, T) {
     const k = smooth(inv(sc[si].end - XFADE / 2, sc[si].end + XFADE / 2, T));
     ctx.drawImage(_A, 0, 0); ctx.globalAlpha = k; ctx.drawImage(_B, 0, 0); ctx.globalAlpha = 1;
   } else drawScene(ctx, si, T);
+  // paper fibres + soft vignette over the picture (not over the titles and subtitles)
+  ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(PAPER(), 0, 0); ctx.globalCompositeOperation = 'source-over';
+  BOIL.on = false;                                   // overlays stay crisp and readable
   chapterCard(ctx, si, T);
   if (!window.NO_SUBS) subtitles(ctx, T);
   // progress bar
@@ -117,10 +127,18 @@ function frame(ctx, T) {
   ctx.fillStyle = C.ochre; ctx.fillRect(0, H - 8, W * T / D, 8);
   ctx.globalAlpha = 1;
   ctx.restore();
+  BOIL.on = true;
 }
+const PAPER = (() => { let c; return () => { if (c) return c; c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, W, H); const r = rng(11);
+  for (let i = 0; i < 2600; i++) { const x = r() * W, y = r() * H, l = 6 + r() * 26, a = r() * TAU; g.strokeStyle = `rgba(120,95,70,${.05 + r() * .07})`; g.lineWidth = .6 + r() * 1.2;
+    g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + Math.cos(a) * l * .5 + (r() - .5) * 6, y + Math.sin(a) * l * .5 + (r() - .5) * 6, x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); }
+  for (let i = 0; i < 14000; i++) { g.fillStyle = `rgba(110,85,60,${r() * .07})`; g.fillRect(r() * W, r() * H, 1 + r() * 2, 1 + r() * 2); }
+  const v = g.createRadialGradient(W / 2, H / 2, H * .45, W / 2, H / 2, H * 1.05); v.addColorStop(0, 'rgba(255,255,255,0)'); v.addColorStop(1, 'rgba(150,120,90,.28)');
+  g.fillStyle = v; g.fillRect(0, 0, W, H); return c; }; })();
 
 // ---- API used by render.mjs and the preview page ----
-const out = document.getElementById('out'), octx = out.getContext('2d');
+const out = document.getElementById('out'), octx = out.getContext('2d'); out.__boil = true;
 window.renderAt = (T, type = 'image/jpeg', q = .92) => { frame(octx, T); return out.toDataURL(type, q); };
 window.drawAt = T => frame(octx, T);
 window.renderSheet = (times, cols = 3, w = 640) => {

@@ -124,7 +124,7 @@ function textBlock(ctx, s, x, y, maxW, { size = 40, font = FONT.body, weight = 7
 // rounded callout label with pop-in. k = 0..1 appear progress
 function label(ctx, s, x, y, { k = 1, size = 40, bg = C.paper, color = C.ink, border = C.ink, pad = 18, font = FONT.title, weight = 600, rot = 0, icon = null } = {}) {
   if (k <= 0) return;
-  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); const sc = easeOutBack(k); ctx.scale(sc, sc); ctx.globalAlpha *= clamp(k * 3);
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); const kk = clamp(k * 2.2), sc = easeOutBack(kk, 2.0); ctx.scale(sc, sc); ctx.globalAlpha *= clamp(kk * 4);
   setFont(ctx, size, font, weight); const w = ctx.measureText(s).width + pad * 2, h = size * 1.45;
   fillRR(ctx, -w / 2 + 5, -h / 2 + 7, w, h, h / 2, 'rgba(0,0,0,.15)');
   fillRR(ctx, -w / 2, -h / 2, w, h, h / 2, bg, border, 4);
@@ -134,7 +134,7 @@ function label(ctx, s, x, y, { k = 1, size = 40, bg = C.paper, color = C.ink, bo
 // big stamp (✔ / ✘ style verdicts)
 function stamp(ctx, s, x, y, { k = 1, color = C.danger, size = 70, rot = -.12 } = {}) {
   if (k <= 0) return;
-  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); const sc = lerp(2.2, 1, easeOut(k)); ctx.scale(sc, sc); ctx.globalAlpha *= clamp(k * 2);
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); const kk = clamp(k / .4), sc = k < .4 ? lerp(2.2, .9, easeIn(kk)) : lerp(.9, 1, easeOutBack(inv(.4, 1, k), 2.5)); ctx.scale(sc, sc); ctx.globalAlpha *= clamp(kk * 3);
   setFont(ctx, size, FONT.title, 700); const w = ctx.measureText(s).width + 50, h = size * 1.5;
   fillRR(ctx, -w / 2, -h / 2, w, h, 16, rgba(color, .08), color, 7);
   text(ctx, s, 0, 4, { size, font: FONT.title, weight: 700, color });
@@ -164,3 +164,62 @@ function cached(key, w, h, draw) {
   let c = _cache.get(key); if (c) return c;
   c = document.createElement('canvas'); c.width = Math.ceil(w); c.height = Math.ceil(h); draw(c.getContext('2d')); _cache.set(key, c); return c;
 }
+
+// ---------- hand-drawn "boil" ----------
+// Every path drawn on a canvas flagged __boil (the output and the crossfade buffers) gets its vertices
+// nudged by a small offset that changes BOIL.fps times a second, like hand-redrawn animation.
+// Offscreen textures are never boiled, so caches stay identical across render workers.
+const BOIL = { fps: 8, amp: 1.8, T: 0, on: true };
+(function () {
+  const P = CanvasRenderingContext2D.prototype;
+  const o = { moveTo: P.moveTo, lineTo: P.lineTo, quad: P.quadraticCurveTo, bez: P.bezierCurveTo, arc: P.arc, ellipse: P.ellipse, rect: P.rect, roundRect: P.roundRect, begin: P.beginPath };
+  const live = c => BOIL.on && c.canvas && c.canvas.__boil;
+  // smooth noise along the path (neighbouring vertices move together), re-drawn BOIL.fps times a second
+  const off = (c) => { const i = c.__bi = (c.__bi || 0) + 1, f = Math.floor(BOIL.T * BOIL.fps) * 17.31, a = BOIL.amp / (c.__bs || 1);
+    return [noise(i * .23 + f) * a, noise(i * .23 + f + 61.7) * a]; };
+  P.beginPath = function () { if (live(this)) { this.__bi = 0; const m = this.getTransform(); this.__bs = Math.sqrt(Math.abs(m.a * m.d - m.b * m.c)) || 1; } return o.begin.call(this); };
+  P.moveTo = function (x, y) { if (!live(this)) return o.moveTo.call(this, x, y); const d = off(this); return o.moveTo.call(this, x + d[0], y + d[1]); };
+  P.lineTo = function (x, y) { if (!live(this)) return o.lineTo.call(this, x, y); const d = off(this); return o.lineTo.call(this, x + d[0], y + d[1]); };
+  P.quadraticCurveTo = function (cx, cy, x, y) { if (!live(this)) return o.quad.call(this, cx, cy, x, y); const a = off(this), d = off(this); return o.quad.call(this, cx + a[0], cy + a[1], x + d[0], y + d[1]); };
+  P.bezierCurveTo = function (a1, b1, a2, b2, x, y) { if (!live(this)) return o.bez.call(this, a1, b1, a2, b2, x, y); const p = off(this), q = off(this), d = off(this); return o.bez.call(this, a1 + p[0], b1 + p[1], a2 + q[0], b2 + q[1], x + d[0], y + d[1]); };
+  // curves → wobbly polylines (small shapes are left crisp: pupils, dots, particles)
+  function poly(c, x, y, rx, ry, rot, a0, a1, ccw) {
+    let sweep = a1 - a0;
+    if (!ccw && sweep < 0) sweep = sweep % TAU + TAU; if (ccw && sweep > 0) sweep = sweep % TAU - TAU;
+    if (Math.abs(a1 - a0) >= TAU) sweep = ccw ? -TAU : TAU;
+    const n = Math.max(12, Math.min(64, Math.ceil(Math.max(rx, ry) * Math.abs(sweep) / 8))), cr = Math.cos(rot), sr = Math.sin(rot);
+    // periodic radial wobble: smooth, and a full circle still closes on itself
+    const i = c.__bi = (c.__bi || 0) + 1, f = Math.floor(BOIL.T * BOIL.fps), a = BOIL.amp * .9 / (c.__bs || 1);
+    const p1 = hash(i * 3.1 + f * 7.7) * TAU, p2 = hash(i * 5.3 + f * 2.9) * TAU, p3 = hash(i * 1.7 + f * 9.1) * TAU;
+    for (let k = 0; k <= n; k++) { const t = a0 + sweep * k / n, w = a * (.55 * Math.sin(2 * t + p1) + .3 * Math.sin(3 * t + p2) + .15 * Math.sin(5 * t + p3));
+      const ex = Math.cos(t) * (rx + w), ey = Math.sin(t) * (ry + w);
+      o.lineTo.call(c, x + ex * cr - ey * sr, y + ex * sr + ey * cr); }
+  }
+  P.arc = function (x, y, r, a0, a1, ccw) { if (!live(this) || r * (this.__bs || 1) < 14) return o.arc.call(this, x, y, r, a0, a1, ccw); poly(this, x, y, r, r, 0, a0, a1, ccw); };
+  P.ellipse = function (x, y, rx, ry, rot, a0, a1, ccw) { if (!live(this) || Math.min(rx, ry) * (this.__bs || 1) < 14) return o.ellipse.call(this, x, y, rx, ry, rot, a0, a1, ccw); poly(this, x, y, rx, ry, rot, a0, a1, ccw); };
+  P.rect = function (x, y, w, h) { if (!live(this)) return o.rect.call(this, x, y, w, h); this.moveTo(x, y); this.lineTo(x + w, y); this.lineTo(x + w, y + h); this.lineTo(x, y + h); this.closePath(); };
+  P.roundRect = function (x, y, w, h, r) {
+    if (!live(this)) return o.roundRect.call(this, x, y, w, h, r);
+    let R = Array.isArray(r) ? r : [r]; if (R.length === 1) R = [R[0], R[0], R[0], R[0]]; else if (R.length === 2) R = [R[0], R[1], R[0], R[1]]; else if (R.length === 3) R = [R[0], R[1], R[2], R[1]];
+    if (w < 0) { x += w; w = -w; } if (h < 0) { y += h; h = -h; }
+    const m = Math.min(w, h) / 2; const [tl, tr, br, bl] = R.map(v => Math.max(0, Math.min(+v || 0, m)));
+    this.moveTo(x + tl, y); this.lineTo(x + w - tr, y); if (tr) P.arc.call(this, x + w - tr, y + tr, tr, -Math.PI / 2, 0);
+    this.lineTo(x + w, y + h - br); if (br) P.arc.call(this, x + w - br, y + h - br, br, 0, Math.PI / 2);
+    this.lineTo(x + bl, y + h); if (bl) P.arc.call(this, x + bl, y + h - bl, bl, Math.PI / 2, Math.PI);
+    this.lineTo(x, y + tl); if (tl) P.arc.call(this, x + tl, y + tl, tl, Math.PI, Math.PI * 1.5); this.closePath();
+  };
+})();
+
+// ---------- sound-effect event capture (used by `render.mjs --events`) ----------
+// While EVT.on, the first time a piece of text becomes visible inside a scene is logged: that's a pop-in.
+const EVT = { on: false, T: 0, scene: '', st: 0, seen: new Set(), log: [] };
+(function () {
+  const P = CanvasRenderingContext2D.prototype, fill = P.fillText;
+  P.fillText = function (s, x, y, mw) {
+    if (EVT.on && BOIL.on && this.canvas && this.canvas.__boil && this.globalAlpha >= .35 && EVT.T - EVT.st > .35) {
+      const key = EVT.scene + '|' + s;
+      if (!EVT.seen.has(key)) { EVT.seen.add(key); const m = /(\d+(?:\.\d+)?)px/.exec(this.font); EVT.log.push({ t: EVT.T, text: String(s), size: m ? +m[1] : 40, scene: EVT.scene }); }
+    }
+    return fill.call(this, s, x, y, mw);
+  };
+})();

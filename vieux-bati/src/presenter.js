@@ -25,7 +25,9 @@ const POSES = {
 function poseAt(t, keys, blend = .45) {
   let cur = POSES[keys[0][1]], prev = cur, t0 = -1e9;
   for (const [kt, name] of keys) { if (t >= kt) { prev = cur; cur = POSES[name]; t0 = kt; } }
-  const k = ease(inv(t0, t0 + blend, t));
+  // anticipation (a small move the other way), then a quick move that overshoots a little and settles
+  const u = inv(t0, t0 + blend * 1.25, t);
+  const k = u < .18 ? -.07 * Math.sin(Math.PI * u / .18) : easeOutBack((u - .18) / .82, 1.6);
   const mix = (a, b) => [lerp(a[0], b[0], k), lerp(a[1], b[1], k)];
   return { L: mix(prev.L, cur.L), R: mix(prev.R, cur.R), sh: lerp(prev.sh, cur.sh, k) };
 }

@@ -38,7 +38,13 @@ async function openPage(tag = '') {
 const frameOf = async (page, t, type, q) => { const url = await page.evaluate((t, type, q) => window.renderAt(t, type, q), t, type, q); return Buffer.from(url.slice(url.indexOf(',') + 1), 'base64'); };
 const times = s => String(s).split(',').map(Number);
 
-if (args.sheet || args.scene) {
+if (args.events) {
+  // replay every frame in order and log when each piece of text first appears → sound-effect cues
+  const page = await openPage(), n = Math.ceil(DUR * FPS);
+  const log = await page.evaluate(async (n, fps) => { EVT.on = true; for (let i = 0; i < n; i++) window.drawAt(i / fps); EVT.on = false; return EVT.log; }, n, FPS);
+  writeFileSync('out/events.json', JSON.stringify(log, null, 1));
+  console.log(`${log.length} text pop-ins → out/events.json`);
+} else if (args.sheet || args.scene) {
   let ts;
   if (args.scene) { const sc = TIMING.scenes.find(s => s.id === args.scene); const n = +(args.n || 12); ts = Array.from({ length: n }, (_, i) => +(sc.start + (sc.end - sc.start) * (i + .5) / n).toFixed(2)); }
   else ts = times(args.sheet);
