@@ -1,8 +1,8 @@
 # Le vieux bâti doit respirer
 
-Vidéo explicative animée (8 min 22 s, 1080p, en français) sur le bâti ancien, présentée par Margot, maçonne du patrimoine. Signée **Valeriansauvage.fr**.
+Vidéo explicative animée (8 min 34 s, 1080p, en français) sur le bâti ancien, présentée par Margot, maçonne du patrimoine. Signée **Valeriansauvage.fr**.
 
-▶ **La vidéo : [`video/le-vieux-bati-doit-respirer.mp4`](video/le-vieux-bati-doit-respirer.mp4)** (8 min 22 s, 1920×1080, 25 i/s, 83 Mo)
+▶ **La vidéo : [`video/le-vieux-bati-doit-respirer.mp4`](video/le-vieux-bati-doit-respirer.mp4)** (8 min 34 s, 1920×1080, 25 i/s, 85 Mo)
 
 | Chapitre | Sujet |
 |---|---|
