@@ -22,16 +22,16 @@ Vidéo explicative animée (8 min 22 s, 1080p, en français) sur le bâti ancien
 Tout est généré par du code : il n'y a ni image ni vidéo source.
 
 - `script.json` : le texte de la narration (`t` = sous-titre, `s` = variante phonétique pour la voix).
-- `tools/tts.py` : la voix off (Kokoro TTS, voix française `ff_siwis`), le calage de chaque phrase, l'enveloppe de la synchro labiale et une musique de fond générée. Il écrit `src/timing.js` et `out/mix.wav`.
+- `tools/tts.py` : la voix off, le calage de chaque phrase, l'enveloppe de la synchro labiale et une musique de fond générée. Il écrit `src/timing.js` et `out/mix.wav`. La voix est « Jessica » (Piper `fr_FR-upmc-medium`, via sherpa-onnx), rendue plus humaine : chaque phrase est synthétisée à part avec un débit et une hauteur légèrement variés, des pauses naturelles, des respirations douces avant la plupart des phrases, une couleur chaude (légèrement plus grave, aigus adoucis) et une petite ambiance de pièce. L'ancien moteur Kokoro reste disponible (`"engine": "kokoro"` dans `script.json`).
 - `src/` : le moteur Canvas 2D (`core.js`, `props.js`, `presenter.js`, `main.js`) et une scène par chapitre dans `src/scenes/`.
 - `render.mjs` : il dessine chaque image dans Chromium headless, puis encode le MP4 avec ffmpeg.
 - `SCENE_GUIDE.md` : le guide de style et l'API des scènes.
 
 ```bash
 npm install
-pip install kokoro-onnx soundfile numpy
-# modèles Kokoro : https://github.com/thewh1teagle/kokoro-onnx/releases/tag/model-files-v1.0
-#   kokoro-v1.0.onnx → models/kokoro.onnx, voices-v1.0.bin → models/voices.bin
+pip install sherpa-onnx soundfile numpy
+# voix Jessica : https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-fr_FR-upmc-medium.tar.bz2
+#   à décompresser dans models/ (ffmpeg avec rubberband requis)
 python3 tools/tts.py --models=models          # voix + timing + musique
 node render.mjs --frames --workers=4          # images → out/frames (reprise possible)
 node render.mjs --encode --out=out/vieux-bati.mp4

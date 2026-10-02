@@ -1,7 +1,9 @@
 {
   "title": "Le vieux bâti doit respirer",
-  "voice": "ff_siwis",
-  "speed": 0.88,
+  "engine": "jessica",
+  "voice": "upmc-jessica",
+  "pitch": 0.96,
+  "speed": 0.9,
   "scenes": [
     {
       "id": "intro",
