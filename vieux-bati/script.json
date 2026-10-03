@@ -9,140 +9,309 @@
       "id": "intro",
       "title": "Le vieux bâti doit respirer",
       "lines": [
-        { "t": "Bonjour ! Moi, c'est Margot, maçonne du patrimoine." },
-        { "t": "Regardez cette maison. Elle a été construite en 1880." },
-        { "t": "Elle a traversé plus d'un siècle… sans un seul gros problème." },
-        { "t": "Puis on l'a « rénovée » : peinture plastique, isolant, fenêtres étanches." },
-        { "t": "Quinze ans plus tard, la peinture cloque, les murs sont humides, et la moisissure s'installe à l'intérieur." },
-        { "t": "Que s'est-il passé ? Pour le comprendre, il faut d'abord comprendre comment vit un mur ancien." }
+        {
+          "t": "Bonjour ! Je suis maçon du patrimoine."
+        },
+        {
+          "t": "Regardez cette maison. Elle a été construite en 1880."
+        },
+        {
+          "t": "Elle a traversé plus d'un siècle… sans un seul gros problème."
+        },
+        {
+          "t": "Puis on l'a « rénovée » : peinture plastique, isolant, fenêtres étanches."
+        },
+        {
+          "t": "Quinze ans plus tard, la peinture cloque, les murs sont humides, et la moisissure s'installe à l'intérieur."
+        },
+        {
+          "t": "Que s'est-il passé ? Pour le comprendre, il faut d'abord comprendre comment vit un mur ancien."
+        }
       ]
     },
     {
       "id": "mur",
       "title": "Comment vit un mur ancien",
       "lines": [
-        { "t": "Avant 1948, on construisait en pierre, en brique, en pisé ou en pan de bois, avec des mortiers de chaux ou de terre." },
-        { "t": "Pas de coupure de capillarité, pas de pare-vapeur, pas de film plastique." },
-        { "t": "L'eau entre dans ces murs : par la pluie, par le sol, et par la vapeur qui vient de l'intérieur." },
-        { "t": "Mais surtout… elle en ressort. Elle s'évapore librement, des deux côtés." },
-        { "t": "Un mur ancien n'est jamais vraiment sec. Il est en équilibre." },
-        { "t": "C'est ce qu'on appelle un mur perspirant : il laisse passer la vapeur d'eau, et il transporte l'humidité vers l'extérieur pour la relâcher.", "s": "C'est ce qu'on appelle un mur perspirant : il laisse passer la vapeur d'eau, et il transporte l'humidité vers l'extérieur pour la relâcher." }
+        {
+          "t": "Avant 1948, on construisait en pierre, en brique, en pisé ou en pan de bois, avec des mortiers de chaux ou de terre."
+        },
+        {
+          "t": "Pas de coupure de capillarité, pas de pare-vapeur, pas de film plastique."
+        },
+        {
+          "t": "L'eau entre dans ces murs : par la pluie, par le sol, et par la vapeur qui vient de l'intérieur."
+        },
+        {
+          "t": "Mais surtout… elle en ressort. Elle s'évapore librement, des deux côtés."
+        },
+        {
+          "t": "Un mur ancien n'est jamais vraiment sec. Il est en équilibre."
+        },
+        {
+          "t": "C'est ce qu'on appelle un mur perspirant : il laisse passer la vapeur d'eau, et il transporte l'humidité vers l'extérieur pour la relâcher.",
+          "s": "C'est ce qu'on appelle un mur perspirant : il laisse passer la vapeur d'eau, et il transporte l'humidité vers l'extérieur pour la relâcher."
+        }
       ]
     },
     {
       "id": "eau",
       "title": "Nous sommes faits d'eau",
       "lines": [
-        { "t": "Et il y a une chose qu'on oublie souvent : nous-mêmes, nous sommes faits d'eau." },
-        { "t": "Le corps humain, c'est environ soixante pour cent d'eau." },
-        { "t": "On respire, on transpire, on cuisine, on se douche, on fait sécher le linge…" },
-        { "t": "Une famille de quatre personnes rejette dix à quinze litres d'eau par jour dans l'air de sa maison !" },
-        { "t": "Toute cette eau doit sortir quelque part." },
-        { "t": "Autrefois, la maison s'en chargeait : les cheminées tiraient, les menuiseries laissaient passer l'air, et les murs absorbaient puis relâchaient l'humidité." },
-        { "t": "Une maison, c'est comme nous : elle a besoin de respirer." }
+        {
+          "t": "Et il y a une chose qu'on oublie souvent : nous-mêmes, nous sommes faits d'eau."
+        },
+        {
+          "t": "Le corps humain, c'est environ soixante pour cent d'eau."
+        },
+        {
+          "t": "On respire, on transpire, on cuisine, on se douche, on fait sécher le linge…"
+        },
+        {
+          "t": "Une famille de quatre personnes rejette dix à quinze litres d'eau par jour dans l'air de sa maison !"
+        },
+        {
+          "t": "Toute cette eau doit sortir quelque part."
+        },
+        {
+          "t": "Autrefois, la maison s'en chargeait : les cheminées tiraient, les menuiseries laissaient passer l'air, et les murs absorbaient puis relâchaient l'humidité."
+        },
+        {
+          "t": "Une maison, c'est comme nous : elle a besoin de respirer."
+        }
       ]
     },
     {
       "id": "plastique",
       "title": "Comment le plastique a piégé l'eau",
       "lines": [
-        { "t": "À partir des années soixante-dix, on a recouvert ces murs de peintures plastiques : acryliques, vinyliques, pliolite… puis de RPE, les revêtements plastiques épais.", "s": "À partir des années soixante-dix, on a recouvert ces murs de peintures plastiques : acryliques, vinyliques, pliolite… puis de R P E, les revêtements plastiques épais." },
-        { "t": "Et d'enduits au ciment, durs et peu perméables." },
-        { "t": "Ces produits forment un film, une peau fermée posée sur le mur." },
-        { "t": "La pluie ne rentre plus par la face… mais l'eau du sol et la vapeur de la maison, elles, continuent d'arriver par derrière." },
-        { "t": "Et maintenant, elles ne peuvent plus sortir." },
-        { "t": "L'eau s'accumule derrière le film. La pression monte. La peinture gonfle, cloque, puis se décolle par plaques." },
-        { "t": "Les sels contenus dans la maçonnerie migrent et cristallisent sous la surface : c'est le salpêtre." },
-        { "t": "En hiver, l'eau piégée gèle, augmente de volume, et fait éclater la pierre et l'ancien enduit : c'est la gélifraction." },
-        { "t": "Le pire ? Le plastique cache les dégâts. La façade paraît propre, pendant que l'enduit de chaux d'origine se transforme en poudre juste derrière." },
-        { "t": "Et au premier coup de grattoir… tout tombe." }
+        {
+          "t": "À partir des années soixante-dix, on a recouvert ces murs de peintures plastiques : acryliques, vinyliques, pliolite… puis de RPE, les revêtements plastiques épais.",
+          "s": "À partir des années soixante-dix, on a recouvert ces murs de peintures plastiques : acryliques, vinyliques, pliolite… puis de R P E, les revêtements plastiques épais."
+        },
+        {
+          "t": "Et d'enduits au ciment, durs et peu perméables."
+        },
+        {
+          "t": "Ces produits forment un film, une peau fermée posée sur le mur."
+        },
+        {
+          "t": "La pluie ne rentre plus par la face… mais l'eau du sol et la vapeur de la maison, elles, continuent d'arriver par derrière."
+        },
+        {
+          "t": "Et maintenant, elles ne peuvent plus sortir."
+        },
+        {
+          "t": "L'eau s'accumule derrière le film. La pression monte. La peinture gonfle, cloque, puis se décolle par plaques."
+        },
+        {
+          "t": "Les sels contenus dans la maçonnerie migrent et cristallisent sous la surface : c'est le salpêtre."
+        },
+        {
+          "t": "En hiver, l'eau piégée gèle, augmente de volume, et fait éclater la pierre et l'ancien enduit : c'est la gélifraction."
+        },
+        {
+          "t": "Le pire ? Le plastique cache les dégâts. La façade paraît propre, pendant que l'enduit de chaux d'origine se transforme en poudre juste derrière."
+        },
+        {
+          "t": "Et au premier coup de grattoir… tout tombe."
+        }
       ]
     },
     {
       "id": "isolation",
       "title": "Sur-isolation et ventilation",
       "lines": [
-        { "t": "Ensuite est venue la course à l'isolation. Et attention : isoler, c'est une très bonne chose !" },
-        { "t": "Le problème, c'est d'isoler un mur ancien comme une maison neuve." },
-        { "t": "Polystyrène à l'extérieur, laine minérale et pare-vapeur à l'intérieur, fenêtres parfaitement étanches… et souvent, aucune ventilation adaptée." },
-        { "t": "La vapeur produite par les habitants traverse l'isolant et rencontre une paroi de plus en plus froide." },
-        { "t": "Quelque part dans le mur, elle atteint le point de rosée : elle se transforme en eau liquide." },
-        { "t": "Le mur se gorge d'eau, l'isolant perd son efficacité, et les moisissures apparaissent dans les angles et derrière les meubles." },
-        { "t": "À l'intérieur, l'humidité dépasse soixante-dix pour cent : acariens, odeur de renfermé, allergies, asthme." },
-        { "t": "La solution : des isolants perspirants et capillaires, comme la fibre de bois, le chanvre et chaux ou le liège…" },
-        { "t": "Et toujours, une vraie ventilation : VMC hygroréglable ou double flux.", "s": "Et toujours, une vraie ventilation : V M C hygroréglable ou double flux." },
-        { "t": "On isole, oui. Mais on laisse la vapeur passer, et on ventile." }
+        {
+          "t": "Ensuite est venue la course à l'isolation. Et attention : isoler, c'est une très bonne chose !"
+        },
+        {
+          "t": "Le problème, c'est d'isoler un mur ancien comme une maison neuve."
+        },
+        {
+          "t": "Polystyrène à l'extérieur, laine minérale et pare-vapeur à l'intérieur, fenêtres parfaitement étanches… et souvent, aucune ventilation adaptée."
+        },
+        {
+          "t": "La vapeur produite par les habitants traverse l'isolant et rencontre une paroi de plus en plus froide."
+        },
+        {
+          "t": "Quelque part dans le mur, elle atteint le point de rosée : elle se transforme en eau liquide."
+        },
+        {
+          "t": "Le mur se gorge d'eau, l'isolant perd son efficacité, et les moisissures apparaissent dans les angles et derrière les meubles."
+        },
+        {
+          "t": "À l'intérieur, l'humidité dépasse soixante-dix pour cent : acariens, odeur de renfermé, allergies, asthme."
+        },
+        {
+          "t": "La solution : des isolants perspirants et capillaires, comme la fibre de bois, le chanvre et chaux ou le liège…"
+        },
+        {
+          "t": "Et toujours, une vraie ventilation : VMC hygroréglable ou double flux.",
+          "s": "Et toujours, une vraie ventilation : V M C hygroréglable ou double flux."
+        },
+        {
+          "t": "On isole, oui. Mais on laisse la vapeur passer, et on ventile."
+        }
       ]
     },
     {
       "id": "chaux",
       "title": "Les enduits à la chaux",
       "lines": [
-        { "t": "Alors, que faut-il mettre sur un mur ancien ? Ce qu'on y mettait déjà depuis des siècles : la chaux." },
-        { "t": "La chaux, c'est de la pierre calcaire cuite dans un four à environ neuf cents degrés." },
-        { "t": "On obtient de la chaux vive, qu'on éteint avec de l'eau pour obtenir de la chaux éteinte." },
-        { "t": "Une fois appliquée sur le mur, elle capte le gaz carbonique de l'air… et redevient du calcaire. C'est la carbonatation." },
-        { "t": "Autrement dit, l'enduit à la chaux redevient de la pierre, directement sur votre façade." },
-        { "t": "Il est souple : il suit les petits mouvements du bâti sans fissurer." },
-        { "t": "Il est perspirant et capillaire : l'humidité le traverse et s'évapore." },
-        { "t": "Et il est naturellement assaini : la chaux est très basique, les moisissures ne s'y plaisent pas." },
-        { "t": "Traditionnellement, on l'applique en trois couches : le gobetis d'accroche, le corps d'enduit, puis la finition, teintée par des sables locaux." }
+        {
+          "t": "Alors, que faut-il mettre sur un mur ancien ? Ce qu'on y mettait déjà depuis des siècles : la chaux."
+        },
+        {
+          "t": "La chaux, c'est de la pierre calcaire cuite dans un four à environ neuf cents degrés."
+        },
+        {
+          "t": "On obtient de la chaux vive, qu'on éteint avec de l'eau pour obtenir de la chaux éteinte."
+        },
+        {
+          "t": "Une fois appliquée sur le mur, elle capte le gaz carbonique de l'air… et redevient du calcaire. C'est la carbonatation."
+        },
+        {
+          "t": "Autrement dit, l'enduit à la chaux redevient de la pierre, directement sur votre façade."
+        },
+        {
+          "t": "Il est souple : il suit les petits mouvements du bâti sans fissurer."
+        },
+        {
+          "t": "Il est perspirant et capillaire : l'humidité le traverse et s'évapore."
+        },
+        {
+          "t": "Et il est naturellement assaini : la chaux est très basique, les moisissures ne s'y plaisent pas."
+        },
+        {
+          "t": "Traditionnellement, on l'applique en trois couches : le gobetis d'accroche, le corps d'enduit, puis la finition, teintée par des sables locaux."
+        }
       ]
     },
     {
       "id": "pouzzolane",
       "title": "Les enduits pouzzolaniques",
       "lines": [
-        { "t": "Et pour les zones plus exposées, il existe une arme secrète… vieille de deux mille ans." },
-        { "t": "La pouzzolane : une roche volcanique, du nom de Pouzzoles, près du Vésuve, en Italie." },
-        { "t": "Les Romains avaient découvert qu'en mélangeant la chaux avec cette cendre volcanique, le mortier durcissait même sous l'eau." },
-        { "t": "C'est grâce à lui que le Panthéon de Rome et les ports romains tiennent encore debout aujourd'hui." },
-        { "t": "La silice et l'alumine de la pouzzolane réagissent avec la chaux et forment des cristaux très résistants : c'est la réaction pouzzolanique." },
-        { "t": "Résultat : un enduit plus dur, plus résistant à l'eau et aux sels… qui reste perspirant." },
-        { "t": "Idéal pour les soubassements, les façades battues par la pluie, ou les régions au climat rude." }
+        {
+          "t": "Et pour les zones plus exposées, il existe une arme secrète… vieille de deux mille ans."
+        },
+        {
+          "t": "La pouzzolane : une roche volcanique, du nom de Pouzzoles, près du Vésuve, en Italie."
+        },
+        {
+          "t": "Les Romains avaient découvert qu'en mélangeant la chaux avec cette cendre volcanique, le mortier durcissait même sous l'eau."
+        },
+        {
+          "t": "C'est grâce à lui que le Panthéon de Rome et les ports romains tiennent encore debout aujourd'hui."
+        },
+        {
+          "t": "La silice et l'alumine de la pouzzolane réagissent avec la chaux et forment des cristaux très résistants : c'est la réaction pouzzolanique."
+        },
+        {
+          "t": "Résultat : un enduit plus dur, plus résistant à l'eau et aux sels… qui reste perspirant."
+        },
+        {
+          "t": "Idéal pour les soubassements, les façades battues par la pluie, ou les régions au climat rude."
+        }
       ]
     },
     {
       "id": "keim",
       "title": "Les peintures minérales KEIM",
       "lines": [
-        { "t": "Et si l'on veut de la couleur ? Là aussi, il existe une solution minérale : les peintures au silicate.", "s": "Et si l'on veut de la couleur ? Là aussi, il existe une solution minérale : les peintures au silicate." },
-        { "t": "En 1878, Adolf Wilhelm Keim dépose le brevet d'une peinture à base de silicate de potassium, une sorte de verre liquide.", "s": "En 1878, Adolf Vilhelm Kaille-me dépose le brevet d'une peinture à base de silicate de potassium, une sorte de verre liquide." },
-        { "t": "Une peinture plastique colle au mur comme un autocollant. Une peinture KEIM, elle, fait corps avec lui.", "s": "Une peinture plastique colle au mur comme un autocollant. Une peinture Kaille-me, elle, fait corps avec lui." },
-        { "t": "Le silicate pénètre dans le support minéral et réagit chimiquement avec lui : c'est la silicatisation. La couleur devient partie intégrante de la pierre." },
-        { "t": "Il n'y a pas de film : la vapeur d'eau passe librement. Rien ne peut cloquer, rien ne peut peler." },
-        { "t": "Les pigments sont des terres et des oxydes minéraux : ils résistent aux UV sans se décolorer.", "s": "Les pigments sont des terres et des oxydes minéraux : ils résistent aux ultraviolets sans se décolorer." },
-        { "t": "Certaines façades peintes au silicate à la fin du dix-neuvième siècle, en Suisse et en Norvège, sont encore là aujourd'hui." },
-        { "t": "Pour les enduits à la chaux récents, on utilise des versions sol-silicate, ou tout simplement un badigeon de chaux." }
+        {
+          "t": "Et si l'on veut de la couleur ? Là aussi, il existe une solution minérale : les peintures au silicate.",
+          "s": "Et si l'on veut de la couleur ? Là aussi, il existe une solution minérale : les peintures au silicate."
+        },
+        {
+          "t": "En 1878, Adolf Wilhelm Keim dépose le brevet d'une peinture à base de silicate de potassium, une sorte de verre liquide.",
+          "s": "En 1878, Adolf Vilhelm Kaille-me dépose le brevet d'une peinture à base de silicate de potassium, une sorte de verre liquide."
+        },
+        {
+          "t": "Une peinture plastique colle au mur comme un autocollant. Une peinture KEIM, elle, fait corps avec lui.",
+          "s": "Une peinture plastique colle au mur comme un autocollant. Une peinture Kaille-me, elle, fait corps avec lui."
+        },
+        {
+          "t": "Le silicate pénètre dans le support minéral et réagit chimiquement avec lui : c'est la silicatisation. La couleur devient partie intégrante de la pierre."
+        },
+        {
+          "t": "Il n'y a pas de film : la vapeur d'eau passe librement. Rien ne peut cloquer, rien ne peut peler."
+        },
+        {
+          "t": "Les pigments sont des terres et des oxydes minéraux : ils résistent aux UV sans se décolorer.",
+          "s": "Les pigments sont des terres et des oxydes minéraux : ils résistent aux ultraviolets sans se décolorer."
+        },
+        {
+          "t": "Certaines façades peintes au silicate à la fin du dix-neuvième siècle, en Suisse et en Norvège, sont encore là aujourd'hui."
+        },
+        {
+          "t": "Pour les enduits à la chaux récents, on utilise des versions sol-silicate, ou tout simplement un badigeon de chaux."
+        }
       ]
     },
     {
       "id": "vieillir",
       "title": "Comment vieilliront nos façades ?",
       "lines": [
-        { "t": "Maintenant, faisons un bond dans le temps. À gauche, une façade rénovée au plastique. À droite, une façade rénovée à la chaux et au silicate." },
-        { "t": "Le jour de la livraison, les deux sont magnifiques." },
-        { "t": "Dix ans plus tard : le plastique a encrassé, il attire la poussière, les couleurs ont passé. Sur l'isolant, des traînées vertes d'algues apparaissent." },
-        { "t": "La façade minérale, elle, commence doucement à se patiner." },
-        { "t": "Vingt-cinq ans : le plastique microfissure, l'eau s'infiltre et reste piégée. Les cloques et les plaques décollées se multiplient." },
-        { "t": "Pour le rénover, il faudra tout décaper, à grands frais, avec des déchets plastiques à la clé." },
-        { "t": "La façade minérale s'érode lentement et uniformément, comme une pierre. Un simple badigeon ou une nouvelle couche de silicate suffit à lui redonner son éclat." },
-        { "t": "Cinquante ans : d'un côté, un mur malade. De l'autre, un mur qui a pris de la valeur." },
-        { "t": "Le minéral vieillit. Le plastique, lui, se dégrade." }
+        {
+          "t": "Maintenant, faisons un bond dans le temps. À gauche, une façade rénovée au plastique. À droite, une façade rénovée à la chaux et au silicate."
+        },
+        {
+          "t": "Le jour de la livraison, les deux sont magnifiques."
+        },
+        {
+          "t": "Dix ans plus tard : le plastique a encrassé, il attire la poussière, les couleurs ont passé. Sur l'isolant, des traînées vertes d'algues apparaissent."
+        },
+        {
+          "t": "La façade minérale, elle, commence doucement à se patiner."
+        },
+        {
+          "t": "Vingt-cinq ans : le plastique microfissure, l'eau s'infiltre et reste piégée. Les cloques et les plaques décollées se multiplient."
+        },
+        {
+          "t": "Pour le rénover, il faudra tout décaper, à grands frais, avec des déchets plastiques à la clé."
+        },
+        {
+          "t": "La façade minérale s'érode lentement et uniformément, comme une pierre. Un simple badigeon ou une nouvelle couche de silicate suffit à lui redonner son éclat."
+        },
+        {
+          "t": "Cinquante ans : d'un côté, un mur malade. De l'autre, un mur qui a pris de la valeur."
+        },
+        {
+          "t": "Le minéral vieillit. Le plastique, lui, se dégrade."
+        }
       ]
     },
     {
       "id": "conclusion",
       "title": "Les bons gestes",
       "lines": [
-        { "t": "Alors, pour rénover un bâtiment ancien, retenez ces règles." },
-        { "t": "Un : faites établir un diagnostic. D'où vient l'eau ? Comment sort-elle ?" },
-        { "t": "Deux : retirez les peintures plastiques, les RPE et les enduits ciment, et laissez le mur sécher.", "s": "Deux : retirez les peintures plastiques, les R P E et les enduits ciment, et laissez le mur sécher." },
-        { "t": "Trois : refaites les enduits à la chaux, ou à la chaux et pouzzolane dans les zones exposées." },
-        { "t": "Quatre : pour la couleur, choisissez une peinture minérale au silicate ou un badigeon de chaux." },
-        { "t": "Cinq : isolez avec des matériaux perspirants, et ventilez." },
-        { "t": "Votre maison a traversé plus d'un siècle. Avec les bons matériaux, elle en traversera encore un autre." },
-        { "t": "Merci de m'avoir suivie ! Retrouvez tous nos conseils sur Valeriansauvage.fr", "s": "Merci de m'avoir suivie ! Retrouvez tous nos conseils sur Valérian Sauvage point F R." }
+        {
+          "t": "Alors, pour rénover un bâtiment ancien, retenez ces règles."
+        },
+        {
+          "t": "Un : faites établir un diagnostic. D'où vient l'eau ? Comment sort-elle ?"
+        },
+        {
+          "t": "Deux : retirez les peintures plastiques, les RPE et les enduits ciment, et laissez le mur sécher.",
+          "s": "Deux : retirez les peintures plastiques, les R P E et les enduits ciment, et laissez le mur sécher."
+        },
+        {
+          "t": "Trois : refaites les enduits à la chaux, ou à la chaux et pouzzolane dans les zones exposées."
+        },
+        {
+          "t": "Quatre : pour la couleur, choisissez une peinture minérale au silicate ou un badigeon de chaux."
+        },
+        {
+          "t": "Cinq : isolez avec des matériaux perspirants, et ventilez."
+        },
+        {
+          "t": "Votre maison a traversé plus d'un siècle. Avec les bons matériaux, elle en traversera encore un autre."
+        },
+        {
+          "t": "Merci de m'avoir suivi ! Retrouvez tous nos conseils sur Valeriansauvage.fr",
+          "s": "Merci de m'avoir suivie ! Retrouvez tous nos conseils sur Valérian Sauvage point F R."
+        }
       ]
     }
   ]

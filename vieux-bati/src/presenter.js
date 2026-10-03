@@ -102,21 +102,27 @@ function presenter(ctx, o) {
   // head
   const hy = -478, tilt = p.tilt + Math.sin(T * 1.3) * .03 + talk * Math.sin(T * 5.3) * .025;
   ctx.save(); ctx.translate(0, hy + talk * Math.sin(T * 9) * 2); ctx.rotate(tilt); ctx.scale(1.12, 1.12);
-  // bun
-  circle(ctx, 0, -98, 34, M.hair, M.ink, 5);
-  // hair back
-  blob(ctx, 0, 0, 88, 3, .05, 12, M.hair, M.ink, 5);
+  // short hair at the back and sides
+  blob(ctx, 0, -6, 84, 3, .04, 12, M.hair, M.ink, 5);
   // ears
-  ellipse(ctx, -80, 8, 14, 20, M.skin, M.ink, 4); ellipse(ctx, 80, 8, 14, 20, M.skin, M.ink, 4);
-  circle(ctx, -82, 30, 5, '#E3B54B'); circle(ctx, 82, 30, 5, '#E3B54B');
-  // face
-  ellipse(ctx, 0, 12, 76, 80, M.skin, M.ink, 5);
-  // fringe
-  ctx.beginPath(); ctx.moveTo(-78, -2); ctx.quadraticCurveTo(-70, -66, 0, -72); ctx.quadraticCurveTo(70, -66, 78, -2); ctx.quadraticCurveTo(40, -40, 10, -30); ctx.quadraticCurveTo(-30, -45, -78, -2); ctx.closePath(); ctx.fillStyle = M.hair; ctx.fill(); ctx.strokeStyle = M.ink; ctx.lineWidth = 4; ctx.stroke();
-  // bandana
-  ctx.beginPath(); ctx.moveTo(-84, -16); ctx.quadraticCurveTo(0, -92, 84, -16); ctx.lineTo(80, -38); ctx.quadraticCurveTo(0, -112, -80, -38); ctx.closePath(); ctx.fillStyle = M.bandana; ctx.fill(); ctx.strokeStyle = M.ink; ctx.lineWidth = 4; ctx.stroke();
-  [[-50, -48], [-18, -66], [18, -66], [50, -48], [0, -78]].forEach(([a, b]) => circle(ctx, a, b, 4, '#F6E6D6'));
-  poly(ctx, [[78, -30], [112, -46], [104, -14]], M.bandana, M.ink, 4);
+  ellipse(ctx, -82, 8, 14, 20, M.skin, M.ink, 4); ellipse(ctx, 82, 8, 14, 20, M.skin, M.ink, 4);
+  // face (a touch squarer)
+  ctx.beginPath(); ctx.moveTo(-76, -10); ctx.quadraticCurveTo(-80, 70, -40, 86); ctx.quadraticCurveTo(0, 100, 40, 86); ctx.quadraticCurveTo(80, 70, 76, -10); ctx.quadraticCurveTo(0, -80, -76, -10); ctx.closePath();
+  ctx.fillStyle = M.skin; ctx.fill(); ctx.strokeStyle = M.ink; ctx.lineWidth = 5; ctx.stroke();
+  // short beard along the jaw + moustache
+  ctx.beginPath(); ctx.moveTo(-74, 22); ctx.quadraticCurveTo(-74, 80, -38, 92); ctx.quadraticCurveTo(0, 106, 38, 92); ctx.quadraticCurveTo(74, 80, 74, 22);
+  ctx.quadraticCurveTo(62, 58, 34, 66); ctx.quadraticCurveTo(0, 74, -34, 66); ctx.quadraticCurveTo(-62, 58, -74, 22); ctx.closePath();
+  ctx.fillStyle = M.hair; ctx.fill(); ctx.strokeStyle = M.ink; ctx.lineWidth = 4; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-30, 46); ctx.quadraticCurveTo(-14, 36, 0, 42); ctx.quadraticCurveTo(14, 36, 30, 46); ctx.quadraticCurveTo(14, 50, 0, 47); ctx.quadraticCurveTo(-14, 50, -30, 46); ctx.closePath();
+  ctx.fillStyle = M.hair; ctx.fill(); ctx.strokeStyle = M.ink; ctx.lineWidth = 3; ctx.stroke();
+  // sideburns
+  fillRR(ctx, -80, -10, 12, 36, 5, M.hair); fillRR(ctx, 68, -10, 12, 36, 5, M.hair);
+  // work cap (casquette) with a short brim
+  ctx.beginPath(); ctx.moveTo(-82, -14); ctx.quadraticCurveTo(-84, -96, 0, -100); ctx.quadraticCurveTo(84, -96, 82, -14); ctx.quadraticCurveTo(0, -34, -82, -14); ctx.closePath();
+  ctx.fillStyle = M.bandana; ctx.fill(); ctx.strokeStyle = M.ink; ctx.lineWidth = 5; ctx.stroke();
+  line(ctx, 0, -98, 0, -30, rgba(M.ink, .35), 3); circle(ctx, 0, -98, 7, M.bandana, M.ink, 3);
+  ctx.beginPath(); ctx.moveTo(-86, -14); ctx.quadraticCurveTo(-30, -36, 60, -22); ctx.quadraticCurveTo(110, -14, 122, 4); ctx.quadraticCurveTo(60, -4, -86, -6); ctx.closePath();
+  ctx.fillStyle = mixColor(M.bandana, '#000000', .25); ctx.fill(); ctx.strokeStyle = M.ink; ctx.lineWidth = 4; ctx.stroke();
   // eyes
   const bi = Math.floor(T / 3.7), bt = T - bi * 3.7 - hash(bi) * 1.5;
   let open = (bt > 0 && bt < .16) ? Math.abs(bt - .08) / .08 : 1;
@@ -134,10 +140,10 @@ function presenter(ctx, o) {
     // eyebrows
     const by = ey - 27 - (p.expr === 'surprised' ? 10 : 0) - talk * 3;
     const inner = p.expr === 'worried' ? -9 : p.expr === 'serious' ? 7 : 0;
-    line(ctx, ex - sd * 14, by + inner, ex + sd * 14, by - 3, M.hairDark, 6);
+    line(ctx, ex - sd * 15, by + inner, ex + sd * 15, by - 3, M.hairDark, 8);
   }
   // cheeks + nose
-  circle(ctx, -48, 36, 12, rgba(M.cheek, .55)); circle(ctx, 48, 36, 12, rgba(M.cheek, .55));
+  circle(ctx, -46, 30, 11, rgba(M.cheek, .3)); circle(ctx, 46, 30, 11, rgba(M.cheek, .3));
   ctx.beginPath(); ctx.moveTo(-3, 18); ctx.quadraticCurveTo(-10, 34, 2, 36); ctx.strokeStyle = M.skinDark; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.stroke();
   // mouth
   const mo = clamp(talk * 1.15 + (p.expr === 'surprised' ? .5 : 0));

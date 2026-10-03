@@ -340,8 +340,8 @@ function intro_nameTag(ctx, x, y, k1, k2, kOut) {
   fillRR(ctx, -w / 2, -h / 2, w, h, 24, C.paper, C.ink, 5);
   ctx.save(); rr(ctx, -w / 2, -h / 2, w, h, 24); ctx.clip(); ctx.fillStyle = C.ochre; ctx.fillRect(-w / 2, -h / 2, 26, h); ctx.restore();
   line(ctx, -w / 2 + 26, -h / 2 + 4, -w / 2 + 26, h / 2 - 4, C.ink, 4);
-  text(ctx, 'Margot', -w / 2 + 60, -26, { size: 76, font: FONT.title, weight: 700, color: C.ink, align: 'left' });
-  if (k2 > 0) text(ctx, 'maçonne du patrimoine', -w / 2 + 62, 46, { size: 54, font: FONT.hand, weight: 700, color: C.terracotta, align: 'left', alpha: clamp(k2 * 2) });
+  text(ctx, 'Maçon', -w / 2 + 60, -26, { size: 76, font: FONT.title, weight: 700, color: C.ink, align: 'left' });
+  if (k2 > 0) text(ctx, 'du patrimoine', -w / 2 + 62, 46, { size: 54, font: FONT.hand, weight: 700, color: C.terracotta, align: 'left', alpha: clamp(k2 * 2) });
   ctx.restore();
 }
 // round inset: the room behind the façade, mould growing in the ceiling corner
