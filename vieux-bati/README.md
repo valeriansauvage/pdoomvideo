@@ -1,8 +1,8 @@
 # Le vieux bâti doit respirer
 
-Vidéo explicative animée (8 min 33 s, 1080p, en français) sur le bâti ancien, racontée par Valérian (voix enregistrée), présentée par un maçon du patrimoine animé. Signée **Valeriansauvage.fr**.
+Vidéo explicative animée (7 min 33 s, 1080p, en français) sur le bâti ancien, narration ElevenLabs (voix « Adam – Instructor »), présentée par un maçon du patrimoine animé. Signée **Valeriansauvage.fr**.
 
-▶ **La vidéo : [`video/le-vieux-bati-doit-respirer.mp4`](video/le-vieux-bati-doit-respirer.mp4)** (8 min 33 s, 1920×1080, 25 i/s, 92 Mo)
+▶ **La vidéo : [`video/le-vieux-bati-doit-respirer.mp4`](video/le-vieux-bati-doit-respirer.mp4)** (7 min 33 s, 1920×1080, 25 i/s, 81 Mo)
 
 | Chapitre | Sujet |
 |---|---|
