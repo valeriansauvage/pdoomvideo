@@ -11,6 +11,7 @@ import numpy as np, soundfile as sf
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REC = sys.argv[1]
+CLEAN = '--clean' in sys.argv          # studio/TTS source: no denoise or gate, just tone and level
 SR, FPS, FIRST_LEAD, LAST_TAIL = 48000, 25, 3.2, 9.0
 script = json.load(open(os.path.join(ROOT, 'script.json'), encoding='utf-8'))
 A = json.load(open(os.path.join(ROOT, 'out/rec/alignment.json'), encoding='utf-8'))['lines']
@@ -21,6 +22,7 @@ FX = ','.join([
     'deesser=i=0.5', 'acompressor=threshold=-24dB:ratio=3:attack=8:release=180:makeup=4',
     'agate=threshold=0.012:ratio=2.5:attack=15:release=350:range=0.25',    # softens room noise between phrases
     'alimiter=limit=0.89'])
+if CLEAN: FX = 'highpass=f=60,equalizer=f=200:t=q:w=1:g=1,acompressor=threshold=-26dB:ratio=2:attack=10:release=200:makeup=6,alimiter=limit=0.89'
 p = subprocess.run(['ffmpeg', '-v', 'error', '-i', REC, '-ac', '1', '-ar', str(SR), '-af', FX, '-f', 'f32le', '-'], capture_output=True, check=True)
 rec = np.frombuffer(p.stdout, np.float32).copy()
 
