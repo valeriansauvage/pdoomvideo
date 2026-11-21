@@ -10,7 +10,7 @@ const yardInterview = (o = {}) => {
   if (o.cris) fig('cris', o.cris[0], 1030, { outfit: 'farm2', view: 'r', ...o.cris[1] });
 };
 const phoneScreen = (u, sw) => {
-  xPush(); xT(3 * u, -1.4 * u); xR(-Math.PI / 2 + .15);
+  xPush(); xT(3 * u, -1.4 * u); xR(-Math.atan2(XM[1], XM[0]) * Math.sign(XM[0] * XM[3] - XM[1] * XM[2] || 1));   // hold it upright, screen to the reader
   paint(rrPts(-2.4 * u, -4.4 * u, 4.8 * u, 8.8 * u, .8 * u), { wash: '#2E2C36', ink: PAL.ink, sw: sw * .45 });
   paint(rrPts(-2 * u, -3.9 * u, 4 * u, 7.8 * u, .4 * u), { wash: '#F5F2EA', ink: null });
   paint(rectPts(-1.8 * u, -3.7 * u, 3.6 * u, 1.4 * u), { wash: '#E2626B', ink: null });
