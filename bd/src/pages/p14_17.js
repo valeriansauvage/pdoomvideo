@@ -39,25 +39,25 @@ page(14, [
   [1, [{
     w: .8,
     draw(w, h) {
-      cam(860, 700, 1.2);
+      cam(860, 650, .95);
       farmyard({ table: false, doorOpen: true });
       fig('cris', 820, 1010, { outfit: 'farm', view: 'b', pose: 'walk', ph: .3, tor: .1, nk: .25 });
     },
   }, {
     w: 1.2,
     draw(w, h) {
-      cam(700, 470, 1.15);
+      cam(700, 430, 1.15);
       kitchen({});
       fig('cris', 470, 920, { outfit: 'farm', view: 'r', ex: 'sadtalk', look: [1, 0], reachN: [560, 685], holdN: hKnife, reachF: [520, 690] });
       fig('louise', 900, 925, { view: 'l', ex: 'smile', armN: [.6, 1.4], handN: 'open' });
     },
     cap: [{ t: 'L’après-midi.', at: 'tl' }],
-    bub: [{ s: 'cris', t: 'Has he let you see exactly what he’s writing?', tr: 'Il t’a montré ce qu’il écrit, exactement ?', x: .26, y: .2, mw: 260 }, { s: 'louise', t: 'We’ll have to ask him. I’ve invited him to eat with us.', tr: 'Il faudra le lui demander. Je l’ai invité à dîner avec nous.', x: .76, y: .28, mw: 250 }],
+    bub: [{ s: 'cris', t: 'Has he let you see exactly what he’s writing?', tr: 'Il t’a montré ce qu’il écrit, exactement ?', x: .28, y: .33, mw: 250, size: .92 }, { s: 'louise', t: 'We’ll have to ask him. I’ve invited him to eat with us.', tr: 'Il faudra le lui demander. Je l’ai invité à dîner avec nous.', x: .75, y: .27, mw: 250, size: .92 }],
   }]],
   [1.1, [{
-    draw(w, h) { cam(1050, 640, .95); dinner({ l: { ex: 'smile', armN: [1.0, .9], handN: 'open' }, t: { ex: 'smile' }, c: { ex: 'suspicious' } }); },
+    draw(w, h) { cam(1050, 595, .95); dinner({ l: { ex: 'smile', armN: [1.0, .9], handN: 'open' }, t: { ex: 'smile' }, c: { ex: 'suspicious' } }); },
     cap: [{ t: 'Le soir.', at: 'tl' }],
-    bub: [{ s: 'louise', t: 'Could you tell us about what you’re writing? Is it a novel?', tr: 'Vous nous parlez de ce que vous écrivez ? C’est un roman ?', x: .25, y: .2, mw: 300 }],
+    bub: [{ s: 'louise', t: 'Could you tell us about what you’re writing? Is it a novel?', tr: 'Vous nous parlez de ce que vous écrivez ? C’est un roman ?', x: .3, y: .18, mw: 440, size: .92 }],
   }]],
   [1, [{
     w: .8,

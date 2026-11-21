@@ -50,12 +50,12 @@ page(11, [
   [1.05, [{
     w: 1.2,
     draw(w, h) {
-      cam(1450, 560, 1.35);
+      cam(1450, 593, 1.15);
       livingRoom({ winOpen: true });
       fig('louise', 1340, 1010, { view: 'r', ex: 'worried', reachN: [1480, 700], handN: 'open' });
       fig('cris', 1560, 1010, { outfit: 'heist', view: 'l', tor: .12, dirt: true, blackEye: true, faceBlood: true, ex: 'sadtalk', reachN: 'chest' });
     },
-    bub: [{ s: 'louise', t: 'Que vous est-il arrivé ?', x: .24, y: .13 }, { s: 'cris', t: 'Mon homme… He beat me up and threw me out of our car and drove away.', tr: 'Il m’a frappée, m’a jetée hors de la voiture et il est parti.', x: .66, y: .27, mw: 280 }],
+    bub: [{ s: 'louise', t: 'Que vous est-il arrivé ?', x: .2, y: .14, mw: 190 }, { s: 'cris', t: 'Mon homme… He beat me up and threw me out of our car and drove away.', tr: 'Il m’a frappée, m’a jetée hors de la voiture et il est parti.', x: .65, y: .24, mw: 300, size: .9 }],
   }, {
     w: .8,
     draw(w, h) {
@@ -79,14 +79,14 @@ page(11, [
 page(12, [
   [1.1, [{
     draw(w, h) {
-      cam(420, 735, .69);
+      cam(420, 700, .69);
       farmyard({ table: false });
       goat(-20, 1010, .85); goat(150, 1050, .8, { graze: true, flip: true }); chicken(540, 1080, 1, { peck: true }); chicken(620, 1060, .9, { flip: true });
       fig('cris', 380, 1060, { outfit: 'farm', view: 'l', ex: 'neutral', reachN: [300, 890], holdN: (u) => bucket(2 * u, 10 * u, u / 4.4 * .55, false) });
       fig('louise', 700, 1050, { view: 'l', ex: 'talk', armN: [1.2, .5], handN: 'open' });
     },
     cap: [{ t: 'Le lendemain matin.', at: 'tl' }],
-    bub: [{ s: 'louise', t: 'You could help around here. I have the room… Help me make up a room.', tr: 'Tu pourrais m’aider ici. J’ai de la place… Aide-moi à préparer une chambre.', x: .62, y: .17, mw: 300, size: .95 }],
+    bub: [{ s: 'louise', t: 'You could help around here. I have the room… Help me make up a room.', tr: 'Tu pourrais m’aider ici. J’ai de la place… Aide-moi à préparer une chambre.', x: .5, y: .16, mw: 360, size: .9 }],
   }, {
     draw(w, h) {
       cam(560, 560, 1.35);
@@ -100,7 +100,7 @@ page(12, [
   [1, [{
     w: .9,
     draw(w, h) {
-      cam(770, 640, .8);
+      cam(745, 590, .62);
       kitchen({});
       fig('cris', 340, 920, { outfit: 'farm', view: 'r', ex: 'neutral', look: [.5, .5], reachN: [430, 685], holdN: hKnife, reachF: [470, 690] });
       fig('louise', 1150, 1010, { view: 'r', ex: 'surprised', look: [1, 0] });
@@ -214,13 +214,13 @@ page(13, [
   }]],
   [1.15, [{
     draw(w, h) {
-      cam(1050, 640, .74);
+      cam(1050, 590, .74);
       hallway({ td: .28, ld: .55, lamp: 70 });
       fig('cris', 420, 1010, { outfit: 'night', view: 'r', ex: 'sad', look: [1, 0], s: .95 });
       panelVignette(PAL.night, 70, .55);
       fig('thibaut', 1100, 1010, { outfit: 'night', view: 'r', pose: 'walk', ph: .3, ex: 'smile' });
       fig('louise', 1575, 1010, { outfit: 'robe', view: 'l', ex: 'love', blush: true, armN: [2.2, .6], handN: 'open' });
     },
-    bub: [{ s: 'louise', t: 'Je me demandais si vous pourriez m’aider à changer une ampoule que je n’arrive pas à atteindre. Cela ne prendra qu’un instant…', x: .62, y: .2, mw: 420 }],
+    bub: [{ s: 'louise', t: 'Je me demandais si vous pourriez m’aider à changer une ampoule que je n’arrive pas à atteindre. Cela ne prendra qu’un instant…', x: .6, y: .17, mw: 560, size: .95 }],
   }]],
 ]);

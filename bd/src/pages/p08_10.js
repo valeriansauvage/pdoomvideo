@@ -60,20 +60,21 @@ page(8, [
     bub: [{ s: 'cris', t: 'Ele ainda está vivo!', tr: 'Il est encore vivant !', kind: 'shout', x: .5, y: .18, mw: 200 }],
   }, {
     draw(w, h) {
-      cam(1200, 900, 1.35);
+      cam(1195, 930, 2.1);
       treeWorld('dusk', { hole: true });
       joseInGrave({ f: { eyes: 'half', mouth: 'open' }, cover: .45 });
-      fig('cris', 1060, 1000, { outfit: 'heist', pose: 'kneel', view: 'r', tor: .95, nk: .35, dirt: true, ex: 'sad', reachN: [1150, 1000], reachF: [1200, 990] });
+      fig('cris', 1215, 880, { at: 'head', outfit: 'heist', view: 'pr', rot: 1.2, eyes: 'closed', brows: 'worried', mouth: 'flat', dirt: true, shadow: false, reachN: [1250, 990], reachF: [1130, 985] });
     },
-    bub: [{ s: 'jose', t: 'Eu te amo.', tr: 'Je t’aime.', kind: 'whisper', x: .72, y: .2, mw: 170 }],
+    bub: [{ s: 'jose', t: 'Eu te amo.', tr: 'Je t’aime.', kind: 'whisper', x: .27, y: .18, mw: 170 }],
   }, {
     draw(w, h) {
-      cam(1200, 900, 1.35);
+      cam(1195, 930, 2.1);
       treeWorld('dusk', { hole: true });
-      joseInGrave({ f: { eyes: 'half', mouth: 'flat' }, cover: .45 });
-      fig('cris', 1075, 1000, { outfit: 'heist', pose: 'kneel', view: 'r', tor: 1.15, nk: .45, dirt: true, ex: 'kiss', tears: true, reachN: [1160, 1000], reachF: [1210, 995] });
+      joseInGrave({ f: { eyes: 'closed', mouth: 'smile' }, cover: .45 });
+      fig('cris', 1196, 930, { at: 'head', outfit: 'heist', view: 'pr', rot: 1.3, eyes: 'shut', brows: 'worried', mouth: 'kiss', dirt: true, shadow: false, reachN: [1250, 990], reachF: [1125, 990] });
+      paint([[1166, 950], [1171, 962], [1166, 967], [1161, 962]], { wash: '#8EC3E6', ink: '#4A7FAF', sw: .3, curv: .5 });
     },
-    bub: [{ s: 'jose', t: 'Eu te amo, Thibaut.', tr: 'Je t’aime, Thibaut.', kind: 'whisper', x: .7, y: .2, mw: 190 }],
+    bub: [{ s: 'jose', t: 'Eu te amo, Thibaut.', tr: 'Je t’aime, Thibaut.', kind: 'whisper', x: .27, y: .18, mw: 190 }],
   }]],
   [1.1, [{
     draw(w, h) {

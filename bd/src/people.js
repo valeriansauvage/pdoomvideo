@@ -142,7 +142,7 @@ function namedTarget(J, name, u, V) {
   const H = (x, y) => V2.add(J.Hc, V2.rot([x * u, y * u], J.headA));
   switch (name) {
     case 'ear': return H(V === 'f' ? -7 : -5.2, 1.4); case 'earF': return H(V === 'f' ? 7 : 6.2, 1.4);
-    case 'mouth': return H(V === 'q' ? 3.6 : V === 'p' ? 6.5 : 0, 6.2); case 'eye': return H(V === 'q' ? 1.2 : V === 'p' ? 5.5 : -2.8, 1.4);
+    case 'mouth': return H(V === 'q' ? 3.2 : V === 'p' ? 6.2 : 0, 8.6); case 'eye': return H(V === 'q' ? 1.2 : V === 'p' ? 5.5 : -2.8, 1.4);
     case 'head': return H(0, -7); case 'chest': return V2.add(J.N, V2.rot([V === 'p' ? 5 * u : 2.5 * u, 11 * u], 0));
     case 'belly': return [V === 'p' ? 6 * u : 3 * u, -9 * u]; case 'hip': return [V === 'f' ? -7 * u : 3 * u, -2 * u];
   }
