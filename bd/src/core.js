@@ -316,14 +316,14 @@ async function paintPanel(pn) {
 // Film-noir lighting pass on a painted panel: darkness everywhere except pools of light around the faces and the
 // light sources, venetian-blind stripes indoors, rain outdoors.
 function noirPost(src, pn) {
-  const w = pn.w, h = pn.h, cv = document.createElement('canvas'); cv.width = w; cv.height = h; const c = cv.getContext('2d');
+  const w = pn.w, h = pn.h, diag = Math.hypot(w, h), cv = document.createElement('canvas'); cv.width = w; cv.height = h; const c = cv.getContext('2d');
   c.filter = MONO ? 'contrast(1.12)' : 'contrast(1.1) saturate(.95)'; c.drawImage(src, 0, 0, w, h, 0, 0, w, h); c.filter = 'none';
   const md = pn.mood || {}, dark = md.dark ?? .45, tint = MONO ? [3, 3, 6] : (md.tint || [6, 10, 30]);
   if (dark > 0) {
     const m = document.createElement('canvas'); m.width = w; m.height = h; const d = m.getContext('2d');
     d.fillStyle = `rgba(${tint[0]},${tint[1]},${tint[2]},${dark})`; d.fillRect(0, 0, w, h);
     d.globalCompositeOperation = 'destination-out';
-    const pools = [], diag = Math.hypot(w, h);
+    const pools = [];
     for (const a of Object.values(pn.anch || {})) {
       const r = a[2] || 30; if (a[0] < -r * 4 || a[1] < -r * 4 || a[0] > w + r * 4 || a[1] > h + r * 4) continue;
       pools.push([a[0], a[1] - r * .7, clamp(r * 6.5, diag * .16, diag * .55), .95]);
