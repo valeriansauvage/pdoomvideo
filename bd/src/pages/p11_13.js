@@ -182,7 +182,7 @@ page(13, [
       fig('cris', 700, 1000, { outfit: 'night', view: 'l', pose: 'run', ph: .3, tor: .25, ex: 'angrytalk', armN: [1.3, .2], armF: [1.4, .3], handN: 'open', handF: 'open' });
     },
     cap: [{ t: 'Le soir.', at: 'tl' }],
-    bub: [{ s: 'cris', t: 'O que você acha que está fazendo?!', tr: 'Qu’est-ce que tu crois faire ?!', kind: 'shout', x: .7, y: .18, mw: 230 }, { s: 'thibaut', t: 'Silêncio! Volte para o seu quarto.', tr: 'Silence ! Retourne dans ta chambre.', kind: 'whisper', x: .2, y: .2, mw: 220 }],
+    bub: [{ s: 'cris', t: 'O que você acha que está fazendo?!', tr: 'Qu’est-ce que tu crois faire ?!', kind: 'shout', x: .66, y: .15, mw: 230 }, { s: 'thibaut', t: 'Silêncio! Volte para o seu quarto.', tr: 'Silence ! Retourne dans ta chambre.', kind: 'whisper', x: .2, y: .36, mw: 220 }],
   }, {
     draw(w, h) {
       cam(560, 545, 1.7);
