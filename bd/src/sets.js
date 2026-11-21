@@ -3,9 +3,11 @@
 
 // ---------- shared scenery helpers ----------
 function skyGrad(x, y, w, h, top, bot, n = 5, tex = true) {
-  n = Math.max(n, 10);
-  for (let i = 0; i < n; i++) paint(rectPts(x, y + h * i / n - 4, w, h / n + 8), { wash: mixCol(top, bot, i / (n - 1)), ink: null });
-  if (tex) paint(rectPts(x, y, w, h), { fill: bot, fillOp: 50, bleed: .2, tex: .5, border: .2, ink: null });
+  n = Math.max(n, 10, Math.round(h / 50));
+  for (let i = 0; i < n; i++) paint(rectPts(x, y + h * i / n - 3, w, h / n + 6), { wash: mixCol(top, bot, i / (n - 1)), ink: null });
+  // watercolour grain; big skies get an oversized layer so its uneven edge stays off-screen
+  const e = h > 900 ? 600 : 0;
+  if (tex) paint(rectPts(x - e / 3, y - e, w + e * .66, h + e), { fill: bot, fillOp: 45, bleed: .2, tex: .5, border: .2, ink: null });
 }
 function cloud(x, y, s = 1, col = '#FBF6EE', op = 200) { paint(scallopPts(x, y, 150 * s, 55 * s, 7, .35, Math.round(x)), { fill: col, fillOp: op, bleed: .25, tex: .4, border: .3, ink: null }); }
 function hillBand(x0, x1, y, amp, col, seed = 1, ink = false, bottom = 1400) {

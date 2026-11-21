@@ -130,38 +130,44 @@ page(26, [
 // ----------------------------------------------------------------------------------- Planche 27 — fin
 // Louise's car seen from the front through the windshield, Thibaut driving, Cris next to him.
 function windshield(o = {}) {
-  const col = '#B5654F';
+  const col = '#B5654F', cx = 830;
   paint(rectPts(-300, -300, 2400, 1600), { wash: '#141834', ink: null });
-  for (let i = 0; i < 20; i++) paint(ellPts(lerp(-100, 1900, hash(i * 3.1)), lerp(-100, 200, hash(i * 7.7)), 3, 3, 5), { wash: '#F6F0D8', ink: null });
-  paint([[300, 260], [1500, 260], [1620, 790], [180, 790]], { wash: '#2E3A5E', ink: null });
-  paint(rrPts(560, 560, 160, 200, 30), { wash: '#4A4E66', ink: PAL.ink, sw: .5 });       // seat backs
-  paint(rrPts(1010, 560, 160, 200, 30), { wash: '#4A4E66', ink: PAL.ink, sw: .5 });
+  for (let i = 0; i < 20; i++) paint(ellPts(lerp(300, 1400, hash(i * 3.1)), lerp(150, 320, hash(i * 7.7)), 3, 3, 5), { wash: '#F6F0D8', ink: null });
+  // inside the car, behind the glass
+  paint([[cx - 270, 400], [cx + 270, 400], [cx + 330, 700], [cx - 330, 700]], { wash: '#2E3A5E', ink: null });
+  paint(rrPts(cx - 235, 540, 150, 200, 30), { wash: '#4A4E66', ink: PAL.ink, sw: .5 });
+  paint(rrPts(cx + 85, 540, 150, 200, 30), { wash: '#4A4E66', ink: PAL.ink, sw: .5 });
   if (o.kiss) {
-    fig('thibaut', 790, 560, { at: 'head', outfit: 'night', view: 'pr', ex: 'kiss', nk: .2 });
-    fig('cris', 868, 572, { at: 'head', outfit: 'night', view: 'pl', ex: 'kiss', blush: true, blackEye: true, nk: -.1 });
-    paint(heartPts(830, 430, 18), { wash: '#E2476E', ink: PAL.ink, sw: .4 });
+    fig('thibaut', cx - 42, 520, { at: 'head', outfit: 'night', view: 'pr', ex: 'kiss', nk: .2 });
+    fig('cris', cx + 36, 532, { at: 'head', outfit: 'night', view: 'pl', ex: 'kiss', blush: true, blackEye: true, nk: -.1 });
+    paint(heartPts(cx, 430, 16), { wash: '#E2476E', ink: PAL.ink, sw: .4 });
   } else {
-    fig('thibaut', 640, 560, { at: 'head', outfit: 'night', view: 'f', ex: 'shock' });
-    fig('cris', 1110, 572, { at: 'head', outfit: 'night', view: 'f', ex: 'shock', blackEye: true });
+    fig('thibaut', cx - 120, 520, { at: 'head', outfit: 'night', view: 'f', ex: 'shock' });
+    fig('cris', cx + 120, 532, { at: 'head', outfit: 'night', view: 'f', ex: 'shock', blackEye: true });
   }
-  paint(ellPts(640, 770, 150, 46, 26), { ink: '#26222E', sw: 2.6 });                    // steering wheel
-  paint([[300, 260], [1500, 260], [1620, 790], [180, 790]], { wash: o.lit ? '#FFF6D8' : '#5A6A9A', washOp: o.lit ? 90 : 45, ink: null });
-  inkLine([[420, 300], [330, 520]], 1.4, '#C9D2F0', 'inkfine', 0); inkLine([[1450, 330], [1500, 470]], 1, '#C9D2F0', 'inkfine', 0);
-  paint([[150, 180], [1650, 180], [1520, 262], [280, 262]], { wash: col, fill: shade(col, .3), fillOp: 60, ink: PAL.ink, sw: 1 });   // roof edge
-  paint([[280, 262], [305, 262], [190, 792], [140, 792]], { wash: shade(col, .2), ink: PAL.ink, sw: .8 });                        // pillars
-  paint([[1495, 262], [1520, 262], [1660, 792], [1610, 792]], { wash: shade(col, .2), ink: PAL.ink, sw: .8 });
-  paint(rrPts(850, 268, 100, 34, 10), { wash: '#2B2233', ink: PAL.ink, sw: .5 });         // rear-view mirror
-  paint([[-300, 790], [2100, 790], [2200, 1400], [-400, 1400]], { wash: col, fill: shade(col, .3), fillOp: 70, tex: .6, ink: PAL.ink, sw: 1 });   // hood
-  inkLine([[300, 860], [1500, 860]], .8, shade(col, .4), 'ink', .2);
-  if (o.lit) { panelWash('#FFF6D8', 60); glow(900, 560, 900, 400, '#FFFBE8', 80); }
+  paint(ellPts(cx - 120, 690, 95, 26, 24), { ink: '#26222E', sw: 2.2 });                       // steering wheel
+  // glass, then the car body around it
+  paint([[cx - 270, 400], [cx + 270, 400], [cx + 330, 700], [cx - 330, 700]], { wash: o.lit ? '#FFF6D8' : '#5A6A9A', washOp: o.lit ? 45 : 40, ink: null });
+  inkLine([[cx - 220, 420], [cx - 270, 560]], 1.2, '#C9D2F0', 'inkfine', 0); inkLine([[cx + 230, 430], [cx + 255, 500]], .9, '#C9D2F0', 'inkfine', 0);
+  paint([[cx - 345, 330], [cx + 345, 330], [cx + 288, 402], [cx - 288, 402]], { wash: col, fill: shade(col, .3), fillOp: 60, ink: PAL.ink, sw: 1 });        // roof edge
+  for (const k of [-1, 1]) {
+    paint([[cx + k * 288, 402], [cx + k * 262, 402], [cx + k * 320, 702], [cx + k * 348, 702]], { wash: shade(col, .2), ink: PAL.ink, sw: .8 });      // pillars
+    paint([[cx + k * 345, 330], [cx + k * 288, 402], [cx + k * 348, 702], [cx + k * 470, 702], [cx + k * 430, 420]], { wash: col, fill: shade(col, .25), fillOp: 60, ink: PAL.ink, sw: .8 });
+    paint(rrPts(cx + k * 470 - 40, 560, 80, 52, 14), { wash: shade(col, .15), ink: PAL.ink, sw: .6 });                                                 // side mirrors
+  }
+  paint(rrPts(cx - 40, 404, 80, 26, 8), { wash: '#2B2233', ink: PAL.ink, sw: .5 });            // rear-view mirror
+  paint([[cx - 700, 700], [cx + 700, 700], [cx + 820, 1300], [cx - 820, 1300]], { wash: col, fill: shade(col, .3), fillOp: 70, tex: .6, ink: PAL.ink, sw: 1 });   // hood
+  inkLine([[cx - 260, 760], [cx + 260, 760]], .7, shade(col, .4), 'ink', .2);
+  if (o.lit) glow(cx, 540, 420, 220, '#FFFBE8', 55);
 }
+
 page(27, [
   [1, [{
     w: 1.1,
-    draw(w, h) { cam(900, 560, 1.05); windshield({ kiss: true }); },
+    draw(w, h) { cam(830, 565, 1.3); windshield({ kiss: true }); },
   }, {
     w: .9,
-    draw(w, h) { cam(900, 560, 1.15); windshield({ lit: true }); },
+    draw(w, h) { cam(830, 565, 1.07); windshield({ lit: true }); },
     sfx: [{ t: '!!', x: .5, y: .2, size: 90, col: PAL.ochre }],
   }]],
   [1.65, [{
