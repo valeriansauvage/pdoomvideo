@@ -53,7 +53,7 @@ page(25, [
       panelWash('#1A1E44', 40);
     },
     cap: [{ t: 'Tard dans la soirée.', at: 'tl', col: '#D9DCF0' }],
-    sfx: [{ t: 'RRR… PSCHH…', x: .26, y: .28, size: 40, rot: -.05, col: '#C9D2F0' }],
+    sfx: [{ t: 'RRR… PSCHH…', x: .38, y: .2, size: 40, rot: -.05, col: '#C9D2F0' }],
   }]],
 ]);
 
@@ -69,7 +69,7 @@ page(26, [
       cam(1420, 930, 1.6);
       nightTree({ hole: true });
       suitcase(1500, 1000, 1, { open: 'gold', col: '#3E4C6E' });
-      fig('cris', 1380, 1000, { at: 'hip', outfit: 'night', view: 'pl', pose: 'lie', rot: Math.PI / 2 - .25, ex: 'dreamy', dirt: true, armN: [.25, .5], armF: [.8, 1.7] });
+      fig('cris', 1380, 1000, { at: 'hip', outfit: 'night', view: 'pl', pose: 'lie', rot: Math.PI / 2 - .25, ex: 'dreamy', dirt: true, armN: [.06, .12], armF: [-.04, .1] });
     },
   }]],
   [1, [{
