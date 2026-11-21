@@ -52,10 +52,10 @@ page(11, [
     draw(w, h) {
       cam(1450, 560, 1.35);
       livingRoom({ winOpen: true });
-      fig('cris', 1350, 1010, { outfit: 'heist', view: 'r', tor: .12, dirt: true, blackEye: true, faceBlood: true, ex: 'sadtalk', reachN: 'chest' });
-      fig('louise', 1560, 1010, { view: 'l', ex: 'worried', reachN: [1420, 700], handN: 'open' });
+      fig('louise', 1340, 1010, { view: 'r', ex: 'worried', reachN: [1480, 700], handN: 'open' });
+      fig('cris', 1560, 1010, { outfit: 'heist', view: 'l', tor: .12, dirt: true, blackEye: true, faceBlood: true, ex: 'sadtalk', reachN: 'chest' });
     },
-    bub: [{ s: 'louise', t: 'Que vous est-il arrivé ?', x: .76, y: .13 }, { s: 'cris', t: 'Mon homme… He beat me up and threw me out of our car and drove away.', tr: 'Il m’a frappée, m’a jetée hors de la voiture et il est parti.', x: .27, y: .26, mw: 280 }],
+    bub: [{ s: 'louise', t: 'Que vous est-il arrivé ?', x: .24, y: .13 }, { s: 'cris', t: 'Mon homme… He beat me up and threw me out of our car and drove away.', tr: 'Il m’a frappée, m’a jetée hors de la voiture et il est parti.', x: .66, y: .27, mw: 280 }],
   }, {
     w: .8,
     draw(w, h) {
@@ -79,28 +79,28 @@ page(11, [
 page(12, [
   [1.1, [{
     draw(w, h) {
-      cam(360, 720, 1.0);
+      cam(420, 735, .69);
       farmyard({ table: false });
-      goat(-60, 1010, .85); goat(130, 1050, .8, { graze: true, flip: true }); chicken(520, 1080, 1, { peck: true }); chicken(600, 1060, .9, { flip: true });
+      goat(-20, 1010, .85); goat(150, 1050, .8, { graze: true, flip: true }); chicken(540, 1080, 1, { peck: true }); chicken(620, 1060, .9, { flip: true });
       fig('cris', 380, 1060, { outfit: 'farm', view: 'l', ex: 'neutral', reachN: [300, 890], holdN: (u) => bucket(2 * u, 10 * u, u / 4.4 * .55, false) });
       fig('louise', 700, 1050, { view: 'l', ex: 'talk', armN: [1.2, .5], handN: 'open' });
     },
     cap: [{ t: 'Le lendemain matin.', at: 'tl' }],
-    bub: [{ s: 'louise', t: 'You could help around here. I have the room… Help me make up a room.', tr: 'Tu pourrais m’aider ici. J’ai de la place… Aide-moi à préparer une chambre.', x: .58, y: .25, mw: 270 }],
+    bub: [{ s: 'louise', t: 'You could help around here. I have the room… Help me make up a room.', tr: 'Tu pourrais m’aider ici. J’ai de la place… Aide-moi à préparer une chambre.', x: .62, y: .17, mw: 300, size: .95 }],
   }, {
     draw(w, h) {
-      cam(560, 650, 1.6);
+      cam(560, 560, 1.35);
       farmyard({ table: false });
       chicken(500, 1080, 1, {});
       fig('cris', 420, 1060, { outfit: 'farm', view: 'r', ex: 'blank', look: [1, -.3], reachN: [470, 900], holdN: (u) => bucket(2 * u, 10 * u, u / 4.4 * .55, false) });
       fig('louise', 690, 1050, { view: 'l', ex: 'smile', armN: [.5, 1.6], handN: 'open' });
     },
-    bub: [{ s: 'louise', t: 'A guest is coming this afternoon. He’s a week late. He paid for the month. He’s writing a book or something. Most likely he’ll stay longer if we treat him right.', tr: 'Un client arrive cet après-midi. Il a une semaine de retard. Il a payé le mois. Il écrit un livre ou quelque chose comme ça. Il restera sûrement plus longtemps si on le soigne bien.', x: .5, y: .3, mw: 340, size: .86 }],
+    bub: [{ s: 'louise', t: 'A guest is coming this afternoon. He’s a week late. He paid for the month. He’s writing a book or something. Most likely he’ll stay longer if we treat him right.', tr: 'Un client arrive cet après-midi. Il a une semaine de retard. Il a payé le mois. Il écrit un livre ou quelque chose comme ça. Il restera sûrement plus longtemps si on le soigne bien.', x: .48, y: .26, mw: 410, size: .86 }],
   }]],
   [1, [{
     w: .9,
     draw(w, h) {
-      cam(900, 620, .8);
+      cam(770, 640, .8);
       kitchen({});
       fig('cris', 390, 1010, { outfit: 'farm', view: 'r', ex: 'neutral', look: [.5, .5], reachN: [430, 620], holdN: hKnife, reachF: [470, 625] });
       fig('louise', 1150, 1010, { view: 'r', ex: 'surprised', look: [1, 0] });
@@ -128,7 +128,7 @@ page(12, [
       fig('cris', 960, 1010, { outfit: 'farm', view: 'l', ex: 'blank', nk: .12, look: [-1, 0], reachN: [880, 820], holdN: hKnife });
     },
     bub: [{ s: 'louise', t: 'Cris, come out and meet Thibaut.', tr: 'Cris, viens dire bonjour à Thibaut.', x: .5, y: .15, mw: 300 }],
-    sfx: [{ t: '…', x: .25, y: .3, size: 50, col: PAL.ink }, { t: '…', x: .75, y: .3, size: 50, col: PAL.ink }],
+    sfx: [{ t: '…', x: .3, y: .3, size: 54, col: PAL.cream }, { t: '…', x: .8, y: .3, size: 54, col: PAL.cream }],
   }]],
   [1, [{
     w: 1.1,

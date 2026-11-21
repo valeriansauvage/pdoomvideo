@@ -35,58 +35,57 @@ page(8, [
   [1, [{
     w: .9,
     draw(w, h) {
-      cam(1500, 900, 1.6);
+      cam(1520, 810, 1.25);
       treeWorld('dusk', { hole: true });
-      suitcase(1450, 1030, 1, { open: 'cash', col: '#4A3E5A' });
-      fig('thibaut', 1600, 1040, { outfit: 'heist', view: 'l', pose: 'kneel', dirt: true, ex: 'sly', look: [-1, .5], reachN: [1460, 905], holdN: hCash, reachF: [1640, 870], holdF: hCash });
+      suitcase(1440, 1030, 1, { open: 'cash', col: '#4A3E5A' });
+      fig('thibaut', 1610, 1040, { outfit: 'heist', view: 'l', pose: 'kneel', dirt: true, ex: 'sly', look: [-1, .5], reachN: [1470, 905], holdN: hCash, reachF: [1640, 840], holdF: hCash });
     },
   }, {
     w: 1.1,
     draw(w, h) {
-      cam(1290, 990, 2.6);
+      cam(1260, 980, 2.3);
       treeWorld('dusk', { hole: true });
       joseInGrave({ f: { eyes: 'half', brows: 'worried', mouth: 'flat' }, cover: .5 });
-      for (let i = 0; i < 9; i++) { const x = 1180 + i * 17, y = 905 + hash(i) * 40; paint(blobPts(x, y, 6, 5, 7, .3, i), { wash: PAL.earth, ink: PAL.ink, sw: .25 }); }
-      for (const k of [-1, 1]) inkLine([[1168 + k * 8, 950], [1170 + k * 14, 940]], .5, PAL.ink, 'inkfine', 0);
+      for (let i = 0; i < 9; i++) { const x = 1150 + i * 17, y = 905 + hash(i) * 40; paint(blobPts(x, y, 6, 5, 7, .3, i), { wash: PAL.earth, ink: PAL.ink, sw: .25 }); }
+      for (const k of [-1, 1]) inkLine([[1138 + k * 8, 950], [1140 + k * 14, 940]], .5, PAL.ink, 'inkfine', 0);
     },
-    sfx: [{ t: 'flap… flap…', x: .3, y: .2, size: 34, rot: -.08, col: PAL.cream }],
   }]],
   [1, [{
     w: .8,
     draw(w, h) {
-      cam(1030, 830, 1.6);
+      cam(1030, 640, 1.35);
       treeWorld('dusk', { hole: true });
       fig('cris', 1030, 1000, { outfit: 'heist', pose: 'kneel', view: 'r', dirt: true, ex: 'shout', eyes: 'wide', armN: [1.4, .5], handN: 'open', armF: [1.2, .3], handF: 'open' });
     },
-    bub: [{ s: 'cris', t: 'Ele ainda está vivo!', tr: 'Il est encore vivant !', kind: 'shout', x: .5, y: .2, mw: 200 }],
+    bub: [{ s: 'cris', t: 'Ele ainda está vivo!', tr: 'Il est encore vivant !', kind: 'shout', x: .5, y: .18, mw: 200 }],
   }, {
     draw(w, h) {
-      cam(1250, 950, 2.0);
+      cam(1200, 900, 1.35);
       treeWorld('dusk', { hole: true });
       joseInGrave({ f: { eyes: 'half', mouth: 'open' }, cover: .45 });
-      fig('cris', 1160, 1000, { outfit: 'heist', pose: 'crouch', view: 'r', tor: 1.0, nk: .4, dirt: true, ex: 'sad', reachN: [1230, 990], reachF: [1300, 1000] });
+      fig('cris', 1060, 1000, { outfit: 'heist', pose: 'kneel', view: 'r', tor: .95, nk: .35, dirt: true, ex: 'sad', reachN: [1150, 1000], reachF: [1200, 990] });
     },
-    bub: [{ s: 'jose', t: 'Eu te amo.', tr: 'Je t’aime.', kind: 'whisper', x: .7, y: .22, mw: 170 }],
+    bub: [{ s: 'jose', t: 'Eu te amo.', tr: 'Je t’aime.', kind: 'whisper', x: .72, y: .2, mw: 170 }],
   }, {
     draw(w, h) {
-      cam(1250, 950, 2.0);
+      cam(1200, 900, 1.35);
       treeWorld('dusk', { hole: true });
       joseInGrave({ f: { eyes: 'half', mouth: 'flat' }, cover: .45 });
-      fig('cris', 1205, 960, { outfit: 'heist', pose: 'crouch', view: 'r', tor: 1.35, nk: .5, dirt: true, ex: 'kiss', tears: true, reachN: [1240, 1000], reachF: [1300, 1000] });
+      fig('cris', 1075, 1000, { outfit: 'heist', pose: 'kneel', view: 'r', tor: 1.15, nk: .45, dirt: true, ex: 'kiss', tears: true, reachN: [1160, 1000], reachF: [1210, 995] });
     },
-    bub: [{ s: 'jose', t: 'Eu te amo, Thibaut.', tr: 'Je t’aime, Thibaut.', kind: 'whisper', x: .62, y: .2, mw: 190, tail: [.48, .78] }],
+    bub: [{ s: 'jose', t: 'Eu te amo, Thibaut.', tr: 'Je t’aime, Thibaut.', kind: 'whisper', x: .7, y: .2, mw: 190 }],
   }]],
   [1.1, [{
     draw(w, h) {
-      cam(1350, 840, 1.05);
+      cam(1330, 735, .95);
       treeWorld('dusk', { hole: true });
       joseInGrave({ cover: .9 });
-      fig('thibaut', 1640, 1030, { outfit: 'heist', view: 'l', tor: .35, dirt: true, ex: 'sad', tears: true, reachN: [1500, 930], reachF: [1560, 800], handN: 'fist', handF: 'fist' });
-      shovel(1470, 935, .9, -2.05);
-      dirtClumps(1440, 900, 40, 18, 6, 8);
-      fig('cris', 940, 1010, { outfit: 'heist', pose: 'kneel', view: 'r', dirt: true, ex: 'cry', tears: true, reachN: 'eye' });
+      shovel(1500, 935, .9, .9);
+      dirtClumps(1490, 930, 30, 14, 5, 8);
+      fig('thibaut', 1700, 1030, { outfit: 'heist', view: 'l', tor: .2, dirt: true, ex: 'sad', tears: true, reachN: [1640, 820], reachF: [1690, 785], handN: 'fist', handF: 'fist' });
+      fig('cris', 930, 1010, { outfit: 'heist', pose: 'kneel', view: 'r', dirt: true, ex: 'cry', tears: true, reachN: 'eye' });
     },
-    bub: [{ s: 'thibaut', t: 'Que Deus o tenha em Sua glória.', tr: 'Que Dieu l’ait en Sa gloire.', x: .72, y: .2, mw: 260 }],
+    bub: [{ s: 'thibaut', t: 'Que Deus o tenha em Sua glória.', tr: 'Que Dieu l’ait en Sa gloire.', x: .55, y: .16, mw: 260 }],
   }]],
 ]);
 
@@ -125,38 +124,38 @@ page(9, [
   [1, [{
     w: 1.1,
     draw(w, h) {
-      cam(870, 960, 2.4);
+      cam(930, 610, 2.6);
       treeWorld('afternoon', { mound: true, leaves: true });
-      sleepers({ sweat: true, t: { eyes: 'closed', brows: 'worried', mouth: 'wobble' } });
-      fly(820, 905, 1.6);
+      fig('thibaut', 900, 600, { at: 'head', outfit: 'heist', view: 'pr', pose: 'lie', rot: -Math.PI / 2, dirt: true, sweat: true, eyes: 'closed', brows: 'worried', mouth: 'wobble', shadow: false });
+      fly(985, 560, 1.4);
     },
-    sfx: [{ t: 'BZZZ', x: .74, y: .22, size: 46, rot: .14, col: PAL.ink }],
+    sfx: [{ t: 'BZZZ', x: .72, y: .2, size: 50, rot: .14, col: PAL.cream }],
   }, {
     w: .9,
     draw(w, h) {
-      cam(930, 870, 1.25);
+      cam(960, 760, .8);
       treeWorld('afternoon', { mound: true, leaves: true });
       fig('cris', 860, 985, { at: 'hip', outfit: 'heist', view: 'pr', pose: 'lie', rot: -Math.PI / 2 + .05, ex: 'sleep', dirt: true, shadow: false, armN: [.6, 1.5] });
-      fig('thibaut', 1050, 1010, { outfit: 'heist', view: 'l', dirt: true, ex: 'blank', legN: [.75, .25], legF: [-.1, 0], tor: -.05 });
+      fig('thibaut', 1060, 1010, { outfit: 'heist', view: 'l', dirt: true, ex: 'blank', legN: [.75, .25], legF: [-.1, 0], tor: -.05 });
     },
-    bub: [{ s: 'thibaut', t: 'Levante-se.', tr: 'Debout.', x: .7, y: .14 }],
+    bub: [{ s: 'thibaut', t: 'Levante-se.', tr: 'Debout.', x: .28, y: .2 }],
   }]],
   [1.05, [{
     draw(w, h) {
-      cam(960, 820, 1.45);
+      cam(960, 750, .85);
       treeWorld('afternoon', { mound: true, leaves: true });
-      fig('cris', 850, 1000, { outfit: 'heist', pose: 'sitFloor', view: 'r', dirt: true, ex: 'sad', look: [1, -.6], reachN: [960, 840], holdN: hWallet, handN: 'fist' });
+      fig('cris', 850, 1000, { outfit: 'heist', pose: 'sitFloor', view: 'r', dirt: true, ex: 'sad', look: [1, -.8], reachN: [940, 860], holdN: hWallet, handN: 'fist' });
       fig('thibaut', 1080, 1010, { outfit: 'heist', view: 'l', dirt: true, ex: 'tired', armN: [.9, .5], handN: 'open' });
     },
-    bub: [{ s: 'thibaut', t: 'Já está na hora. Sua carteira.', tr: 'C’est l’heure. Ton portefeuille.', x: .64, y: .15, mw: 270 }],
+    bub: [{ s: 'thibaut', t: 'Já está na hora. Sua carteira.', tr: 'C’est l’heure. Ton portefeuille.', x: .32, y: .18, mw: 260 }],
   }, {
     draw(w, h) {
-      cam(1000, 780, 1.75);
+      cam(975, 740, .9);
       treeWorld('afternoon', { mound: true, leaves: true });
       fig('cris', 860, 1000, { outfit: 'heist', pose: 'sitFloor', view: 'r', dirt: true, ex: 'sad', look: [1, -.8], reachN: [930, 850], holdN: hWallet });
       fig('thibaut', 1060, 1010, { outfit: 'heist', view: 'l', dirt: true, ex: 'blank', reachN: [1010, 700], holdN: hCash, reachF: [1050, 640] });
     },
-    bub: [{ s: 'thibaut', t: 'Você não precisa de dinheiro.', tr: 'Tu n’as pas besoin d’argent.', x: .3, y: .14, mw: 250 }],
+    bub: [{ s: 'thibaut', t: 'Você não precisa de dinheiro.', tr: 'Tu n’as pas besoin d’argent.', x: .3, y: .18, mw: 250 }],
   }]],
 ]);
 
@@ -201,7 +200,7 @@ page(10, [
       treeWorld('afternoon', { mound: true });
       fig('thibaut', 1022, 588, { at: 'head', outfit: 'heist', view: 'pl', dirt: true, ex: 'kiss', nk: .28, reachN: [940, 660] });
       fig('cris', 960, 612, { at: 'head', outfit: 'heist', view: 'pr', dirt: true, blackEye: true, ex: 'kiss', nk: -.15, reachN: [1020, 650] });
-      paint(heartPts(990, 500, 18), { wash: '#E2476E', ink: PAL.ink, sw: .4 });
+      paint(heartPts(1000, 520, 16), { wash: '#E2476E', ink: PAL.ink, sw: .4 });
     },
   }, {
     w: .9,

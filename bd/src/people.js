@@ -425,12 +425,12 @@ function drawHead(ctx) {
   const eyesK = o.eyes || ex[0], browK = o.brows || ex[1], mouthK = o.mouth || ex[2];
   const hp = headPts(ctx, g);
   // ears (behind the head outline on the far side in front view)
-  const ear = (x, y, s) => { paint(ellPts(x, y, 1.25 * u * Math.abs(s), 2.0 * u, 10), { wash: shade(D.skin, .06), ink: PAL.ink, sw: sw * .5 }); inkLine([[x + .2 * u * s, y - 1 * u], [x - .5 * u * s, y + .2 * u], [x + .1 * u * s, y + 1 * u]], sw * .35, shade(D.skin, .4), 'inkfine', .5); };
+  const ear = (x, y, s) => { paint(ellPts(x, y, 1.0 * u * Math.abs(s), 1.65 * u, 10), { wash: shade(D.skin, .06), ink: PAL.ink, sw: sw * .42 }); inkLine([[x + .2 * u * s, y - 1 * u], [x - .5 * u * s, y + .2 * u], [x + .1 * u * s, y + 1 * u]], sw * .35, shade(D.skin, .4), 'inkfine', .5); };
   if (V === 'f') { ear(-g.rx * .98, 1 * u, 1); ear(g.rx * .98, 1 * u, -1); }
   if (V === 'b') { ear(-g.rx * .96, 1 * u, 1); ear(g.rx * .96, 1 * u, -1); }
   paint(hp, { wash: D.skin, fill: shade(D.skin, .14), fillOp: 45, bleed: .08, tex: .55, border: .55, ink: PAL.ink, sw: sw * .9, curv: .3 });
   if (V === 'q') ear(-5.5 * u, 1.6 * u, .9);
-  if (V === 'p') ear(-1.6 * u, 1.2 * u, 1);
+  if (V === 'p') ear(-2.4 * u, 1.3 * u, .9);
   if (V === 'b') { hairFront(ctx, g); anchor(name, 0, 4 * u); return; }
   // stubble / beard base
   if (D.stubble) paint(jawPts(ctx, g, .45), { fill: '#3A4A60', fillOp: 55, bleed: .1, tex: .8, border: .3, ink: null });

@@ -413,6 +413,12 @@ function bubble(c, r, b, prev) {
     const pa = a + Math.PI / 2;
     neck = [[p1[0] + Math.cos(pa) * w, p1[1] + Math.sin(pa) * w], [p2[0] + Math.cos(pa) * w, p2[1] + Math.sin(pa) * w], [p2[0] - Math.cos(pa) * w, p2[1] - Math.sin(pa) * w], [p1[0] - Math.cos(pa) * w, p1[1] - Math.sin(pa) * w]];
   }
+  // layout checks (printed in the render log): speakers out of the panel, bubbles sitting on a face
+  if (b.s && r.anch && r.anch[b.s]) { const [ax, ay] = r.anch[b.s]; if (ax < -10 || ay < -10 || ax > r.w + 10 || ay > r.h + 10) console.warn(`check ${r.id}: speaker ${b.s} is outside the panel`); }
+  for (const [who, [ax, ay]] of Object.entries(r.anch || {})) {
+    const dx = (r.x + ax - cx) / (rx + 8), dy = (r.y + ay - 30 - cy) / (ry + 8);
+    if (dx * dx + dy * dy < 1) console.warn(`check ${r.id}: a bubble covers ${who}'s face`);
+  }
   const fillCol = b.fill || (kind === 'box' ? '#F7E7BE' : PAL.bubble), lw = 3.2;
   c.save(); c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = PAL.ink;
   // outlines (double width: the fills cover the inner half)
@@ -481,6 +487,8 @@ function caption(c, r, cp) {
 // Sound effect. s: { t, x, y (fractions), size, rot, col, stroke }
 function sfxText(c, r, s) {
   const x = r.x + s.x * r.w, y = r.y + s.y * r.h, size = s.size || 70;
+  const lum = (h => { const v = parseInt(h.slice(1), 16); return ((v >> 16 & 255) * .3 + (v >> 8 & 255) * .59 + (v & 255) * .11) / 255; })(s.col || PAL.ochre);
+  if (lum < .35 && !s.stroke) s = { ...s, stroke: PAL.cream };
   c.save(); c.translate(x, y); c.rotate(s.rot ?? -.08); c.font = `${size}px ${F_FX}`; c.textAlign = 'center'; c.textBaseline = 'middle';
   c.lineJoin = 'round';
   c.lineWidth = size * .16; c.strokeStyle = s.stroke || PAL.ink; c.strokeText(s.t, size * .05, size * .06);
