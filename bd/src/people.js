@@ -197,7 +197,7 @@ function fig(who, x, y, o = {}) {
   if (P.legsFront) { if (want('legF') && o.legsAllFront) drawLeg(ctx, J.legF, 'F'); if (want('legN')) drawLeg(ctx, J.legN, 'N'); if (want('skirt')) drawSkirt(ctx); }
   if (frontArms && want('armF')) drawArm(ctx, J.armF, 'F');
   if (want('head')) inHead(ctx, () => drawHead(ctx));
-  else if (o.anchorAlways !== false) inHead(ctx, () => anchor(name, ...mouthPos(ctx)));
+  else if (o.anchorAlways !== false) inHead(ctx, () => anchor(name, ...mouthPos(ctx), faceGeom(ctx).ry));
   if (frontArms && want('armN')) drawArm(ctx, J.armN, 'N');
   else if (!frontArms && want('armN')) drawArm(ctx, J.armN, 'N');
   if (!frontArms && o.farArmFront && want('armF')) drawArm(ctx, J.armF, 'F');
@@ -431,7 +431,7 @@ function drawHead(ctx) {
   paint(hp, { wash: D.skin, fill: shade(D.skin, .14), fillOp: 45, bleed: .08, tex: .55, border: .55, ink: PAL.ink, sw: sw * .9, curv: .3 });
   if (V === 'q') ear(-5.5 * u, 1.6 * u, .9);
   if (V === 'p') ear(-2.4 * u, 1.3 * u, .9);
-  if (V === 'b') { hairFront(ctx, g); anchor(name, 0, 4 * u); return; }
+  if (V === 'b') { hairFront(ctx, g); anchor(name, 0, 4 * u, g.ry); return; }
   // stubble / beard base
   if (D.stubble) paint(jawPts(ctx, g, .45), { fill: '#3A4A60', fillOp: 55, bleed: .1, tex: .8, border: .3, ink: null });
   if (D.beard) { paint(jawPts(ctx, g, 0), { wash: D.beard, fill: shade(D.beard, .3), fillOp: 70, tex: .7, ink: PAL.ink, sw: sw * .55, curv: .2 }); }
@@ -451,10 +451,16 @@ function drawHead(ctx) {
   if (o.sweat) paint([[g.rx * .55, -4 * u], [g.rx * .55 + 1 * u, -1.8 * u], [g.rx * .55, -.8 * u], [g.rx * .55 - 1 * u, -1.8 * u]], { wash: '#BFE0F4', ink: '#4A7FAF', sw: sw * .4, curv: .6 });
   if (o.crumbs) for (let i = 0; i < 6; i++) paint(ellPts(g.mouth[0] + lerp(-2.5, 3, hash(i * 9.1)) * u, g.mouth[1] + lerp(-2.6, 1.5, hash(i * 4.3)) * u, .45 * u, .35 * u, 6), { wash: '#D9A048', ink: '#8A5A20', sw: sw * .2 });
   if (o.faceBlood) { inkLine([[g.fx + 1.4 * u, 3 * u], [g.fx + 1.6 * u, 4.4 * u], [g.fx + 1.2 * u, 6.2 * u]], sw * .9, PAL.blood, 'ink', .4); }
+  // noir chiaroscuro: the side of the head away from the light falls into shadow
+  if (NOIR && !o.noShade) {
+    const hp = headPts(ctx, g), x0 = V === 'f' ? -g.rx * .12 : V === 'p' ? g.rx * .05 : -g.rx * .02;
+    paint(hp.filter(p => p[0] < x0), { wash: PAL.ink, washOp: 120, ink: null });
+    paint(hp.filter(p => p[0] < x0 + g.rx * .22), { wash: PAL.ink, washOp: 40, ink: null });
+  }
   if (D.bandana) drawBandana(ctx, g);
   if (o.scarfDown) { const col = typeof o.scarfDown === 'string' ? o.scarfDown : PAL.teal; paint([[-g.rx * .72, g.ry * .92], [g.rx * .9, g.ry * .84], [g.rx * .86, g.ry * 1.32], [g.fx, g.ry * 1.55], [-g.rx * .7, g.ry * 1.3]], { wash: col, fill: shade(col, .25), fillOp: 70, ink: PAL.ink, sw: sw * .7, curv: .3 }); }
   hairFront(ctx, g);
-  anchor(name, g.mouth[0], g.mouth[1]);
+  anchor(name, g.mouth[0], g.mouth[1], g.ry);
 }
 
 function jawPts(ctx, g, k) {

@@ -28,6 +28,29 @@ const PAL = {
   woodDk: '#7C4A2C', wall: '#F2E1C6', dusk: '#F0B27A', smoke: '#C9C3CF', denim: '#4A5F8F', bubble: '#FFFBF1'
 };
 
+// ---------- style ----------
+// 'noir' (default): black & white film-noir look — high-contrast greys, light pools on the faces, venetian-blind
+// shadows indoors, rain in the city, typewriter captions, black page; only blood, gold, hearts, wine and the police
+// light keep their colour. 'aquarelle': the original watercolour palette.  Choose with ?style=… (render.mjs --style=…).
+const STYLE = new URLSearchParams(location.search).get('style') || 'noir';
+const NOIR = STYLE === 'noir';
+const ACCENT = new Set(['#b3263a', '#8e1b2e', '#6a1020', '#7a1424',                 // blood
+  '#edb83c', '#a8741c', '#f8dc7a', '#fff6c8', '#fff3c4', '#ffe08a',                 // gold
+  '#e2476e', '#8a2234', '#4a8fe0', '#8ec3ff']);                                       // hearts, wine, police light
+const isAccent = c => typeof c === 'string' && ACCENT.has(c.toLowerCase());
+const TONE = new Map();
+// Colour → noir grey (contrast curve: deep blacks, bright highlights); accents pass through.
+function tone(c) {
+  if (!NOIR || typeof c !== 'string' || c[0] !== '#' || c.length !== 7) return c;
+  const k = c.toLowerCase(); if (ACCENT.has(k)) return k;
+  let v = TONE.get(k); if (v) return v;
+  const n = parseInt(k.slice(1), 16), L0 = (.2126 * (n >> 16 & 255) + .7152 * (n >> 8 & 255) + .0722 * (n & 255)) / 255;
+  const L = Math.max(0, Math.min(1, (Math.pow(L0, 1.2) - .5) * 1.5 + .48));
+  const y = Math.round(L * 248 + 4);
+  v = '#' + ((1 << 24) + (y << 16) + (y << 8) + Math.min(255, y + 3)).toString(16).slice(1);
+  TONE.set(k, v); return v;
+}
+
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const lerp = (a, b, x) => a + (b - a) * x;
 const ease = x => { x = clamp(x); return x * x * (3 - 2 * x); };
@@ -119,23 +142,24 @@ function smoothPts(pts, k, closed = true) {
 function paint(pts, o = {}) {
   if (o.curv) pts = smoothPts(pts, o.curv, !o.open);
   if (o.wash || o.fill || o.hatch) {
-    if (o.wash) brush.wash(o.wash, o.washOp ?? 255); else brush.noWash();
-    if (o.fill) { brush.fill(o.fill, o.fillOp ?? 170); brush.fillBleed(o.bleed ?? .1); brush.fillTexture(o.tex ?? .4, o.border ?? .35); } else brush.noFill();
-    if (o.hatch) { brush.hatch(o.hatch.d, o.hatch.a, o.hatch.o || { rand: .15 }); brush.hatchStyle(o.hatch.b || 'HB', o.hatch.c || PAL.ink, (o.hatch.w || 1) * SWK); } else brush.noHatch();
+    if (o.wash) brush.wash(tone(o.wash), o.washOp ?? 255); else brush.noWash();
+    if (o.fill) { brush.fill(tone(o.fill), o.fillOp ?? 170); brush.fillBleed(o.bleed ?? .1); brush.fillTexture(o.tex ?? .4, o.border ?? .35); } else brush.noFill();
+    if (o.hatch) { brush.hatch(o.hatch.d, o.hatch.a, o.hatch.o || { rand: .15 }); brush.hatchStyle(o.hatch.b || 'HB', tone(o.hatch.c || PAL.ink), (o.hatch.w || 1) * SWK); } else brush.noHatch();
     brush.noStroke();
     brush.polygon(pts);
   }
   if (o.ink !== null) {
-    brush.noWash(); brush.noFill(); brush.noHatch(); brush.set(o.br || 'ink', o.ink || PAL.ink, (o.sw ?? 1) * SWK);
+    brush.noWash(); brush.noFill(); brush.noHatch(); brush.set(o.br || 'ink', tone(o.ink || PAL.ink), (o.sw ?? 1) * SWK * (NOIR ? 1.12 : 1));
     brush.beginShape(0); for (const p of pts) brush.vertex(p[0], p[1]); brush.endShape(o.open ? false : true);
   }
 }
 function inkLine(pts, sw = 1, col = PAL.ink, br = 'ink', curv = .5) {
-  brush.noFill(); brush.noWash(); brush.noHatch(); brush.set(br, col, sw * SWK); brush.spline(pts, curv);
+  brush.noFill(); brush.noWash(); brush.noHatch(); brush.set(br, tone(col), sw * SWK * (NOIR ? 1.12 : 1)); brush.spline(pts, curv);
 }
 // soft watercolour glow / shadow pool
 // Soft light: stacked translucent washes (watercolour fills darken, so light is painted as washes).
 function glow(cx, cy, rx, ry, col, op = 90, soft = .3) {
+  if (NOIR) { light(cx, cy, Math.max(rx, ry) * 1.2, clamp(op / 110, .3, 1)); if (!isAccent(col)) col = '#FFFFFF'; }
   const n = 5;
   for (let k = 0; k < n; k++) { const f = 1 - k / n * .82; paint(ellPts(cx, cy, rx * f, ry * f, 28, Math.min(rx, ry) * .03), { wash: col, washOp: op * .3, ink: null }); }
 }
@@ -166,13 +190,17 @@ function worldText(txt, x, y, size, col = PAL.ink, o = {}) {
   c.save(); c.translate(px, py); c.rotate(rot); c.globalAlpha = o.alpha ?? .92;
   c.font = o.font === 'hand' ? `${o.bold ? 800 : 600} ${sz}px ${F_DIAL}` : `${sz}px ${F_FX}`;
   c.textAlign = o.align || 'center'; c.textBaseline = 'middle';
-  if (o.stroke) { c.lineJoin = 'round'; c.lineWidth = sz * .14; c.strokeStyle = o.stroke; c.strokeText(txt, 0, 0); }
-  c.fillStyle = col; c.fillText(txt, 0, 0); c.restore();
+  if (o.stroke) { c.lineJoin = 'round'; c.lineWidth = sz * .14; c.strokeStyle = tone(o.stroke); c.strokeText(txt, 0, 0); }
+  c.fillStyle = tone(col); c.fillText(txt, 0, 0); c.restore();
   brushFlush();
   push(); resetMatrix(); translate(-PANEL.w / 2, -PANEL.h / 2); image(txtG, 0, 0); pop();
 }
 // Record where a speaker's mouth is (in panel px) so bubble tails can point at it.
-function anchor(name, x, y) { ANCH[name] = xApply(x, y); }
+function anchor(name, x, y, r = 0) { const p = xApply(x, y); ANCH[name] = [p[0], p[1], r * xScale()]; }
+// Noir lighting: a light source at world (x, y) with radius r (pools of light cut into the panel's darkness).
+function light(x, y, r, k = 1) { if (!PANEL) return; const [px, py] = xApply(x, y); PANEL.lights.push([px, py, r * xScale(), k]); }
+// Per-panel noir mood, set by the sets: { dark: 0..1 darkness away from the lights, blinds: true | alpha, rain: true | density }
+function noirMood(o) { if (PANEL) PANEL.mood = { ...PANEL.mood, ...o }; }
 // Full-panel tint (night, flashback, fades) — screen space.
 function panelWash(col, op = 255, o = {}) {
   xPush(); XM = [1, 0, 0, 1, 0, 0]; resetMatrix(); translate(-PANEL.w / 2, -PANEL.h / 2);
@@ -218,18 +246,19 @@ function layout(P) {
 function lcg(seed) { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
 function makePaper(w, h, seed = 11) {
   const cv = document.createElement('canvas'); cv.width = w; cv.height = h; const c = cv.getContext('2d'), r = lcg(seed);
-  c.fillStyle = PAL.paper; c.fillRect(0, 0, w, h);
-  for (let i = 0; i < 90; i++) { const x = r() * w, y = r() * h, rr = 120 + r() * 420, gr = c.createRadialGradient(x, y, 0, x, y, rr), a = .045 * r(); gr.addColorStop(0, `rgba(160,125,80,${a})`); gr.addColorStop(1, 'rgba(160,125,80,0)'); c.fillStyle = gr; c.fillRect(x - rr, y - rr, 2 * rr, 2 * rr); }
+  const tint = NOIR ? '95,95,100' : '160,125,80', fib = NOIR ? '70,70,75' : '110,88,60';
+  c.fillStyle = NOIR ? '#ECEBE8' : PAL.paper; c.fillRect(0, 0, w, h);
+  for (let i = 0; i < 90; i++) { const x = r() * w, y = r() * h, rr = 120 + r() * 420, gr = c.createRadialGradient(x, y, 0, x, y, rr), a = .045 * r(); gr.addColorStop(0, `rgba(${tint},${a})`); gr.addColorStop(1, `rgba(${tint},0)`); c.fillStyle = gr; c.fillRect(x - rr, y - rr, 2 * rr, 2 * rr); }
   c.lineWidth = 1;
-  for (let i = 0; i < 2400; i++) { const x = r() * w, y = r() * h, l = 6 + r() * 26, a = r() * TAU; c.strokeStyle = `rgba(110,88,60,${.03 + r() * .05})`; c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(x + Math.cos(a + .6) * l * .5, y + Math.sin(a + .6) * l * .5, x + Math.cos(a) * l, y + Math.sin(a) * l); c.stroke(); }
+  for (let i = 0; i < 2400; i++) { const x = r() * w, y = r() * h, l = 6 + r() * 26, a = r() * TAU; c.strokeStyle = `rgba(${fib},${.03 + r() * .05})`; c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(x + Math.cos(a + .6) * l * .5, y + Math.sin(a + .6) * l * .5, x + Math.cos(a) * l, y + Math.sin(a) * l); c.stroke(); }
   return cv;
 }
 function makeGrain(w, h) {
   const cv = document.createElement('canvas'); cv.width = w; cv.height = h; const c = cv.getContext('2d'), r = lcg(5);
   const id = c.createImageData(w, h), d = id.data;
-  for (let i = 0; i < d.length; i += 4) { const v = 255 - (r() < .55 ? r() * r() * 30 : 0); d[i] = v; d[i + 1] = v - 1; d[i + 2] = v - 3; d[i + 3] = 255; }
+  for (let i = 0; i < d.length; i += 4) { const v = 255 - (r() < .55 ? r() * r() * (NOIR ? 46 : 30) : 0); d[i] = v; d[i + 1] = NOIR ? v : v - 1; d[i + 2] = NOIR ? v : v - 3; d[i + 3] = 255; }
   c.putImageData(id, 0, 0);
-  const g = c.createRadialGradient(w / 2, h / 2, h * .42, w / 2, h / 2, h * .78); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(150,120,90,.22)');
+  const g = c.createRadialGradient(w / 2, h / 2, h * .42, w / 2, h / 2, h * .78); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, NOIR ? 'rgba(40,40,48,.3)' : 'rgba(150,120,90,.22)');
   c.fillStyle = g; c.fillRect(0, 0, w, h);
   return cv;
 }
@@ -254,7 +283,7 @@ async function setup() {
 function draw() {
   if (!JOB) return;
   brush.load();
-  XM = [1, 0, 0, 1, 0, 0]; XS.length = 0; SWK = 1; ZOOM = 1; ANCH = {}; PANEL = JOB;
+  XM = [1, 0, 0, 1, 0, 0]; XS.length = 0; SWK = 1; ZOOM = 1; ANCH = {}; PANEL = JOB; JOB.lights = []; JOB.mood = { dark: .45 };
   push(); translate(-JOB.w / 2, -JOB.h / 2);
   randomSeed(JOB.seed); noiseSeed(JOB.seed % 1000);
   image(paperG, -JOB.x, -JOB.y);
@@ -269,19 +298,64 @@ async function paintPanel(pn) {
   return drawingContext.canvas;
 }
 
+// Film-noir lighting pass on a painted panel: darkness everywhere except pools of light around the faces and the
+// light sources, venetian-blind stripes indoors, rain outdoors.
+function noirPost(src, pn) {
+  const w = pn.w, h = pn.h, cv = document.createElement('canvas'); cv.width = w; cv.height = h; const c = cv.getContext('2d');
+  c.filter = 'contrast(1.12)'; c.drawImage(src, 0, 0, w, h, 0, 0, w, h); c.filter = 'none';
+  const md = pn.mood || {}, dark = md.dark ?? .45;
+  if (dark > 0) {
+    const m = document.createElement('canvas'); m.width = w; m.height = h; const d = m.getContext('2d');
+    d.fillStyle = `rgba(3,3,6,${dark})`; d.fillRect(0, 0, w, h);
+    d.globalCompositeOperation = 'destination-out';
+    const pools = [], diag = Math.hypot(w, h);
+    for (const a of Object.values(pn.anch || {})) {
+      const r = a[2] || 30; if (a[0] < -r * 4 || a[1] < -r * 4 || a[0] > w + r * 4 || a[1] > h + r * 4) continue;
+      pools.push([a[0], a[1] - r * .7, clamp(r * 6.5, diag * .16, diag * .55), .95]);
+    }
+    for (const L of pn.lights || []) pools.push([L[0], L[1], Math.min(L[2], diag * 1.2), L[3]]);
+    if (!pools.length) pools.push([w * .5, h * .42, diag * .45, .75]);
+    for (const [x, y, R, k] of pools) {
+      if (R < 4) continue;
+      const g = d.createRadialGradient(x, y, 0, x, y, R);
+      g.addColorStop(0, `rgba(0,0,0,${k})`); g.addColorStop(.42, `rgba(0,0,0,${k * .82})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+      d.fillStyle = g; d.fillRect(x - R, y - R, 2 * R, 2 * R);
+    }
+    d.globalCompositeOperation = 'source-over';
+    if (md.blinds) {
+      const gap = md.blindsGap ?? clamp(h / 11, 34, 90), a = md.blinds === true ? .42 : md.blinds;
+      d.save(); d.translate(w / 2, h / 2); d.rotate(md.blindsAngle ?? -.42); d.fillStyle = `rgba(0,0,0,${a})`;
+      for (let y = -diag; y < diag; y += gap) d.fillRect(-diag, y, 2 * diag, gap * .4);
+      d.restore();
+    }
+    c.drawImage(m, 0, 0);
+  }
+  if (md.rain) {
+    const r = lcg(Math.round(pn.x * 7 + pn.y * 3) + 11), n = Math.round(w * h / 2200 * (md.rain === true ? 1 : md.rain));
+    c.lineCap = 'round';
+    for (const [lw, al] of [[1, .22], [1.8, .32]]) {
+      c.strokeStyle = `rgba(225,228,236,${al})`; c.lineWidth = lw; c.beginPath();
+      for (let i = 0; i < n / 2; i++) { const x = r() * (w + 120) - 20, y = r() * (h + 60) - 30, l = 16 + r() * 46; c.moveTo(x, y); c.lineTo(x - l * .22, y + l); }
+      c.stroke();
+    }
+  }
+  return cv;
+}
+
 // Render page n → { url, ms }. o.type 'image/jpeg' | 'image/png', o.q quality, o.only = panel index (debug).
 window.renderPage = async (n, o = {}) => {
   const t0 = performance.now(), P = PAGES[n];
   if (!P) throw new Error('no page ' + n);
   const pc = document.createElement('canvas'); pc.width = PW; pc.height = PH; const c = pc.getContext('2d');
-  c.drawImage(paperC, 0, 0);
+  if (NOIR) { c.fillStyle = '#0B0B0E'; c.fillRect(0, 0, PW, PH); } else c.drawImage(paperC, 0, 0);
   if (P.under) P.under(c);
   const rects = layout(P), times = [];
   for (let i = 0; i < rects.length; i++) {
     const pn = rects[i]; pn.id = n + ':' + (i + 1); pn.seed = 1000 + n * 97 + i * 13;
     if (o.only != null && o.only !== i + 1) continue;
     const t1 = performance.now();
-    const cv = await paintPanel(pn);
+    let cv = await paintPanel(pn);
+    if (NOIR) cv = noirPost(cv, pn);
     c.drawImage(cv, 0, 0, pn.w, pn.h, pn.x, pn.y, pn.w, pn.h);
     times.push(Math.round(performance.now() - t1));
   }
@@ -298,13 +372,15 @@ window.pageList = () => Object.keys(PAGES).map(Number).sort((a, b) => a - b);
 // Lettering (2D canvas, page coordinates)
 // ======================================================================================
 const F_DIAL = '"Shantell Sans", "Comic Sans MS", sans-serif', F_FX = '"Permanent Marker", "Comic Sans MS", cursive';
-const FONTS = ['600 27px "Shantell Sans"', 'italic 400 21px "Shantell Sans"', '800 30px "Shantell Sans"', 'italic 600 24px "Shantell Sans"', '100px "Permanent Marker"'];
+const F_TYPE = '"Special Elite", "Courier New", monospace', F_TITLE = '"Limelight", "Didot", serif';   // noir captions, noir title
+const FONTS = ['600 27px "Shantell Sans"', 'italic 400 21px "Shantell Sans"', '800 30px "Shantell Sans"', 'italic 600 24px "Shantell Sans"', '100px "Permanent Marker"',
+  '400 24px "Special Elite"', '100px "Limelight"'];
 const LET = { size: 26, lh: 1.17, trSize: 20, trLh: 1.15, padX: 20, padY: 15 };
 
 function inkFrame(c, r) {
   const rr = lcg(Math.round(r.x * 7 + r.y * 13) + 3), j = () => (rr() - .5) * 2.2;
   for (const [lw, a] of [[3.6, .95], [1.4, .55]]) {
-    c.save(); c.strokeStyle = PAL.ink; c.globalAlpha = a; c.lineWidth = lw; c.lineJoin = 'round'; c.lineCap = 'round';
+    c.save(); c.strokeStyle = NOIR ? '#E4E1DA' : PAL.ink; c.globalAlpha = NOIR ? a * .9 : a; c.lineWidth = NOIR ? lw * .7 : lw; c.lineJoin = 'round'; c.lineCap = 'round';
     c.beginPath();
     const pts = [[r.x, r.y], [r.x + r.w, r.y], [r.x + r.w, r.y + r.h], [r.x, r.y + r.h], [r.x, r.y]];
     for (let i = 0; i < 4; i++) {
@@ -316,7 +392,7 @@ function inkFrame(c, r) {
 }
 
 function folio(c, n) {
-  c.save(); c.font = `600 22px ${F_DIAL}`; c.fillStyle = PAL.ink; c.globalAlpha = .75; c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.save(); c.font = NOIR ? `400 24px ${F_TYPE}` : `600 22px ${F_DIAL}`; c.fillStyle = NOIR ? '#D9D6CF' : PAL.ink; c.globalAlpha = .75; c.textAlign = 'center'; c.textBaseline = 'middle';
   c.fillText(String(n), PW / 2, PH - MAR.b / 2 + 4); c.restore();
 }
 
@@ -342,7 +418,7 @@ function bubbleText(c, b, maxW) {
   if (b.tr) {
     const ts = (b.size || 1) * LET.trSize; if (b.t) y += ts * .25;
     c.font = `italic 400 ${ts}px ${F_DIAL}`; c.letterSpacing = '0px';
-    for (const L of wrapLines(c, '(' + b.tr + ')', maxW)) { lines.push({ txt: L, font: c.font, w: c.measureText(L).width, y, h: ts * LET.trLh, col: '#5E5368', ls: '0px' }); y += ts * LET.trLh; }
+    for (const L of wrapLines(c, '(' + b.tr + ')', maxW)) { lines.push({ txt: L, font: c.font, w: c.measureText(L).width, y, h: ts * LET.trLh, col: NOIR ? '#55545C' : '#5E5368', ls: '0px' }); y += ts * LET.trLh; }
   }
   c.letterSpacing = '0px';
   return { lines, w: Math.max(...lines.map(l => l.w)), h: y };
@@ -419,7 +495,7 @@ function bubble(c, r, b, prev) {
     const dx = (r.x + ax - cx) / (rx + 8), dy = (r.y + ay - 30 - cy) / (ry + 8);
     if (dx * dx + dy * dy < 1) console.warn(`check ${r.id}: a bubble covers ${who}'s face`);
   }
-  const fillCol = b.fill || (kind === 'box' ? '#F7E7BE' : PAL.bubble), lw = 3.2;
+  const fillCol = b.fill || (kind === 'box' ? '#F7E7BE' : NOIR ? '#F4F2ED' : PAL.bubble), lw = 3.2;
   c.save(); c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = PAL.ink;
   // outlines (double width: the fills cover the inner half)
   c.lineWidth = lw * 2;
@@ -466,8 +542,8 @@ function cloudPts(cx, cy, rx, ry, seed) {
 
 // Caption box (récitatif). cp: { t, at: 'tl'|'tr'|'bl'|'br'|'tc'|'bc' | [fx, fy], mw, col }
 function caption(c, r, cp) {
-  const sz = cp.size || 23, maxW = cp.mw || Math.min(r.w * .6, 520);
-  c.save(); c.font = `italic 600 ${sz}px ${F_DIAL}`;
+  const sz = (cp.size || 23) * (NOIR ? 1.06 : 1), maxW = cp.mw || Math.min(r.w * .6, 520);
+  c.save(); c.font = NOIR ? `400 ${sz}px ${F_TYPE}` : `italic 600 ${sz}px ${F_DIAL}`;
   const lines = wrapLines(c, cp.t, maxW), lh = sz * 1.2, w = Math.max(...lines.map(l => c.measureText(l).width)) + 30, h = lines.length * lh + 20;
   let x, y; const at = cp.at || 'tl', inset = 0;
   if (Array.isArray(at)) { x = r.x + at[0] * r.w - w / 2; y = r.y + at[1] * r.h - h / 2; }
@@ -477,9 +553,9 @@ function caption(c, r, cp) {
   }
   const rr = lcg(Math.round(x + y) + 7), j = () => (rr() - .5) * 2;
   const pts = [[x + j(), y + j()], [x + w + j(), y + j()], [x + w + j(), y + h + j()], [x + j(), y + h + j()]];
-  c.fillStyle = cp.col || '#F6E0AE'; pathPts(c, pts); c.fill();
-  c.strokeStyle = PAL.ink; c.lineWidth = 3; c.lineJoin = 'round'; pathPts(c, pts); c.stroke();
-  c.fillStyle = cp.ink || PAL.ink; c.textAlign = 'left'; c.textBaseline = 'top';
+  c.fillStyle = NOIR ? '#E8E3D6' : (cp.col || '#F6E0AE'); pathPts(c, pts); c.fill();
+  c.strokeStyle = PAL.ink; c.lineWidth = NOIR ? 2.4 : 3; c.lineJoin = 'round'; pathPts(c, pts); c.stroke();
+  c.fillStyle = NOIR ? '#141318' : (cp.ink || PAL.ink); c.textAlign = 'left'; c.textBaseline = 'top';
   lines.forEach((l, i) => c.fillText(l, x + 15, y + 11 + i * lh));
   c.restore();
 }
@@ -487,6 +563,8 @@ function caption(c, r, cp) {
 // Sound effect. s: { t, x, y (fractions), size, rot, col, stroke }
 function sfxText(c, r, s) {
   const x = r.x + s.x * r.w, y = r.y + s.y * r.h, size = s.size || 70;
+  // noir: sound effects in bone white, the violent ones in blood red
+  if (NOIR) s = { ...s, col: /BAOUM|PAF|CRAC|BOUM|SPLATCH/.test(s.t) ? '#C3172E' : '#F1EFEA', stroke: PAL.ink };
   const lum = (h => { const v = parseInt(h.slice(1), 16); return ((v >> 16 & 255) * .3 + (v >> 8 & 255) * .59 + (v & 255) * .11) / 255; })(s.col || PAL.ochre);
   if (lum < .35 && !s.stroke) s = { ...s, stroke: PAL.cream };
   c.save(); c.translate(x, y); c.rotate(s.rot ?? -.08); c.font = `${size}px ${F_FX}`; c.textAlign = 'center'; c.textBaseline = 'middle';

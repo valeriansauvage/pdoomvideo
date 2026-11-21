@@ -130,6 +130,7 @@ page(26, [
 // ----------------------------------------------------------------------------------- Planche 27 — fin
 // Louise's car seen from the front through the windshield, Thibaut driving, Cris next to him.
 function windshield(o = {}) {
+  noirMood({ dark: .6 });
   const col = '#B5654F', cx = 830;
   paint(rectPts(-300, -300, 2400, 1600), { wash: '#141834', ink: null });
   for (let i = 0; i < 20; i++) paint(ellPts(lerp(300, 1400, hash(i * 3.1)), lerp(150, 320, hash(i * 7.7)), 3, 3, 5), { wash: '#F6F0D8', ink: null });

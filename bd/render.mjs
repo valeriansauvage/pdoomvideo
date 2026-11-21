@@ -6,14 +6,16 @@
 //   node bd/render.mjs --pdf                                         bind out/bd/planche_*.jpg → out/bd/<title>.pdf
 // Pages 90 and up are development sheets (model sheet, set gallery): --all and --pdf skip them.
 // Chrome: --chrome=<path> (defaults: Windows Chrome, or Playwright's Chromium on Linux). GPU backend: --angle=<d3d11|metal|swiftshader|...>.
+// Style: --style=noir (default, → out/bd-noir) or --style=aquarelle (the watercolour version, → out/bd).
 import puppeteer from 'puppeteer-core';
 import { mkdirSync, writeFileSync, existsSync, readdirSync, readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const args = Object.fromEntries(process.argv.slice(2).map(a => { const [k, v] = a.replace(/^--/, '').split('='); return [k, v ?? true]; }));
-const OUT = args.out || 'out/bd';
-const TITLE = 'Sous_un_arbre_a_la_campagne';
+const STYLE = args.style || 'noir';                       // noir (default) | aquarelle
+const OUT = args.out || (STYLE === 'noir' ? 'out/bd-noir' : 'out/bd');
+const TITLE = 'Sous_un_arbre_a_la_campagne' + (STYLE === 'noir' ? '_noir' : '');
 mkdirSync(OUT, { recursive: true });
 
 function findChrome() {
@@ -40,7 +42,7 @@ async function openPage(browser, tag = '') {
   const page = await browser.newPage();
   page.on('console', m => { if (['error', 'warn'].includes(m.type()) && !/GPU stall|GL Driver/.test(m.text())) console.log(`[page${tag}]`, m.text()); });
   page.on('pageerror', e => console.log(`[page error${tag}]`, e.message));
-  await page.goto(pathToFileURL(resolve('bd/album.html')).href + '?render', { waitUntil: 'networkidle0', timeout: 120000 });
+  await page.goto(pathToFileURL(resolve('bd/album.html')).href + '?render&style=' + STYLE, { waitUntil: 'networkidle0', timeout: 120000 });
   await page.waitForFunction('window.ready === true', { timeout: 120000 });
   if (!(await page.evaluate(() => window.fontsOk))) console.log('warning: fonts did not load');
   return page;

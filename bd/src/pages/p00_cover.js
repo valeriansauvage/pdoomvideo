@@ -4,6 +4,7 @@ page(0, [], {
     draw(w, h) {
       cam(1060, 700, 1.0);
       countryside({ time: 'afternoon', hy: 980, farm: [1900, 1060, .55] });
+      noirMood({ dark: .5 });
       paint([[-600, 1500], [300, 1290], [1050, 1240], [1800, 1280], [2800, 1500], [2800, 2600], [-600, 2600]], { wash: '#A9C46E', fill: '#6E8A4E', fillOp: 60, tex: .7, ink: PAL.ink, sw: .8, curv: .4 });
       bigTree(1000, 1330, 1.55, { mound: [1640, 1350] });
       shovel(1760, 1300, 1.1, .2);
@@ -15,13 +16,14 @@ page(0, [], {
     },
   },
   over(c) {
-    const line = (t, y, size) => {
-      c.save(); c.font = `${size}px ${F_FX}`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineJoin = 'round';
+    const line = (t, y, size, font) => {
+      c.save(); c.font = `${size}px ${font}`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineJoin = 'round';
       c.lineWidth = size * .16; c.strokeStyle = PAL.ink; c.strokeText(t, PW / 2 + size * .05, y + size * .06); c.fillStyle = PAL.ink; c.fillText(t, PW / 2 + size * .05, y + size * .06);
-      c.lineWidth = size * .1; c.strokeStyle = PAL.ink; c.strokeText(t, PW / 2, y); c.fillStyle = PAL.cream; c.fillText(t, PW / 2, y); c.restore();
+      c.lineWidth = size * .1; c.strokeStyle = PAL.ink; c.strokeText(t, PW / 2, y); c.fillStyle = NOIR ? '#F2EFE8' : PAL.cream; c.fillText(t, PW / 2, y); c.restore();
     };
-    line('Sous un arbre', 190, 150); line('à la campagne', 350, 150);
-    c.save(); c.font = `italic 600 34px ${F_DIAL}`; c.textAlign = 'center'; c.fillStyle = PAL.ink; c.globalAlpha = .85;
-    c.fillText('Bande dessinée d’après le scénario original', PW / 2, PH - 90); c.restore();
+    if (NOIR) { line('Sous un arbre', 190, 140, F_TITLE); line('à la campagne', 345, 140, F_TITLE); }
+    else { line('Sous un arbre', 190, 150, F_FX); line('à la campagne', 350, 150, F_FX); }
+    c.save(); c.font = NOIR ? `400 34px ${F_TYPE}` : `italic 600 34px ${F_DIAL}`; c.textAlign = 'center'; c.fillStyle = NOIR ? '#E8E5DE' : PAL.ink; c.globalAlpha = .9;
+    c.fillText(NOIR ? 'Un film noir en bande dessinée' : 'Bande dessinée d’après le scénario original', PW / 2, PH - 90); c.restore();
   },
 });

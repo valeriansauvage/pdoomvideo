@@ -63,6 +63,7 @@ function curtain(x, y, w, h, col = '#F1E9DA', side = 1) {
 // =====================================================================================
 const BED = { hip: 800, l: 560, r: 1340, door: [1615, 1830] };
 function bedroom(o = {}) {
+  noirMood({ dark: .5, blinds: true });
   paint(rectPts(-300, -200, 2500, 1110), { wash: '#EDD8C2', fill: '#D9BEA2', fillOp: 70, bleed: .1, tex: .6, border: .4, ink: null });
   for (const [x, w] of [[-150, 220], [500, 300], [1080, 300]]) paint(rectPts(x, 120, w, 220), { ink: '#CBAE90', sw: .4 });
   woodFloor(-300, 2300, 900, 1250, '#B98A5E');
@@ -119,6 +120,7 @@ function duvet(o = {}) {
 // PARIS — the street with the protest. World x -400..2800, street y 900 (sidewalk 860..900, road below).
 // =====================================================================================
 function parisStreet(o = {}) {
+  noirMood({ dark: .4, rain: true });
   skyGrad(-500, -500, 3500, 520, '#C9D8E4', '#E9E4DA', 4);
   const bw = 520;
   for (let b = -1; b < 6; b++) {
@@ -212,6 +214,7 @@ function crowd(o = {}) {
 // o.blast: [x, y, r] explosion glow; o.daylight: the far end is open to the day; o.corner: x of a wall corner on the right.
 // =====================================================================================
 function tunnel(o = {}) {
+  noirMood({ dark: .72 });
   const [vx, vy] = o.vp || [1150, 470], fw = 170, fh = 210, X0 = -600, X1 = 2600, Y0 = -400, Y1 = 1700;
   const wall = o.wall || '#4A4E68', far = [[vx - fw, vy - fh], [vx + fw, vy - fh], [vx + fw, vy + fh], [vx - fw, vy + fh]];
   if (o.daylight) paint(far, { wash: '#FFF4D8', ink: null }); else paint(far, { wash: '#1A1C2C', ink: null });
@@ -249,6 +252,7 @@ function tunnel(o = {}) {
 //   driver seat: hip ~ (430, 640); back seat: hip ~ (1080, 660), seat surface y 680, from x 900 to 1450.
 // =====================================================================================
 function carInterior(o = {}) {
+  noirMood({ dark: .55 });
   paint(rectPts(-200, -200, 2200, 1400), { wash: '#3E4258', ink: null });
   // windows with a blurred landscape
   for (const [x0, x1] of [[120, 640], [720, 1460]]) {
@@ -277,6 +281,7 @@ function carInterior(o = {}) {
 // o.farm: [x, y, s] small farmhouse in the distance. o.ground: foreground grass colour.
 // =====================================================================================
 function countryside(o = {}) {
+  noirMood({ dark: { night: .74, dusk: .56, morning: .36, afternoon: .38, day: .36 }[o.time || 'day'] });
   const hy = o.hy ?? 560, t = o.time || 'day';
   const skies = { day: ['#8EC3E6', '#EAF1EC'], afternoon: ['#9BC8E4', '#F5E9CF'], dusk: ['#7D86B8', '#F4B98A'], night: ['#151A3C', '#2F3C7A'], morning: ['#A9CDE4', '#F8E6CC'] };
   const [top, bot] = skies[t];
@@ -340,6 +345,7 @@ function bigTree(x, y, s = 1, o = {}) {
 const FARM = { ground: 900, door: [855, 900], kitchenWin: [380, 470, 180, 190], livingWin: [1100, 470, 200, 190], table: [1820, 900] };
 function farmyard(o = {}) {
   countryside({ hy: 620, time: o.time || 'day', clouds: true });
+  noirMood({ dark: o.time === 'night' ? .72 : o.time === 'dusk' ? .52 : .38 });
   // woods behind the house and on the right
   for (let i = 0; i < 6; i++) treeRound(1500 + i * 230, 900 - 10 * (i % 2), 1.6 + .3 * hash(i), { col: '#5E8F45', dk: '#3A6634' });
   for (let i = 0; i < 4; i++) treeRound(-350 + i * 170, 880, 1.3 + .2 * hash(i * 3), { col: '#6E9A50', dk: '#46703C' });
@@ -381,6 +387,7 @@ function farmyard(o = {}) {
 // the pianist sits at ~x 1100 facing left), couch x 1350..1800, fireplace x 1950..2250. o.dinner: table centred at x 1050.
 // =====================================================================================
 function livingRoom(o = {}) {
+  noirMood({ dark: o.night ? .64 : .46, blinds: !o.night });
   const night = o.night;
   paint(rectPts(-300, -200, 2700, 1110), { wash: night ? '#9C8C86' : '#F0E3CB', fill: night ? '#6E625E' : '#D9C6A6', fillOp: 70, bleed: .08, tex: .6, border: .4, ink: null });
   paint(rectPts(-300, 700, 2700, 200), { wash: night ? '#7A6A60' : '#D8C3A2', fill: '#B9A07C', fillOp: 60, tex: .5, ink: null });
@@ -450,6 +457,7 @@ function dinnerTable(x, y, s = 1, night = true) {
 // (y 170..520), door x 1600..1790. Cutting board x 250..520 (worktop y 690). People at the counter stand at y ~940.
 // =====================================================================================
 function kitchen(o = {}) {
+  noirMood({ dark: .46, blinds: true });
   paint(rectPts(-300, -200, 2700, 1110), { wash: '#F2E6CF', fill: '#D9C6A6', fillOp: 70, bleed: .08, tex: .6, border: .4, ink: null });
   paint(rectPts(80, 470, 1340, 220), { wash: '#E9EEEC', fill: '#B9C8C8', fillOp: 50, tex: .4, ink: null });
   for (let i = 0; i < 17; i++) for (let j = 0; j < 3; j++) paint(rectPts(80 + i * 79, 470 + j * 73, 79, 73), { ink: '#A9BCC4', sw: .3 });
@@ -499,6 +507,7 @@ function groceries(x, y, s = 1) {
 // o.td (0..1) Thibaut's door ajar; o.ld Louise's door open (warm light).
 // =====================================================================================
 function hallway(o = {}) {
+  noirMood({ dark: .7 });
   paint(rectPts(-300, -200, 2600, 1110), { wash: '#4A4A6E', fill: '#30304E', fillOp: 90, bleed: .08, tex: .6, border: .4, ink: null });
   woodFloor(-300, 2400, 900, 1300, '#5A4A48');
   const door = (x, k, light) => {
@@ -515,6 +524,7 @@ function hallway(o = {}) {
 
 // The closet where Louise hides. World x 0..1200, y 0..1000. Light wedge from the opened door on the left.
 function closet(o = {}) {
+  noirMood({ dark: .72 });
   paint(rectPts(-200, -200, 1600, 1400), { wash: '#2E2A3E', fill: '#1E1A2C', fillOp: 90, tex: .6, ink: null });
   inkLine([[80, 140], [1120, 140]], 1.6, '#8A7A60', 'ink', 0);
   const coats = ['#7A4E40', '#4F6A7A', '#8A7A5A', '#6E5A7A', '#5E7A5A', '#A9775A'];
@@ -527,6 +537,7 @@ function closet(o = {}) {
 // NIGHT woods with the big tree. World x -400..2600, ground y 900, big tree at o.tree (default [1200, 900]).
 // =====================================================================================
 function nightWoods(o = {}) {
+  noirMood({ dark: .74 });
   skyGrad(-500, -700, 3400, 1600, '#141834', '#2B3566', 4, false);
   paint(ellPts(o.moon?.[0] ?? 300, o.moon?.[1] ?? 40, 50, 50, 20), { wash: '#F3EBC8', ink: null }); glow(o.moon?.[0] ?? 300, o.moon?.[1] ?? 40, 200, 200, '#8FA0D8', 90);
   for (let i = 0; i < 30; i++) paint(ellPts(lerp(-400, 2600, hash(i * 3.1)), lerp(-600, 300, hash(i * 7.7)), 3, 3, 5), { wash: '#F6F0D8', ink: null });
@@ -539,6 +550,7 @@ function nightWoods(o = {}) {
 
 // Night road: dirt track from the bottom left up to a main road (y ~ 640). World x -400..2800.
 function nightRoad(o = {}) {
+  noirMood({ dark: .7 });
   skyGrad(-500, -700, 3600, 1260, '#141834', '#2B3566', 4, false);
   for (let i = 0; i < 40; i++) paint(ellPts(lerp(-400, 2800, hash(i * 3.1)), lerp(-600, 450, hash(i * 7.7)), 3, 3, 5), { wash: '#F6F0D8', ink: null });
   paint([[-500, 520], [800, 470], [1700, 500], [3100, 460], [3100, 900], [-500, 900]], { wash: '#1E2646', ink: null, curv: .3 });
@@ -551,6 +563,7 @@ function nightRoad(o = {}) {
 
 // Flashback bedroom (side view of a bed, lamp, moonlit window). World x -200..2000, floor y 900.
 function nightBedroom(o = {}) {
+  noirMood({ dark: .7, blinds: .3 });
   paint(rectPts(-300, -200, 2500, 1110), { wash: '#2E3460', fill: '#1E2448', fillOp: 90, tex: .6, ink: null });
   woodFloor(-300, 2300, 900, 1300, '#3A3450');
   skyGrad(1300, 160, 300, 400, '#141834', '#2F3C7A', 3, false); paint(ellPts(1450, 260, 36, 36, 16), { wash: '#F3EBC8', ink: null }); windowFrame(1300, 160, 300, 400, { col: '#4A5080' });
@@ -560,6 +573,7 @@ function nightBedroom(o = {}) {
 }
 // Barn interior at night (flashback). World x -200..2000, floor y 900. Planks lifted at x 700..1100.
 function barnNight(o = {}) {
+  noirMood({ dark: .7 });
   paint(rectPts(-300, -200, 2500, 1110), { wash: '#3E3448', fill: '#2A2236', fillOp: 90, tex: .7, ink: null });
   for (let i = 0; i < 16; i++) inkLine([[-300 + i * 160, -200], [-300 + i * 160, 900]], .6, '#1E1828', 'ink', 0);
   inkLine([[-300, 200], [2300, 200]], 3, '#2A2030', 'ink', 0);
