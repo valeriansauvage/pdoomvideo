@@ -68,13 +68,13 @@ page(8, [
     bub: [{ s: 'jose', t: 'Eu te amo.', tr: 'Je t’aime.', kind: 'whisper', x: .27, y: .18, mw: 170 }],
   }, {
     draw(w, h) {
-      cam(1195, 930, 2.1);
+      cam(1170, 925, 2.1);
       treeWorld('dusk', { hole: true });
-      joseInGrave({ f: { eyes: 'closed', mouth: 'smile' }, cover: .45 });
-      fig('cris', 1196, 930, { at: 'head', outfit: 'heist', view: 'pr', rot: 1.3, eyes: 'shut', brows: 'worried', mouth: 'kiss', dirt: true, shadow: false, reachN: [1250, 990], reachF: [1125, 990] });
-      paint([[1166, 950], [1171, 962], [1166, 967], [1161, 962]], { wash: '#8EC3E6', ink: '#4A7FAF', sw: .3, curv: .5 });
+      joseInGrave({ f: { eyes: 'half', mouth: 'open' }, cover: .45 });
+      fig('cris', 1110, 880, { at: 'head', outfit: 'heist', view: 'pr', rot: .92, eyes: 'wide', brows: 'worried', mouth: 'O', dirt: true, shadow: false, reachN: [1122, 1012], reachF: [1134, 1000] });
+      for (const [x, y, r] of [[1127, 922, 1], [1131, 948, .8]]) paint([[x, y - 7 * r], [x + 4 * r, y + 2 * r], [x, y + 6 * r], [x - 4 * r, y + 2 * r]], { wash: '#8EC3E6', ink: '#4A7FAF', sw: .3, curv: .5 });
     },
-    bub: [{ s: 'jose', t: 'Eu te amo, Thibaut.', tr: 'Je t’aime, Thibaut.', kind: 'whisper', x: .27, y: .18, mw: 190 }],
+    bub: [{ s: 'jose', t: 'Eu te amo, Thibaut.', tr: 'Je t’aime, Thibaut.', kind: 'whisper', x: .72, y: .18, mw: 190 }],
   }]],
   [1.1, [{
     draw(w, h) {
