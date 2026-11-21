@@ -79,14 +79,14 @@ page(11, [
 page(12, [
   [1.1, [{
     draw(w, h) {
-      cam(420, 700, .69);
+      cam(420, 660, .69);
       farmyard({ table: false });
       goat(-20, 1010, .85); goat(150, 1050, .8, { graze: true, flip: true }); chicken(540, 1080, 1, { peck: true }); chicken(620, 1060, .9, { flip: true });
       fig('cris', 380, 1060, { outfit: 'farm', view: 'l', ex: 'neutral', reachN: [300, 890], holdN: (u) => bucket(2 * u, 10 * u, u / 4.4 * .55, false) });
       fig('louise', 700, 1050, { view: 'l', ex: 'talk', armN: [1.2, .5], handN: 'open' });
     },
     cap: [{ t: 'Le lendemain matin.', at: 'tl' }],
-    bub: [{ s: 'louise', t: 'You could help around here. I have the room… Help me make up a room.', tr: 'Tu pourrais m’aider ici. J’ai de la place… Aide-moi à préparer une chambre.', x: .5, y: .16, mw: 360, size: .9 }],
+    bub: [{ s: 'louise', t: 'You could help around here. I have the room… Help me make up a room.', tr: 'Tu pourrais m’aider ici. J’ai de la place… Aide-moi à préparer une chambre.', x: .61, y: .18, mw: 330, size: .88 }],
   }, {
     draw(w, h) {
       cam(560, 560, 1.35);
