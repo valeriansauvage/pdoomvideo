@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Sous un arbre à la campagne — atelier BD</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shantell+Sans:ital,wght@0,400;0,600;0,800;1,400;1,600&display=block">
+<style>
+  html, body { margin: 0; background: #1b1820; color: #eee; font: 13px system-ui, sans-serif; }
+  main { padding: 12px; display: grid; gap: 8px; justify-items: start; }
+  #view { width: min(100%, 800px); height: auto; background: #F3EBDC; }
+  .p5Canvas { display: none !important; }
+  .bar { display: flex; gap: 10px; align-items: center; }
+</style>
+<script src="../node_modules/p5/lib/p5.min.js"></script>
+<script src="../node_modules/p5.brush/dist/p5.brush.js"></script>
+</head>
+<body>
+<main>
+  <div class="bar"><label>Planche <select id="pg"></select></label><span id="st">chargement…</span></div>
+  <img id="view" alt="planche">
+</main>
+<script src="src/core.js"></script>
+<script src="src/people.js"></script>
+<script src="src/props.js"></script>
+<script src="src/sets.js"></script>
+<script src="src/pages/p00_cover.js"></script>
+<script src="src/pages/p01_02.js"></script>
+<script src="src/pages/p03_07.js"></script>
+<script src="src/pages/p08_10.js"></script>
+<script src="src/pages/p11_13.js"></script>
+<script src="src/pages/p14_17.js"></script>
+<script src="src/pages/p18_20.js"></script>
+<script src="src/pages/p21_24.js"></script>
+<script src="src/pages/p25_27.js"></script>
+<!-- development sheets (pages 95-99): model sheet, set gallery -->
+<script src="src/pages/p98_test.js"></script>
+<script src="src/pages/p97_sets.js"></script>
+<script>
+  // Dev viewer: open bd/album.html in Chrome (with --allow-file-access-from-files) to browse the pages.
+  if (!location.search.includes('render')) (async () => {
+    while (!window.ready) await new Promise(r => setTimeout(r, 100));
+    const sel = document.getElementById('pg'), st = document.getElementById('st'), img = document.getElementById('view');
+    for (const n of pageList()) sel.add(new Option(String(n), n));
+    const show = async () => { st.textContent = 'peinture…'; const r = await renderPage(+sel.value); img.src = r.url; st.textContent = r.ms + ' ms'; };
+    sel.onchange = show; sel.value = new URLSearchParams(location.search).get('p') || pageList()[0]; show();
+  })();
+</script>
+</body>
+</html>
