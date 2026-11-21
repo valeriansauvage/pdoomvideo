@@ -47,20 +47,20 @@ page(3, [
   }, {
     w: 1.2,
     draw(w, h) {
-      cam(905, 850, 1.3);
+      cam(920, 860, 1.0);
       tunnel({ corner: 1500 });
       fig('jose', 1190, 1075, { outfit: 'heist', view: 'l', reachN: 'chest', ex: 'pain', blood: .6, tor: .12 });
       suitcase(890, 1095, 1, { open: 'gold', col: '#3E4C6E' });
+      glow(890, 1000, 300, 170, '#FFE08A', 55);
       fig('cris', 690, 1095, { outfit: 'heist', pose: 'kneel', view: 'r', ex: 'surprised', look: [.6, .6], blush: true });
       fig('thibaut', 1035, 1095, { outfit: 'heist', pose: 'crouch', view: 'l', reachN: [930, 980], reachF: [870, 975], ex: 'smirk' });
-      glow(890, 980, 260, 160, '#FFE08A', 70);
     },
     sfx: [{ t: '!!', x: .24, y: .25, size: 80, rot: .1, col: PAL.gold }],
   }]],
   [1.05, [{
     w: .7,
     draw(w, h) {
-      cam(800, 640, 2.2);
+      cam(800, 615, 2.0);
       tunnel({});
       fig('jose', 800, 570, { at: 'head', outfit: 'heist', view: 'r', ex: 'pain', sweat: true, blood: 1, reachN: 'chest', reachF: [880, 720], bloodyHands: true, look: [-1, .2] });
     },

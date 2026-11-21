@@ -1,6 +1,6 @@
 # Sous un arbre à la campagne — la bande dessinée
 
-This folder adapts the screenplay *Sous un arbre à la campagne* into a 26-page comic album plus a cover. It is painted with the same watercolour-and-ink engine as the P(doom) video: p5.js with p5.brush, rendered in headless Chrome. Every panel is code: there is no hand-drawn or generated image anywhere.
+This folder adapts the screenplay *Sous un arbre à la campagne* into a 27-page comic album plus a cover. It is painted with the same watercolour-and-ink engine as the P(doom) video: p5.js with p5.brush, rendered in headless Chrome. Every panel is code: there is no hand-drawn or generated image anywhere.
 
 The page-by-page adaptation, with every line of dialogue and its French translation, is in [`DECOUPAGE.md`](DECOUPAGE.md).
 
