@@ -40,7 +40,7 @@ page(1, [
   }]],
   [1.05, [{
     draw(w, h) {
-      cam(955, 610, 1.0);
+      cam(955, 568, .92);
       bedroom({ door: .5 });
       inBed('cris', 760, { ex: 'surprised', look: [.8, -1], tor: -.08, armN: [.3, -1.4], armF: [.9, .9], handF: 'open' });
       inBed('thibaut', 1150, { ex: 'laugh', look: [-.8, -1], tor: .06, armN: [.9, .9], armF: [.2, -1.4], handN: 'open' });
@@ -48,8 +48,8 @@ page(1, [
       fig('jose', 955, 625, { at: 'hip', view: 'f', outfit: 'bed', ex: 'laugh', armN: [2.5, .35], armF: [2.5, .35], handN: 'open', handF: 'open', legN: [1.05, 2.3], legF: [1.05, 2.3], shadow: false });
       for (const k of [-1, 1]) inkLine([[955 + k * 70, 750], [955 + k * 95, 785], [955 + k * 100, 805]], .6, PAL.ink, 'inkfine', .5);
     },
-    bub: [{ s: 'jose', t: 'Estamos a fazê-lo?', tr: 'On le fait ?', x: .26, y: .17 }],
-    sfx: [{ t: 'BOÏNG !', x: .78, y: .2, size: 64, rot: .1, col: PAL.sky }],
+    bub: [{ s: 'jose', t: 'Estamos a fazê-lo?', tr: 'On le fait ?', x: .2, y: .14, mw: 230 }],
+    sfx: [{ t: 'BOÏNG !', x: .8, y: .22, size: 64, rot: .1, col: PAL.sky }],
   }, {
     draw(w, h) {
       cam(1000, 655, 1.35);
