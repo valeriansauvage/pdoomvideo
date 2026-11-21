@@ -137,7 +137,7 @@ page(23, [
 page(24, [
   [1, [{
     w: 1.15,
-    draw(w, h) { cam(1950, 500, .95); yardInterview({ tx: 1500, t: { ex: 'happy', armF: [2.2, .3], handF: 'open' }, v: { view: 'r', ex: 'blank', pose: 'walk', ph: .3 }, d: { view: 'r', ex: 'angrytalk', pose: 'walk', ph: .7 }, vx: 2050, dx: 2230, cris: [1680, { ex: 'blank' }] }); },
+    draw(w, h) { cam(1870, 500, .95); yardInterview({ tx: 1500, t: { ex: 'happy', armF: [2.2, .3], handF: 'open' }, v: { view: 'r', ex: 'blank', pose: 'walk', ph: .3 }, d: { view: 'r', ex: 'angrytalk', pose: 'walk', ph: .7 }, vx: 2050, dx: 2230, cris: [1680, { ex: 'blank' }] }); },
     bub: [{ s: 'thibaut', t: 'Au revoir. Merci messieurs les agents. Je lui expliquerai tout ce que vous dites. Pourriez-vous maintenant répondre à quelques questions sur le travail de détective vu de l’intérieur ?', x: .28, y: .26, mw: 360, size: .9 },
           { s: 'vlad', t: 'Lisez un roman policier.', x: .8, y: .14, mw: 200 }],
   }, {
@@ -147,7 +147,7 @@ page(24, [
   }]],
   [1, [{
     w: .85,
-    draw(w, h) { cam(2200, 760, .6); farmyard({}); car(2500, 1000, 1.1, { col: '#6E7F92', dust: true, siren: true }); fig('thibaut', 1700, 1030, { outfit: 'farm', view: 'r', s: .9, ex: 'happy', armF: [2.6, .2], handF: 'open' }); },
+    draw(w, h) { cam(2200, 760, .6); farmyard({}); car(2500, 1000, 1.1, { col: '#6E7F92', dust: true, siren: true }); fig('thibaut', 1860, 1030, { outfit: 'farm', view: 'r', s: .9, ex: 'happy', armF: [2.6, .2], handF: 'open' }); },
     sfx: [{ t: 'VROUM !', x: .72, y: .25, size: 60, rot: -.08, col: PAL.ochre }],
   }, {
     w: 1.15,
@@ -156,11 +156,11 @@ page(24, [
   }]],
   [1, [{
     draw(w, h) {
-      cam(1600, 700, 1.0);
+      cam(1590, 770, .85);
       farmyard({});
-      fig('cris', 1780, 1050, { at: 'hip', outfit: 'farm2', view: 'pl', pose: 'lie', rot: Math.PI / 2 - .3, ex: 'pain', armN: [1.5, .2], armF: [1.7, .3], legN: [.9, .4], legF: [1.3, .6] });
-      fig('thibaut', 1450, 1030, { outfit: 'farm', view: 'f', ex: 'laugh', armN: [2.6, .4], armF: [2.4, .6], handN: 'open', handF: 'open', legN: [.4, .5], tor: .1 });
-      musicNotes(1300, 640, 1, 3);
+      fig('thibaut', 1470, 1030, { outfit: 'farm', view: 'f', ex: 'laugh', armN: [2.6, .4], armF: [2.4, .6], handN: 'open', handF: 'open', legN: [.4, .5], tor: .1 });
+      fig('cris', 1700, 1040, { outfit: 'farm2', view: 'l', pose: 'sitFloor', ex: 'pain', armN: [-.6, .1], armF: [-.45, .2], handN: 'open', handF: 'open' });
+      musicNotes(1360, 640, .9, 3);
     },
     sfx: [{ t: 'BOUM !', x: .78, y: .3, size: 54, rot: .12, col: PAL.ochre }],
   }, {
@@ -169,21 +169,21 @@ page(24, [
   }, {
     w: 1.3,
     draw(w, h) {
-      cam(600, 520, .95);
+      cam(600, 540, .95);
       closet({});
-      fig('louise', 620, 900, { pose: 'crouch', view: 'r', ex: 'scared', look: [-1, -.3], tor: .3, reachN: 'mouth', handN: 'open' });
-      fig('cris', 120, 1060, { outfit: 'farm2', view: 'r', ex: 'talk', s: 1.05 });
+      fig('louise', 680, 900, { pose: 'crouch', view: 'l', ex: 'scared', look: [-1, -.3], tor: .3, reachN: 'mouth', handN: 'open' });
+      fig('cris', 360, 1080, { outfit: 'farm2', view: 'r', ex: 'talk', s: 1.05 });
     },
     bub: [{ s: 'cris', t: 'They’ve left. It was about some robbery somewhere.', tr: 'Ils sont partis. C’était pour un vol, quelque part.', x: .3, y: .17, mw: 260 }],
   }]],
   [1.1, [{
     draw(w, h) {
-      cam(600, 540, 1.0);
+      cam(650, 590, 1.6);
       closet({});
-      fig('louise', 560, 1010, { view: 'r', ex: 'sad', s: .98, skip: ['armN', 'armF'] });
-      fig('cris', 760, 1010, { outfit: 'farm2', view: 'l', ex: 'smile', skip: ['armN'] });
-      fig('louise', 560, 1010, { view: 'r', s: .98, only: ['armN', 'armF'], reachN: [700, 640], reachF: [740, 660] });
-      fig('cris', 760, 1010, { outfit: 'farm2', view: 'l', only: ['armN'], reachN: [570, 650] });
+      fig('louise', 600, 1010, { view: 'r', eyes: 'closed', brows: 'worried', mouth: 'smile', nk: .12, skip: ['armN', 'armF'] });
+      fig('cris', 705, 1010, { outfit: 'farm2', view: 'l', eyes: 'closed', brows: 'up', mouth: 'smile', nk: .12, skip: ['armN', 'armF'] });
+      fig('louise', 600, 1010, { view: 'r', nk: .12, only: ['armF'], reachF: [738, 690] });
+      fig('cris', 705, 1010, { outfit: 'farm2', view: 'l', nk: .12, only: ['armF'], reachF: [572, 668] });
     },
     bub: [{ s: 'louise', t: 'Thibaut. He doesn’t matter.', tr: 'Thibaut. Il ne compte pas.', x: .2, y: .2, mw: 220 }, { s: 'cris', t: 'He doesn’t matter to me. I’ll stay. I think you need him. I will be alright.', tr: 'Pour moi non plus. Je reste. Je crois que tu as besoin de lui. Ça ira, pour moi.', x: .73, y: .26, mw: 300 }],
   }]],

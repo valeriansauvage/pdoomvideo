@@ -5,11 +5,11 @@ page(0, [], {
       cam(1060, 700, 1.0);
       countryside({ time: 'afternoon', hy: 980, farm: [1900, 1060, .55] });
       paint([[-600, 1500], [300, 1290], [1050, 1240], [1800, 1280], [2800, 1500], [2800, 2600], [-600, 2600]], { wash: '#A9C46E', fill: '#6E8A4E', fillOp: 60, tex: .7, ink: PAL.ink, sw: .8, curv: .4 });
-      bigTree(1000, 1330, 1.55, { mound: [1450, 1335] });
-      suitcase(760, 1360, .85, { open: 'gold', col: '#3E4C6E' });
-      shovel(1560, 1290, 1.1, .2);
-      fig('cris', 860, 1440, { at: 'hip', outfit: 'heist', view: 'pr', pose: 'lie', rot: -Math.PI / 2 + .05, ex: 'sleep', dirt: true, shadow: false, armN: [.6, 1.5], legN: [.2, .4], s: 1.1 });
-      fig('thibaut', 930, 1500, { at: 'hip', outfit: 'heist', view: 'pr', pose: 'lie', rot: -Math.PI / 2, ex: 'sleep', dirt: true, shadow: false, armN: [.3, 1.2], legF: [.3, .6], s: 1.1 });
+      bigTree(1000, 1330, 1.55, { mound: [1640, 1350] });
+      shovel(1760, 1300, 1.1, .2);
+      suitcase(820, 1395, .95, { open: 'gold', col: '#3E4C6E' });
+      fig('thibaut', 1170, 1400, { outfit: 'heist', view: 'r', pose: 'sitFloor', tor: -.22, nk: .32, eyes: 'closed', mouth: 'smile', dirt: true, s: 1.2, armN: [-.25, .3], armF: [.4, 1.2] });
+      fig('cris', 1260, 1420, { outfit: 'heist', view: 'r', pose: 'sitFloor', tor: -.28, nk: -.38, eyes: 'closed', mouth: 'smile', blush: true, dirt: true, s: 1.2, armN: [.35, 1.35], armF: [.5, 1.5] });
       grassStrokes(-300, 2400, 1700, 120, 90, '#5E7A34', .9);
       flowers(-300, 2400, 1600, 1900, 60);
     },
