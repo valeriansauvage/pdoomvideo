@@ -111,7 +111,7 @@ page(4, [
       fig('valerian', 1080, 1020, { view: 'l', tor: -.12, ex: 'shock', holdN: hCoffeeSpill, armN: [1.25, 1.0], holdF: hCroissant, armF: [.3, 1.2] });
       dragger('cris', 860, 1030, { outfit: 'manif', ex: 'surprised', tor: .15, case: '#6A5A44' }, 1);
     },
-    bub: [{ s: 'valerian', t: 'Hé ! Pourquoi es-tu si pressé ?', x: .62, y: .16 }, { s: 'cris', t: 'What?', tr: 'Quoi ?', x: .22, y: .22 }],
+    bub: [{ s: 'valerian', t: 'Hé ! Pourquoi es-tu si pressé ?', x: .58, y: .1 }, { s: 'cris', t: 'What?', tr: 'Quoi ?', x: .18, y: .33 }],
     sfx: [{ t: 'SPLATCH !', x: .43, y: .34, size: 58, rot: -.15, col: '#B97A4A' }],
   }]],
   [1.05, [{
@@ -122,7 +122,7 @@ page(4, [
       fig('cris', 880, 1020, { outfit: 'manif', view: 'r', ex: 'worried', look: [1, -.2], armN: [.25, .5] });
       fig('vlad', 1125, 1020, { view: 'l', ex: 'talk', armN: [.7, .9], handN: 'open' });
     },
-    bub: [{ s: 'vlad', t: 'Are you ok? Can we help you?', tr: 'Ça va ? On peut vous aider ?', x: .5, y: .12, mw: 300 }, { s: 'cris', t: 'I’m just trying to get to my AirBnB in this craziness.', tr: 'J’essaie juste de rejoindre mon Airbnb dans cette folie.', x: .22, y: .4, mw: 260, size: .92 }],
+    bub: [{ s: 'vlad', t: 'Are you ok? Can we help you?', tr: 'Ça va ? On peut vous aider ?', x: .63, y: .12, mw: 300 }, { s: 'cris', t: 'I’m just trying to get to my AirBnB in this craziness.', tr: 'J’essaie juste de rejoindre mon Airbnb dans cette folie.', x: .25, y: .39, mw: 310, size: .9 }],
   }, {
     draw(w, h) {
       cam(1020, 520, 1.25);
