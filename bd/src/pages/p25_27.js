@@ -97,6 +97,7 @@ page(26, [
     draw(w, h) {
       cam(1420, 770, .9);
       nightTree({ hole: true });
+      light(1395, 965, 300, .9);
       paint(capsule(1420, 990, 1370, 950, 13, 11, 4), { wash: '#7E8A7A', ink: PAL.ink, sw: .5 });
       for (let i = 0; i < 4; i++) paint(capsule(1370, 950, 1350 - i * 6, 925 + i * 5, 4, 3.5, 3), { wash: '#7E8A7A', ink: PAL.ink, sw: .35 });
       fig('cris', 1600, 1020, { outfit: 'night', view: 'l', tor: -.35, ex: 'scared', reachN: 'mouth', dirt: true });

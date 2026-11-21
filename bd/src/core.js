@@ -45,7 +45,7 @@ function tone(c) {
   const k = c.toLowerCase(); if (ACCENT.has(k)) return k;
   let v = TONE.get(k); if (v) return v;
   const n = parseInt(k.slice(1), 16), L0 = (.2126 * (n >> 16 & 255) + .7152 * (n >> 8 & 255) + .0722 * (n & 255)) / 255;
-  const L = Math.max(0, Math.min(1, (Math.pow(L0, 1.2) - .5) * 1.5 + .48));
+  const L = Math.max(L0 * .38, Math.min(1, (Math.pow(L0, 1.2) - .5) * 1.5 + .48));
   const y = Math.round(L * 248 + 4);
   v = '#' + ((1 << 24) + (y << 16) + (y << 8) + Math.min(255, y + 3)).toString(16).slice(1);
   TONE.set(k, v); return v;
@@ -323,10 +323,17 @@ function noirPost(src, pn) {
     }
     d.globalCompositeOperation = 'source-over';
     if (md.blinds) {
-      const gap = md.blindsGap ?? clamp(h / 11, 34, 90), a = md.blinds === true ? .42 : md.blinds;
-      d.save(); d.translate(w / 2, h / 2); d.rotate(md.blindsAngle ?? -.42); d.fillStyle = `rgba(0,0,0,${a})`;
-      for (let y = -diag; y < diag; y += gap) d.fillRect(-diag, y, 2 * diag, gap * .4);
-      d.restore();
+      // light through venetian blinds: bright slats cut into the darkness, strongest near the window, fading away
+      const gap = md.blindsGap ?? clamp(h / 9, 40, 110), a = md.blinds === true ? .8 : md.blinds;
+      const S = document.createElement('canvas'); S.width = w; S.height = h; const sc = S.getContext('2d');
+      sc.save(); sc.translate(w / 2, h / 2); sc.rotate(md.blindsAngle ?? -.42); sc.fillStyle = '#000';
+      for (let y = -diag; y < diag; y += gap) sc.fillRect(-diag, y, 2 * diag, gap * .5);
+      sc.restore();
+      const [bx, by] = md.blindsFrom || [w * .12, h * .05];
+      const g = sc.createRadialGradient(bx, by, 0, bx, by, diag * .95);
+      g.addColorStop(0, `rgba(0,0,0,${a})`); g.addColorStop(.55, `rgba(0,0,0,${a * .55})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+      sc.globalCompositeOperation = 'destination-in'; sc.fillStyle = g; sc.fillRect(0, 0, w, h);
+      d.globalCompositeOperation = 'destination-out'; d.drawImage(S, 0, 0); d.globalCompositeOperation = 'source-over';
     }
     c.drawImage(m, 0, 0);
   }

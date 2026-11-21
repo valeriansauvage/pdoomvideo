@@ -2,6 +2,7 @@
 // Floors / ground lines and the main landmarks are listed in each set's comment so figures can be placed on them.
 
 // ---------- shared scenery helpers ----------
+const NSKY = () => NOIR ? ['#323C6C', '#7682B6'] : ['#141834', '#2B3566'];        // night sky (top, horizon)
 function skyGrad(x, y, w, h, top, bot, n = 5, tex = true) {
   n = Math.max(n, 10, Math.round(h / 50));
   for (let i = 0; i < n; i++) paint(rectPts(x, y + h * i / n - 3, w, h / n + 6), { wash: mixCol(top, bot, i / (n - 1)), ink: null });
@@ -283,7 +284,7 @@ function carInterior(o = {}) {
 function countryside(o = {}) {
   noirMood({ dark: { night: .74, dusk: .56, morning: .36, afternoon: .38, day: .36 }[o.time || 'day'] });
   const hy = o.hy ?? 560, t = o.time || 'day';
-  const skies = { day: ['#8EC3E6', '#EAF1EC'], afternoon: ['#9BC8E4', '#F5E9CF'], dusk: ['#7D86B8', '#F4B98A'], night: ['#151A3C', '#2F3C7A'], morning: ['#A9CDE4', '#F8E6CC'] };
+  const skies = { day: ['#8EC3E6', '#EAF1EC'], afternoon: ['#9BC8E4', '#F5E9CF'], dusk: ['#7D86B8', '#F4B98A'], night: NSKY(), morning: ['#A9CDE4', '#F8E6CC'] };
   const [top, bot] = skies[t];
   skyGrad(-500, -600, 3600, hy + 640, top, bot, 5, t !== 'night');
   if (t === 'night') { paint(ellPts(o.moon?.[0] ?? 1700, o.moon?.[1] ?? 80, 46, 46, 20), { wash: '#F3EBC8', ink: null }); glow(o.moon?.[0] ?? 1700, o.moon?.[1] ?? 80, 160, 160, '#9FB0E0', 90); for (let i = 0; i < 40; i++) paint(ellPts(lerp(-400, 2800, hash(i * 3.1)), lerp(-500, hy - 80, hash(i * 7.7)), 3, 3, 5), { wash: '#F6F0D8', ink: null }); }
@@ -395,7 +396,7 @@ function livingRoom(o = {}) {
   woodFloor(-300, 2400, 900, 1300, night ? '#7A5A44' : '#B07E52');
   // window onto the countryside
   const wx = 160, wy = 160, ww = 300, wh = 480;
-  if (night) { skyGrad(wx, wy, ww, wh, '#151A3C', '#2F3C7A', 3, false); paint(ellPts(wx + ww * .7, wy + 90, 22, 22, 14), { wash: '#F3EBC8', ink: null }); }
+  if (night) { skyGrad(wx, wy, ww, wh, ...NSKY(), 3, false); paint(ellPts(wx + ww * .7, wy + 90, 22, 22, 14), { wash: '#F3EBC8', ink: null }); }
   else { skyGrad(wx, wy, ww, wh * .6, '#9BC8E4', '#F2EBD6', 3); hillBand(wx, wx + ww, wy + wh * .66, 30, '#9DB874', 3, false, wy + wh); treeRound(wx + ww * .3, wy + wh * .8, .35, { ink: false }); }
   windowFrame(wx, wy, ww, wh, { cross: !o.winOpen });
   if (o.winOpen) { paint([[wx, wy], [wx - 90, wy + 30], [wx - 90, wy + wh - 30], [wx, wy + wh]], { wash: '#E6EEF0', washOp: 160, ink: PAL.ink, sw: .5 }); paint([[wx + ww, wy], [wx + ww + 90, wy + 30], [wx + ww + 90, wy + wh - 30], [wx + ww, wy + wh]], { wash: '#E6EEF0', washOp: 160, ink: PAL.ink, sw: .5 }); }
@@ -538,7 +539,8 @@ function closet(o = {}) {
 // =====================================================================================
 function nightWoods(o = {}) {
   noirMood({ dark: .74 });
-  skyGrad(-500, -700, 3400, 1600, '#141834', '#2B3566', 4, false);
+  skyGrad(-500, -700, 3400, 1600, ...NSKY(), 4, false);
+  if (NOIR) light(o.moon?.[0] ?? 300, o.moon?.[1] ?? 40, 1500, .5);
   paint(ellPts(o.moon?.[0] ?? 300, o.moon?.[1] ?? 40, 50, 50, 20), { wash: '#F3EBC8', ink: null }); glow(o.moon?.[0] ?? 300, o.moon?.[1] ?? 40, 200, 200, '#8FA0D8', 90);
   for (let i = 0; i < 30; i++) paint(ellPts(lerp(-400, 2600, hash(i * 3.1)), lerp(-600, 300, hash(i * 7.7)), 3, 3, 5), { wash: '#F6F0D8', ink: null });
   for (let i = 0; i < 9; i++) treeRound(lerp(-400, 2600, i / 8), 860 + hash(i) * 30, 1.6 + hash(i * 2) * .6, { col: '#202A48', dk: '#151C34', trunk: '#1A1E34', ink: false, night: true });
@@ -551,7 +553,7 @@ function nightWoods(o = {}) {
 // Night road: dirt track from the bottom left up to a main road (y ~ 640). World x -400..2800.
 function nightRoad(o = {}) {
   noirMood({ dark: .7 });
-  skyGrad(-500, -700, 3600, 1260, '#141834', '#2B3566', 4, false);
+  skyGrad(-500, -700, 3600, 1260, ...NSKY(), 4, false);
   for (let i = 0; i < 40; i++) paint(ellPts(lerp(-400, 2800, hash(i * 3.1)), lerp(-600, 450, hash(i * 7.7)), 3, 3, 5), { wash: '#F6F0D8', ink: null });
   paint([[-500, 520], [800, 470], [1700, 500], [3100, 460], [3100, 900], [-500, 900]], { wash: '#1E2646', ink: null, curv: .3 });
   for (let i = 0; i < 8; i++) treeRound(lerp(-300, 2700, hash(i * 5.3)), 560 + hash(i) * 30, .7, { col: '#1A2240', dk: '#121830', trunk: '#141830', ink: false, night: true });
@@ -566,7 +568,7 @@ function nightBedroom(o = {}) {
   noirMood({ dark: .7, blinds: .3 });
   paint(rectPts(-300, -200, 2500, 1110), { wash: '#2E3460', fill: '#1E2448', fillOp: 90, tex: .6, ink: null });
   woodFloor(-300, 2300, 900, 1300, '#3A3450');
-  skyGrad(1300, 160, 300, 400, '#141834', '#2F3C7A', 3, false); paint(ellPts(1450, 260, 36, 36, 16), { wash: '#F3EBC8', ink: null }); windowFrame(1300, 160, 300, 400, { col: '#4A5080' });
+  skyGrad(1300, 160, 300, 400, ...NSKY(), 3, false); paint(ellPts(1450, 260, 36, 36, 16), { wash: '#F3EBC8', ink: null }); windowFrame(1300, 160, 300, 400, { col: '#4A5080' });
   paint(rectPts(300, 640, 900, 140), { wash: '#4A4E78', fill: '#2E3260', fillOp: 70, tex: .5, ink: PAL.ink, sw: .6 });
   paint([[240, 420], [320, 440], [320, 860], [240, 850]], { wash: '#3A2E48', ink: PAL.ink, sw: .6 });
   paint(rectPts(300, 760, 900, 60), { wash: '#2A2440', ink: PAL.ink, sw: .5 });
