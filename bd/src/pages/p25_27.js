@@ -140,7 +140,7 @@ function windshield(o = {}) {
   if (o.kiss) {
     fig('thibaut', cx - 42, 520, { at: 'head', outfit: 'night', view: 'pr', ex: 'kiss', nk: .2 });
     fig('cris', cx + 36, 532, { at: 'head', outfit: 'night', view: 'pl', ex: 'kiss', blush: true, blackEye: true, nk: -.1 });
-    paint(heartPts(cx, 430, 16), { wash: '#E2476E', ink: PAL.ink, sw: .4 });
+    paint(heartPts(cx + 2, 462, 13), { wash: '#E2476E', ink: PAL.ink, sw: .4 });
   } else {
     fig('thibaut', cx - 120, 520, { at: 'head', outfit: 'night', view: 'f', ex: 'shock' });
     fig('cris', cx + 120, 532, { at: 'head', outfit: 'night', view: 'f', ex: 'shock', blackEye: true });
