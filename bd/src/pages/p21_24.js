@@ -107,19 +107,19 @@ page(23, [
           { s: 'cris', t: 'Sir, I cook, clean and tend the animals. He’s been here every day of May. This man, I don’t know where he is at night.', tr: 'Monsieur, je cuisine, je fais le ménage et je m’occupe des bêtes. Il a été là tous les jours de mai. La nuit, cet homme, je ne sais pas où il est.', x: .33, y: .38, mw: 560, size: .88 }],
   }]],
   [1, [{
-    draw(w, h) { cam(1760, 470, 1.3); yardInterview({ tx: 1450, t: { ex: 'blank' }, v: { ex: 'talk' }, d: { ex: 'neutral' }, cris: [1640, { ex: 'sly' }] }); },
+    draw(w, h) { cam(1760, 512, 1.1); yardInterview({ tx: 1450, t: { ex: 'blank' }, v: { ex: 'talk' }, d: { ex: 'neutral' }, cris: [1640, { ex: 'sly' }] }); },
     bub: [{ s: 'valerian', t: 'Where’s the owner of the place?', tr: 'Où est la propriétaire ?', x: .66, y: .13 }, { s: 'cris', t: 'She stays in Paris most of the time.', tr: 'Elle est à Paris la plupart du temps.', x: .27, y: .4, mw: 260 }],
   }, {
-    draw(w, h) { cam(1840, 470, 1.3); yardInterview({ tx: 1450, t: { ex: 'blank' }, v: { ex: 'neutral' }, d: { ex: 'smile', look: [-1, 0] }, cris: [1640, { ex: 'suspicious' }] }); },
+    draw(w, h) { cam(1840, 512, 1.1); yardInterview({ tx: 1450, t: { ex: 'blank' }, v: { ex: 'neutral' }, d: { ex: 'smile', look: [-1, 0] }, cris: [1640, { ex: 'suspicious' }] }); },
     bub: [{ s: 'vlad', t: 'Are you ever in Paris?', tr: 'Vous allez parfois à Paris ?', x: .7, y: .13 }, { s: 'cris', t: 'I’m not interested.', tr: 'Ça ne m’intéresse pas.', x: .26, y: .4 }],
   }]],
   [1, [{
     w: 1.1,
-    draw(w, h) { cam(1840, 465, 1.25); yardInterview({ tx: 1450, t: { ex: 'blank' }, v: { ex: 'smirk' }, d: { ex: 'worried', blush: true }, cris: [1640, { ex: 'sly', eyes: 'half' }] }); },
+    draw(w, h) { cam(1840, 512, 1.1); yardInterview({ tx: 1450, t: { ex: 'blank' }, v: { ex: 'smirk' }, d: { ex: 'worried', blush: true }, cris: [1640, { ex: 'sly', eyes: 'half' }] }); },
     bub: [{ s: 'vlad', t: 'I didn’t mean that. You don’t have any injuries or wounds do you?', tr: 'Ce n’est pas ce que je voulais dire. Vous n’avez pas de blessures, n’est-ce pas ?', x: .64, y: .17, mw: 380, size: .9 }, { s: 'cris', t: 'But you’re interested in my body.', tr: 'Mais mon corps vous intéresse.', x: .22, y: .45, mw: 250, size: .9 }],
   }, {
     w: .9,
-    draw(w, h) { cam(1840, 470, 1.3); yardInterview({ tx: 1450, t: { ex: 'blank' }, v: { ex: 'neutral' }, d: { ex: 'talk' }, cris: [1640, { ex: 'blank', eyes: 'wide' }] }); },
+    draw(w, h) { cam(1840, 512, 1.1); yardInterview({ tx: 1450, t: { ex: 'blank' }, v: { ex: 'neutral' }, d: { ex: 'talk' }, cris: [1640, { ex: 'blank', eyes: 'wide' }] }); },
     bub: [{ s: 'vlad', t: 'There was a crime and there was blood. We’re doing an investigation.', tr: 'Il y a eu un crime et du sang. Nous menons une enquête.', x: .62, y: .17, mw: 330, size: .9 }, { s: 'cris', t: 'I don’t understand.', tr: 'Je ne comprends pas.', x: .22, y: .46 }],
   }]],
   [1.15, [{
