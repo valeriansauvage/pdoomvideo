@@ -64,7 +64,7 @@ function curtain(x, y, w, h, col = '#F1E9DA', side = 1) {
 // =====================================================================================
 const BED = { hip: 800, l: 560, r: 1340, door: [1615, 1830] };
 function bedroom(o = {}) {
-  noirMood({ dark: .5, blinds: true });
+  noirMood({ dark: .5, blinds: true, tint: [16, 12, 34] });
   paint(rectPts(-300, -200, 2500, 1110), { wash: '#EDD8C2', fill: '#D9BEA2', fillOp: 70, bleed: .1, tex: .6, border: .4, ink: null });
   for (const [x, w] of [[-150, 220], [500, 300], [1080, 300]]) paint(rectPts(x, 120, w, 220), { ink: '#CBAE90', sw: .4 });
   woodFloor(-300, 2300, 900, 1250, '#B98A5E');
@@ -121,7 +121,7 @@ function duvet(o = {}) {
 // PARIS — the street with the protest. World x -400..2800, street y 900 (sidewalk 860..900, road below).
 // =====================================================================================
 function parisStreet(o = {}) {
-  noirMood({ dark: .4, rain: true });
+  noirMood({ dark: .42, rain: true, tint: [10, 18, 32] });
   skyGrad(-500, -500, 3500, 520, '#C9D8E4', '#E9E4DA', 4);
   const bw = 520;
   for (let b = -1; b < 6; b++) {
@@ -215,7 +215,7 @@ function crowd(o = {}) {
 // o.blast: [x, y, r] explosion glow; o.daylight: the far end is open to the day; o.corner: x of a wall corner on the right.
 // =====================================================================================
 function tunnel(o = {}) {
-  noirMood({ dark: .72 });
+  noirMood({ dark: .72, tint: [10, 8, 20] });
   const [vx, vy] = o.vp || [1150, 470], fw = 170, fh = 210, X0 = -600, X1 = 2600, Y0 = -400, Y1 = 1700;
   const wall = o.wall || '#4A4E68', far = [[vx - fw, vy - fh], [vx + fw, vy - fh], [vx + fw, vy + fh], [vx - fw, vy + fh]];
   if (o.daylight) paint(far, { wash: '#FFF4D8', ink: null }); else paint(far, { wash: '#1A1C2C', ink: null });
@@ -253,7 +253,7 @@ function tunnel(o = {}) {
 //   driver seat: hip ~ (430, 640); back seat: hip ~ (1080, 660), seat surface y 680, from x 900 to 1450.
 // =====================================================================================
 function carInterior(o = {}) {
-  noirMood({ dark: .55 });
+  noirMood({ dark: .55, tint: [10, 14, 28] });
   paint(rectPts(-200, -200, 2200, 1400), { wash: '#3E4258', ink: null });
   // windows with a blurred landscape
   for (const [x0, x1] of [[120, 640], [720, 1460]]) {
@@ -282,7 +282,8 @@ function carInterior(o = {}) {
 // o.farm: [x, y, s] small farmhouse in the distance. o.ground: foreground grass colour.
 // =====================================================================================
 function countryside(o = {}) {
-  noirMood({ dark: { night: .74, dusk: .56, morning: .36, afternoon: .38, day: .36 }[o.time || 'day'] });
+  noirMood({ dark: { night: .72, dusk: .56, morning: .36, afternoon: .38, day: .36 }[o.time || 'day'],
+    tint: { night: [4, 8, 28], dusk: [34, 14, 40], morning: [30, 22, 22] }[o.time] || [46, 26, 10] });
   const hy = o.hy ?? 560, t = o.time || 'day';
   const skies = { day: ['#8EC3E6', '#EAF1EC'], afternoon: ['#9BC8E4', '#F5E9CF'], dusk: ['#7D86B8', '#F4B98A'], night: NSKY(), morning: ['#A9CDE4', '#F8E6CC'] };
   const [top, bot] = skies[t];
@@ -346,7 +347,7 @@ function bigTree(x, y, s = 1, o = {}) {
 const FARM = { ground: 900, door: [855, 900], kitchenWin: [380, 470, 180, 190], livingWin: [1100, 470, 200, 190], table: [1820, 900] };
 function farmyard(o = {}) {
   countryside({ hy: 620, time: o.time || 'day', clouds: true });
-  noirMood({ dark: o.time === 'night' ? .72 : o.time === 'dusk' ? .52 : .38 });
+  noirMood({ dark: o.time === 'night' ? .72 : o.time === 'dusk' ? .52 : .38, tint: o.time === 'night' ? [4, 8, 28] : o.time === 'dusk' ? [34, 14, 40] : [46, 26, 10] });
   // woods behind the house and on the right
   for (let i = 0; i < 6; i++) treeRound(1500 + i * 230, 900 - 10 * (i % 2), 1.6 + .3 * hash(i), { col: '#5E8F45', dk: '#3A6634' });
   for (let i = 0; i < 4; i++) treeRound(-350 + i * 170, 880, 1.3 + .2 * hash(i * 3), { col: '#6E9A50', dk: '#46703C' });
@@ -388,7 +389,7 @@ function farmyard(o = {}) {
 // the pianist sits at ~x 1100 facing left), couch x 1350..1800, fireplace x 1950..2250. o.dinner: table centred at x 1050.
 // =====================================================================================
 function livingRoom(o = {}) {
-  noirMood({ dark: o.night ? .64 : .46, blinds: !o.night });
+  noirMood({ dark: o.night ? .64 : .46, blinds: !o.night, tint: o.night ? [8, 8, 28] : [26, 16, 22] });
   const night = o.night;
   paint(rectPts(-300, -200, 2700, 1110), { wash: night ? '#9C8C86' : '#F0E3CB', fill: night ? '#6E625E' : '#D9C6A6', fillOp: 70, bleed: .08, tex: .6, border: .4, ink: null });
   paint(rectPts(-300, 700, 2700, 200), { wash: night ? '#7A6A60' : '#D8C3A2', fill: '#B9A07C', fillOp: 60, tex: .5, ink: null });
@@ -458,7 +459,7 @@ function dinnerTable(x, y, s = 1, night = true) {
 // (y 170..520), door x 1600..1790. Cutting board x 250..520 (worktop y 690). People at the counter stand at y ~940.
 // =====================================================================================
 function kitchen(o = {}) {
-  noirMood({ dark: .46, blinds: true });
+  noirMood({ dark: .46, blinds: true, tint: [22, 16, 26] });
   paint(rectPts(-300, -200, 2700, 1110), { wash: '#F2E6CF', fill: '#D9C6A6', fillOp: 70, bleed: .08, tex: .6, border: .4, ink: null });
   paint(rectPts(80, 470, 1340, 220), { wash: '#E9EEEC', fill: '#B9C8C8', fillOp: 50, tex: .4, ink: null });
   for (let i = 0; i < 17; i++) for (let j = 0; j < 3; j++) paint(rectPts(80 + i * 79, 470 + j * 73, 79, 73), { ink: '#A9BCC4', sw: .3 });

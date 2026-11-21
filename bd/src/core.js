@@ -29,25 +29,39 @@ const PAL = {
 };
 
 // ---------- style ----------
-// 'noir' (default): black & white film-noir look — high-contrast greys, light pools on the faces, venetian-blind
-// shadows indoors, rain in the city, typewriter captions, black page; only blood, gold, hearts, wine and the police
-// light keep their colour. 'aquarelle': the original watercolour palette.  Choose with ?style=… (render.mjs --style=…).
+// 'noir' (default): colour film noir — muted, contrasted colours, darkness tinted night-blue cut by pools of light around
+// the faces and the lamps, venetian-blind light indoors, rain in the city, half-shadowed faces, typewriter captions,
+// black page; blood, gold, hearts, wine and the police light stay fully saturated.
+// 'noirbw': the same in black & white (only those accents keep their colour). 'aquarelle': the original watercolour.
+// Choose with ?style=… (render.mjs --style=…).
 const STYLE = new URLSearchParams(location.search).get('style') || 'noir';
-const NOIR = STYLE === 'noir';
+const NOIR = STYLE === 'noir' || STYLE === 'noirbw';       // film-noir lighting, black page, typewriter captions
+const MONO = STYLE === 'noirbw';                           // … in black & white (otherwise in colour)
 const ACCENT = new Set(['#b3263a', '#8e1b2e', '#6a1020', '#7a1424',                 // blood
   '#edb83c', '#a8741c', '#f8dc7a', '#fff6c8', '#fff3c4', '#ffe08a',                 // gold
   '#e2476e', '#8a2234', '#4a8fe0', '#8ec3ff']);                                       // hearts, wine, police light
 const isAccent = c => typeof c === 'string' && ACCENT.has(c.toLowerCase());
 const TONE = new Map();
-// Colour → noir grey (contrast curve: deep blacks, bright highlights); accents pass through.
+// Colour → noir grade (accents pass through). Colour: muted, contrasted, cool shadows and warm highlights.
+// Black & white: a grey contrast curve with deep blacks.
 function tone(c) {
   if (!NOIR || typeof c !== 'string' || c[0] !== '#' || c.length !== 7) return c;
   const k = c.toLowerCase(); if (ACCENT.has(k)) return k;
   let v = TONE.get(k); if (v) return v;
-  const n = parseInt(k.slice(1), 16), L0 = (.2126 * (n >> 16 & 255) + .7152 * (n >> 8 & 255) + .0722 * (n & 255)) / 255;
-  const L = Math.max(L0 * .38, Math.min(1, (Math.pow(L0, 1.2) - .5) * 1.5 + .48));
-  const y = Math.round(L * 248 + 4);
-  v = '#' + ((1 << 24) + (y << 16) + (y << 8) + Math.min(255, y + 3)).toString(16).slice(1);
+  const n = parseInt(k.slice(1), 16), r0 = (n >> 16 & 255) / 255, g0 = (n >> 8 & 255) / 255, b0 = (n & 255) / 255;
+  const L0 = .2126 * r0 + .7152 * g0 + .0722 * b0;
+  const hex = (r, g, b) => '#' + [r, g, b].map(x => Math.round(Math.max(0, Math.min(1, x)) * 255).toString(16).padStart(2, '0')).join('');
+  if (MONO) {
+    const L = Math.max(L0 * .38, Math.min(1, (Math.pow(L0, 1.2) - .5) * 1.5 + .48)), y = L * .973 + .016;
+    v = hex(y, y, y + .012);
+  } else {
+    const Lt = Math.max(L0 * .45, Math.min(1, (Math.pow(L0, 1.12) - .5) * 1.32 + .47));
+    const sat = .8, f = L0 > .002 ? Lt / L0 : 0;
+    let r = (L0 + (r0 - L0) * sat) * f, g = (L0 + (g0 - L0) * sat) * f, b = (L0 + (b0 - L0) * sat) * f;
+    const sh = Math.max(0, Math.min(1, (.5 - Lt) / .5)) * .26, hi = Math.max(0, Math.min(1, (Lt - .62) / .38)) * .1;
+    r += (.10 - r) * sh + (1 - r) * hi; g += (.14 - g) * sh + (.92 - g) * hi; b += (.27 - b) * sh + (.78 - b) * hi;
+    v = hex(r, g, b);
+  }
   TONE.set(k, v); return v;
 }
 
@@ -159,7 +173,7 @@ function inkLine(pts, sw = 1, col = PAL.ink, br = 'ink', curv = .5) {
 // soft watercolour glow / shadow pool
 // Soft light: stacked translucent washes (watercolour fills darken, so light is painted as washes).
 function glow(cx, cy, rx, ry, col, op = 90, soft = .3) {
-  if (NOIR) { light(cx, cy, Math.max(rx, ry) * 1.2, clamp(op / 110, .3, 1)); if (!isAccent(col)) col = '#FFFFFF'; }
+  if (NOIR) { light(cx, cy, Math.max(rx, ry) * 1.2, clamp(op / 110, .3, 1), col); if (MONO && !isAccent(col)) col = '#FFFFFF'; }
   const n = 5;
   for (let k = 0; k < n; k++) { const f = 1 - k / n * .82; paint(ellPts(cx, cy, rx * f, ry * f, 28, Math.min(rx, ry) * .03), { wash: col, washOp: op * .3, ink: null }); }
 }
@@ -198,8 +212,9 @@ function worldText(txt, x, y, size, col = PAL.ink, o = {}) {
 // Record where a speaker's mouth is (in panel px) so bubble tails can point at it.
 function anchor(name, x, y, r = 0) { const p = xApply(x, y); ANCH[name] = [p[0], p[1], r * xScale()]; }
 // Noir lighting: a light source at world (x, y) with radius r (pools of light cut into the panel's darkness).
-function light(x, y, r, k = 1) { if (!PANEL) return; const [px, py] = xApply(x, y); PANEL.lights.push([px, py, r * xScale(), k]); }
-// Per-panel noir mood, set by the sets: { dark: 0..1 darkness away from the lights, blinds: true | alpha, rain: true | density }
+function light(x, y, r, k = 1, col = null) { if (!PANEL) return; const [px, py] = xApply(x, y); PANEL.lights.push([px, py, r * xScale(), k, col]); }
+// Per-panel noir mood, set by the sets: { dark: 0..1 darkness away from the lights, tint: [r, g, b] colour of the darkness,
+//   blinds: true | alpha, rain: true | density }
 function noirMood(o) { if (PANEL) PANEL.mood = { ...PANEL.mood, ...o }; }
 // Full-panel tint (night, flashback, fades) — screen space.
 function panelWash(col, op = 255, o = {}) {
@@ -302,11 +317,11 @@ async function paintPanel(pn) {
 // light sources, venetian-blind stripes indoors, rain outdoors.
 function noirPost(src, pn) {
   const w = pn.w, h = pn.h, cv = document.createElement('canvas'); cv.width = w; cv.height = h; const c = cv.getContext('2d');
-  c.filter = 'contrast(1.12)'; c.drawImage(src, 0, 0, w, h, 0, 0, w, h); c.filter = 'none';
-  const md = pn.mood || {}, dark = md.dark ?? .45;
+  c.filter = MONO ? 'contrast(1.12)' : 'contrast(1.1) saturate(.95)'; c.drawImage(src, 0, 0, w, h, 0, 0, w, h); c.filter = 'none';
+  const md = pn.mood || {}, dark = md.dark ?? .45, tint = MONO ? [3, 3, 6] : (md.tint || [6, 10, 30]);
   if (dark > 0) {
     const m = document.createElement('canvas'); m.width = w; m.height = h; const d = m.getContext('2d');
-    d.fillStyle = `rgba(3,3,6,${dark})`; d.fillRect(0, 0, w, h);
+    d.fillStyle = `rgba(${tint[0]},${tint[1]},${tint[2]},${dark})`; d.fillRect(0, 0, w, h);
     d.globalCompositeOperation = 'destination-out';
     const pools = [], diag = Math.hypot(w, h);
     for (const a of Object.values(pn.anch || {})) {
@@ -336,6 +351,13 @@ function noirPost(src, pn) {
       d.globalCompositeOperation = 'destination-out'; d.drawImage(S, 0, 0); d.globalCompositeOperation = 'source-over';
     }
     c.drawImage(m, 0, 0);
+  }
+  if (!MONO) for (const L of pn.lights || []) {           // coloured lights bloom a little (screen)
+    if (!L[4] || L[3] < .3 || L[2] < 8) continue;
+    const R = Math.min(L[2], diag * 1.2), g = c.createRadialGradient(L[0], L[1], 0, L[0], L[1], R), col = tone(L[4]);
+    const n = parseInt(col.slice(1), 16), rgb = `${n >> 16 & 255},${n >> 8 & 255},${n & 255}`;
+    g.addColorStop(0, `rgba(${rgb},${.2 * L[3]})`); g.addColorStop(1, `rgba(${rgb},0)`);
+    c.globalCompositeOperation = 'screen'; c.fillStyle = g; c.fillRect(L[0] - R, L[1] - R, 2 * R, 2 * R); c.globalCompositeOperation = 'source-over';
   }
   if (md.rain) {
     const r = lcg(Math.round(pn.x * 7 + pn.y * 3) + 11), n = Math.round(w * h / 2200 * (md.rain === true ? 1 : md.rain));

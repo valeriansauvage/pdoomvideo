@@ -6,16 +6,17 @@
 //   node bd/render.mjs --pdf                                         bind out/bd/planche_*.jpg → out/bd/<title>.pdf
 // Pages 90 and up are development sheets (model sheet, set gallery): --all and --pdf skip them.
 // Chrome: --chrome=<path> (defaults: Windows Chrome, or Playwright's Chromium on Linux). GPU backend: --angle=<d3d11|metal|swiftshader|...>.
-// Style: --style=noir (default, → out/bd-noir) or --style=aquarelle (the watercolour version, → out/bd).
+// Style: --style=noir (colour film noir, default → out/bd-noir), --style=noirbw (black & white → out/bd-noirbw)
+//        or --style=aquarelle (the watercolour version → out/bd).
 import puppeteer from 'puppeteer-core';
 import { mkdirSync, writeFileSync, existsSync, readdirSync, readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const args = Object.fromEntries(process.argv.slice(2).map(a => { const [k, v] = a.replace(/^--/, '').split('='); return [k, v ?? true]; }));
-const STYLE = args.style || 'noir';                       // noir (default) | aquarelle
-const OUT = args.out || (STYLE === 'noir' ? 'out/bd-noir' : 'out/bd');
-const TITLE = 'Sous_un_arbre_a_la_campagne' + (STYLE === 'noir' ? '_noir' : '');
+const STYLE = args.style || 'noir';                       // noir (colour, default) | noirbw (black & white) | aquarelle
+const OUT = args.out || { noir: 'out/bd-noir', noirbw: 'out/bd-noirbw' }[STYLE] || 'out/bd';
+const TITLE = 'Sous_un_arbre_a_la_campagne' + ({ noir: '_noir', noirbw: '_noir_nb' }[STYLE] || '');
 mkdirSync(OUT, { recursive: true });
 
 function findChrome() {
