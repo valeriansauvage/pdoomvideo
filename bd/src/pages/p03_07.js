@@ -55,7 +55,7 @@ page(3, [
       fig('cris', 690, 1095, { outfit: 'heist', pose: 'kneel', view: 'r', ex: 'surprised', look: [.6, .6], blush: true });
       fig('thibaut', 1035, 1095, { outfit: 'heist', pose: 'crouch', view: 'l', reachN: [930, 980], reachF: [870, 975], ex: 'smirk' });
     },
-    sfx: [{ t: '!!', x: .24, y: .25, size: 80, rot: .1, col: PAL.gold }],
+    sfx: [{ t: '!!', x: .13, y: .2, size: 80, rot: .1, col: PAL.gold }],
   }]],
   [1.05, [{
     w: .7,
