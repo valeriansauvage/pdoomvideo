@@ -192,14 +192,14 @@ page(5, [
     bub: [{ s: 'cris', t: 'These people are breaking things and making a mess. I just want to get to safety.', tr: 'Ces gens cassent tout et mettent le bazar. Je veux juste me mettre à l’abri.', x: .38, y: .2, mw: 330 }],
   }, {
     draw(w, h) {
-      cam(1060, 540, 1.3);
+      cam(1050, 478, 1.15);
       street(.8);
       crowd({ rows: [[870, .5, 26], [930, .62, 14]], seed: 23 });
       fig('valerian', 900, 1020, { view: 'r', ex: 'smirk', look: [1, .2], holdF: hCroissant, armF: [.3, 1.2] });
       fig('vlad', 1180, 1020, { view: 'l', ex: 'talk', armN: [.8, .7], handN: 'open', armF: [1.1, .4], handF: 'open' });
     },
-    bub: [{ s: 'vlad', t: 'The people are marching in the streets. It’s their right. We’re here to protect everyone’s rights, safety and property.', tr: 'Les gens manifestent. C’est leur droit. Nous sommes là pour protéger les droits, la sécurité et les biens de chacun.', x: .62, y: .26, mw: 330, size: .92 },
-          { s: 'valerian', t: 'Tous sont des casseurs.', kind: 'whisper', x: .15, y: .3, mw: 150 }],
+    bub: [{ s: 'vlad', t: 'The people are marching in the streets. It’s their right. We’re here to protect everyone’s rights, safety and property.', tr: 'Les gens manifestent. C’est leur droit. Nous sommes là pour protéger les droits, la sécurité et les biens de chacun.', x: .5, y: .19, mw: 560, size: .86 },
+          { s: 'valerian', t: 'Tous sont des casseurs.', kind: 'whisper', x: .14, y: .86, mw: 190 }],
   }]],
   [1, [{
     w: .8,
