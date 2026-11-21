@@ -25,10 +25,10 @@ page(21, [
   [1, [{
     w: .9,
     draw(w, h) {
-      cam(900, 600, 1.0);
+      cam(900, 530, 1.0);
       kitchen({ groceries: true, board: false });
-      fig('louise', 1180, 1010, { view: 'r', pose: 'run', ph: .3, ex: 'scared', look: [-1, 0], armN: [.6, .9], handN: 'open' });
-      fig('cris', 600, 1010, { outfit: 'farm2', view: 'r', ex: 'worried', look: [1, 0] });
+      fig('louise', 1180, 940, { view: 'r', pose: 'run', ph: .3, ex: 'scared', look: [-1, 0], armN: [.6, .9], handN: 'open' });
+      fig('cris', 600, 940, { outfit: 'farm2', view: 'r', ex: 'worried', look: [1, 0] });
     },
     bub: [{ s: 'louise', t: 'I reported him missing… They must have figured it out. Tell them I’m not here!', tr: 'J’ai signalé sa disparition… Ils ont dû comprendre. Dis-leur que je ne suis pas là !', x: .5, y: .2, mw: 300, size: .92 }],
   }, {

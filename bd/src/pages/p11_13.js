@@ -102,7 +102,7 @@ page(12, [
     draw(w, h) {
       cam(770, 640, .8);
       kitchen({});
-      fig('cris', 340, 920, { outfit: 'farm', view: 'r', ex: 'neutral', look: [.5, .5], reachN: [430, 640], holdN: hKnife, reachF: [470, 645] });
+      fig('cris', 340, 920, { outfit: 'farm', view: 'r', ex: 'neutral', look: [.5, .5], reachN: [430, 685], holdN: hKnife, reachF: [470, 690] });
       fig('louise', 1150, 1010, { view: 'r', ex: 'surprised', look: [1, 0] });
     },
     cap: [{ t: 'L’après-midi.', at: 'tl' }],

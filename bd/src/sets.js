@@ -444,13 +444,13 @@ function dinnerTable(x, y, s = 1, night = true) {
 
 // =====================================================================================
 // THE FARM — kitchen. World x -200..2300, floor y 900. Counter x 100..1400 (worktop y 640), window above it x 420..780
-// (y 170..520), door x 1600..1790. Cutting board x 250..520.
+// (y 170..520), door x 1600..1790. Cutting board x 250..520 (worktop y 690). People at the counter stand at y ~940.
 // =====================================================================================
 function kitchen(o = {}) {
   paint(rectPts(-300, -200, 2700, 1110), { wash: '#F2E6CF', fill: '#D9C6A6', fillOp: 70, bleed: .08, tex: .6, border: .4, ink: null });
-  paint(rectPts(80, 420, 1340, 220), { wash: '#E9EEEC', fill: '#B9C8C8', fillOp: 50, tex: .4, ink: null });
-  for (let i = 0; i < 17; i++) for (let j = 0; j < 3; j++) paint(rectPts(80 + i * 79, 420 + j * 73, 79, 73), { ink: '#A9BCC4', sw: .3 });
-  for (let i = 0; i < 8; i++) paint(starPts(120 + i * 160, 460 + (i % 2) * 73, 14, .45, 4), { wash: '#6E98B4', ink: null });
+  paint(rectPts(80, 470, 1340, 220), { wash: '#E9EEEC', fill: '#B9C8C8', fillOp: 50, tex: .4, ink: null });
+  for (let i = 0; i < 17; i++) for (let j = 0; j < 3; j++) paint(rectPts(80 + i * 79, 470 + j * 73, 79, 73), { ink: '#A9BCC4', sw: .3 });
+  for (let i = 0; i < 8; i++) paint(starPts(120 + i * 160, 510 + (i % 2) * 73, 14, .45, 4), { wash: '#6E98B4', ink: null });
   woodFloor(-300, 2400, 900, 1300, '#C8A06E');
   // window with the farmyard outside
   const wx = 420, wy = 170, ww = 360, wh = 330;
@@ -465,13 +465,13 @@ function kitchen(o = {}) {
   inkLine([[100, 130], [380, 130]], .9, '#6B4A33', 'ink', 0);
   for (let i = 0; i < 3; i++) { const px = 140 + i * 90; inkLine([[px, 130], [px, 170]], .5, PAL.ink, 'inkfine', 0); paint(ellPts(px, 210, 34 - i * 4, 34 - i * 4, 14), { wash: '#B87333', fill: '#8A4E22', fillOp: 70, ink: PAL.ink, sw: .5 }); }
   // counter + cabinets + sink
-  paint(rectPts(80, 640, 1360, 30), { wash: '#C8975F', fill: '#9C6B44', fillOp: 70, tex: .5, ink: PAL.ink, sw: .7 });
-  paint(rectPts(100, 670, 1320, 230), { wash: '#9FB2A3', fill: '#7A8E80', fillOp: 70, tex: .5, ink: PAL.ink, sw: .7 });
-  for (let i = 0; i < 5; i++) { paint(rectPts(118 + i * 262, 690, 240, 190), { ink: '#6E8274', sw: .4 }); paint(rectPts(225 + i * 262, 710, 26, 8), { wash: '#C9B06A', ink: null }); }
-  paint(rectPts(640, 632, 260, 14), { wash: '#C9CED6', ink: PAL.ink, sw: .4 });
-  inkLine([[770, 640], [770, 570], [810, 560]], 1.2, '#AEB6C2', 'ink', .5);
-  if (o.board !== false) { paint(rrPts(240, 618, 300, 24, 10), { wash: '#D9B07A', ink: PAL.ink, sw: .5 }); vegetables(390, 620, 1); }
-  if (o.groceries) groceries(1150, 640, 1);
+  paint(rectPts(80, 690, 1360, 28), { wash: '#C8975F', fill: '#9C6B44', fillOp: 70, tex: .5, ink: PAL.ink, sw: .7 });
+  paint(rectPts(100, 718, 1320, 182), { wash: '#9FB2A3', fill: '#7A8E80', fillOp: 70, tex: .5, ink: PAL.ink, sw: .7 });
+  for (let i = 0; i < 5; i++) { paint(rectPts(118 + i * 262, 734, 240, 150), { ink: '#6E8274', sw: .4 }); paint(rectPts(225 + i * 262, 750, 26, 8), { wash: '#C9B06A', ink: null }); }
+  paint(rectPts(640, 682, 260, 14), { wash: '#C9CED6', ink: PAL.ink, sw: .4 });
+  inkLine([[770, 690], [770, 620], [810, 610]], 1.2, '#AEB6C2', 'ink', .5);
+  if (o.board !== false) { paint(rrPts(240, 668, 300, 24, 10), { wash: '#D9B07A', ink: PAL.ink, sw: .5 }); vegetables(390, 670, 1); }
+  if (o.groceries) groceries(1150, 690, 1);
   // door
   paint(rectPts(1590, 300, 210, 600), { wash: o.doorOpen ? '#F6EAD0' : '#8EA8B8', fill: o.doorOpen ? '#E8D6AE' : '#6E8898', fillOp: 70, tex: .5, ink: PAL.ink, sw: .8 });
   if (!o.doorOpen) { paint(rectPts(1620, 340, 150, 200), { wash: '#C9D6DF', ink: PAL.ink, sw: .4 }); paint(ellPts(1770, 620, 8, 8, 8), { wash: PAL.gold, ink: null }); }

@@ -46,9 +46,9 @@ page(14, [
   }, {
     w: 1.2,
     draw(w, h) {
-      cam(700, 520, 1.15);
+      cam(700, 470, 1.15);
       kitchen({});
-      fig('cris', 470, 920, { outfit: 'farm', view: 'r', ex: 'sadtalk', look: [1, 0], reachN: [560, 640], holdN: hKnife, reachF: [520, 645] });
+      fig('cris', 470, 920, { outfit: 'farm', view: 'r', ex: 'sadtalk', look: [1, 0], reachN: [560, 685], holdN: hKnife, reachF: [520, 690] });
       fig('louise', 900, 925, { view: 'l', ex: 'smile', armN: [.6, 1.4], handN: 'open' });
     },
     cap: [{ t: 'L’après-midi.', at: 'tl' }],
