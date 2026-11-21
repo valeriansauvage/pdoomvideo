@@ -339,14 +339,14 @@ function noirPost(src, pn) {
     d.globalCompositeOperation = 'source-over';
     if (md.blinds) {
       // light through venetian blinds: bright slats cut into the darkness, strongest near the window, fading away
-      const gap = md.blindsGap ?? clamp(h / 9, 40, 110), a = md.blinds === true ? .8 : md.blinds;
+      const gap = md.blindsGap ?? clamp(h / 10, 36, 96), a = md.blinds === true ? .5 : md.blinds;
       const S = document.createElement('canvas'); S.width = w; S.height = h; const sc = S.getContext('2d');
       sc.save(); sc.translate(w / 2, h / 2); sc.rotate(md.blindsAngle ?? -.42); sc.fillStyle = '#000';
-      for (let y = -diag; y < diag; y += gap) sc.fillRect(-diag, y, 2 * diag, gap * .5);
+      for (let y = -diag; y < diag; y += gap) sc.fillRect(-diag, y, 2 * diag, gap * .38);
       sc.restore();
       const [bx, by] = md.blindsFrom || [w * .12, h * .05];
-      const g = sc.createRadialGradient(bx, by, 0, bx, by, diag * .95);
-      g.addColorStop(0, `rgba(0,0,0,${a})`); g.addColorStop(.55, `rgba(0,0,0,${a * .55})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+      const g = sc.createRadialGradient(bx, by, 0, bx, by, diag * .8);
+      g.addColorStop(0, `rgba(0,0,0,${a})`); g.addColorStop(.5, `rgba(0,0,0,${a * .5})`); g.addColorStop(1, 'rgba(0,0,0,0)');
       sc.globalCompositeOperation = 'destination-in'; sc.fillStyle = g; sc.fillRect(0, 0, w, h);
       d.globalCompositeOperation = 'destination-out'; d.drawImage(S, 0, 0); d.globalCompositeOperation = 'source-over';
     }

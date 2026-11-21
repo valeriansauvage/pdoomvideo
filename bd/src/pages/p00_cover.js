@@ -4,8 +4,8 @@ page(0, [], {
     draw(w, h) {
       cam(1060, 700, 1.0);
       // noir: a moonlit night — the tree a black silhouette against the moon, the gold the only warm light
-      countryside(NOIR ? { time: 'night', hy: 980, moon: [1480, 330], clouds: false } : { time: 'afternoon', hy: 980, farm: [1900, 1060, .55] });
-      if (NOIR) { paint(ellPts(1480, 330, 150, 150, 40), { wash: '#F3EBC8', ink: null }); light(1480, 330, 900, .75); noirMood({ dark: .62 }); }
+      countryside(NOIR ? { time: 'night', hy: 980, moon: [1640, 110], clouds: false } : { time: 'afternoon', hy: 980, farm: [1900, 1060, .55] });
+      if (NOIR) { paint(ellPts(1640, 110, 140, 140, 40), { wash: '#F3EBC8', ink: null }); light(1640, 110, 1100, .7); light(1210, 1300, 520, .6); noirMood({ dark: .58 }); }
       paint([[-600, 1500], [300, 1290], [1050, 1240], [1800, 1280], [2800, 1500], [2800, 2600], [-600, 2600]], { wash: NOIR ? '#4A5072' : '#A9C46E', fill: NOIR ? null : '#6E8A4E', fillOp: 60, tex: .7, ink: PAL.ink, sw: .8, curv: .4 });
       bigTree(1000, 1330, 1.55, { mound: [1640, 1350], night: NOIR });
       shovel(1760, 1300, 1.1, .2);
