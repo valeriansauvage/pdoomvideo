@@ -52,7 +52,7 @@ if (args.pdf) {
   const files = readdirSync(OUT).filter(f => /^planche_\d+\.jpg$/.test(f) && +f.match(/\d+/)[0] < 90).sort();   // pages 90+ are development sheets
   if (!files.length) throw new Error('no pages in ' + OUT);
   const browser = await launch(), page = await browser.newPage();
-  const html = `<!doctype html><html><head><style>@page{size:160mm 220mm;margin:0}html,body{margin:0}img{display:block;width:160mm;height:220mm;page-break-after:always;break-after:page}img:last-child{page-break-after:auto;break-after:auto}</style></head><body>` +
+  const html = `<!doctype html><html><head><title>Sous un arbre à la campagne</title><style>@page{size:160mm 220mm;margin:0}html,body{margin:0}img{display:block;width:160mm;height:220mm;page-break-after:always;break-after:page}img:last-child{page-break-after:auto;break-after:auto}</style></head><body>` +
     files.map(f => `<img src="data:image/jpeg;base64,${readFileSync(join(OUT, f)).toString('base64')}">`).join('') + '</body></html>';
   await page.setContent(html, { waitUntil: 'load' });
   const out = join(OUT, TITLE + '.pdf');
