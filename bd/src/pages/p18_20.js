@@ -99,8 +99,8 @@ page(19, [
     bub: [{ s: 'louise', t: 'They’re police detectives!', tr: 'Ce sont des inspecteurs de police !', x: .3, y: .14, mw: 230 }, { s: 'cris', t: 'Police detectives?', tr: 'Des inspecteurs ?', kind: 'whisper', x: .76, y: .3 }],
   }, {
     w: .62,
-    draw(w, h) { cam(890, 530, 2.6); kitchen({ board: false }); panelWash('#3A2E50', 70); fig('louise', 890, 590, { at: 'head', view: 'l', ex: 'determined', eyes: 'half', look: [-1, 0] }); },
-    bub: [{ s: 'louise', t: 'Look. I didn’t tell you. My bastard husband. I killed him.', tr: 'Écoute. Je ne te l’ai pas dit. Mon salaud de mari. Je l’ai tué.', x: .5, y: .24, mw: 260, size: .88 }],
+    draw(w, h) { cam(890, 580, 2.2); kitchen({ board: false }); panelWash('#3A2E50', 70); fig('louise', 890, 590, { at: 'head', view: 'l', ex: 'determined', eyes: 'half', look: [-1, 0] }); },
+    bub: [{ s: 'louise', t: 'Look. I didn’t tell you. My bastard husband. I killed him.', tr: 'Écoute. Je ne te l’ai pas dit. Mon salaud de mari. Je l’ai tué.', x: .5, y: .19, mw: 330, size: .86 }],
   }, {
     w: .5,
     draw(w, h) { cam(560, 600, 2.8); kitchen({ board: false }); fig('cris', 560, 590, { at: 'head', outfit: 'farm2', view: 'r', eyes: 'wide', brows: 'up', mouth: 'flat', sweat: true }); },
