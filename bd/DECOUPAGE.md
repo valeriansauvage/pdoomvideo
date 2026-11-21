@@ -1,6 +1,6 @@
 # Sous un arbre à la campagne — découpage de la bande dessinée
 
-Adaptation en bande dessinée du scénario *Sous un arbre à la campagne* : une couverture et 27 planches, peintes dans le style aquarelle + encre du clip P(doom) (p5.brush).
+Adaptation en bande dessinée du scénario *Sous un arbre à la campagne* : une couverture et 27 planches, en **film noir en couleur**. L'album est peint avec le moteur aquarelle et encre du clip P(doom) (p5.brush), puis passé à l'étalonnage noir : couleurs sourdes, nuits bleues, flaques de lumière, stores, pluie, visages à moitié dans l'ombre. Le sang et l'or restent en couleurs vives. Une version noir et blanc et la version aquarelle d'origine restent disponibles.
 
 ## Partis pris
 

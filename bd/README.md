@@ -2,6 +2,13 @@
 
 This folder adapts the screenplay *Sous un arbre à la campagne* into a 27-page comic album plus a cover. It is painted with the same watercolour-and-ink engine as the P(doom) video: p5.js with p5.brush, rendered in headless Chrome. Every panel is code: there is no hand-drawn or generated image anywhere.
 
+The album renders as a **colour film noir** by default. The colours are muted and contrasted. Each scene's darkness is tinted night blue, dusk violet or sunlit amber, and pools of light open it up around the faces and the lamps. Light falls through venetian blinds indoors, and rain falls on Paris. Faces are half in shadow, the captions use a typewriter face, and the page is black. Blood, gold, hearts, wine and the police light keep their full colour.
+
+Two other styles are available with `--style`:
+
+- `noirbw`: the same film noir in black and white.
+- `aquarelle`: the original watercolour.
+
 The page-by-page adaptation, with every line of dialogue and its French translation, is in [`DECOUPAGE.md`](DECOUPAGE.md).
 
 ## Rendering
@@ -10,8 +17,9 @@ The prerequisites are the same as for the video: Node.js and Google Chrome (or C
 
 ```bash
 npm install
-node bd/render.mjs --all --workers=3        # paint every page → out/bd/planche_XX.jpg (page 0 is the cover)
-node bd/render.mjs --pdf                    # bind them → out/bd/Sous_un_arbre_a_la_campagne.pdf
+node bd/render.mjs --all --workers=3        # paint every page → out/bd-noir/planche_XX.jpg (page 0 is the cover)
+node bd/render.mjs --pdf                    # bind them → out/bd-noir/Sous_un_arbre_a_la_campagne_noir.pdf
+node bd/render.mjs --all --style=aquarelle  # the watercolour version → out/bd/ (then --pdf --style=aquarelle)
 node bd/render.mjs --pages=4 --only=2       # just panel 2 of page 4, for quick checks
 ```
 
