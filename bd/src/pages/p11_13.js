@@ -86,7 +86,7 @@ page(12, [
       fig('louise', 700, 1050, { view: 'l', ex: 'talk', armN: [1.2, .5], handN: 'open' });
     },
     cap: [{ t: 'Le lendemain matin.', at: 'tl' }],
-    bub: [{ s: 'louise', t: 'You could help around here. I have the room… Help me make up a room.', tr: 'Tu pourrais m’aider ici. J’ai de la place… Aide-moi à préparer une chambre.', x: .61, y: .18, mw: 330, size: .88 }],
+    bub: [{ s: 'louise', t: 'You could help around here. I have the room… Help me make up a room.', tr: 'Tu pourrais m’aider ici. J’ai de la place… Aide-moi à préparer une chambre.', x: .71, y: .22, mw: 320, size: .86 }],
   }, {
     draw(w, h) {
       cam(560, 560, 1.35);
