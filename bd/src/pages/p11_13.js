@@ -102,7 +102,7 @@ page(12, [
     draw(w, h) {
       cam(770, 640, .8);
       kitchen({});
-      fig('cris', 390, 1010, { outfit: 'farm', view: 'r', ex: 'neutral', look: [.5, .5], reachN: [430, 620], holdN: hKnife, reachF: [470, 625] });
+      fig('cris', 340, 920, { outfit: 'farm', view: 'r', ex: 'neutral', look: [.5, .5], reachN: [430, 640], holdN: hKnife, reachF: [470, 645] });
       fig('louise', 1150, 1010, { view: 'r', ex: 'surprised', look: [1, 0] });
     },
     cap: [{ t: 'L’après-midi.', at: 'tl' }],
@@ -176,21 +176,21 @@ page(13, [
   }]],
   [1.05, [{
     draw(w, h) {
-      cam(560, 640, 1.2);
+      cam(565, 560, 1.2);
       hallway({ td: .28, ld: 0, lamp: 60 });
       fig('thibaut', 470, 1010, { outfit: 'night', view: 'r', ex: 'angry', armN: [.4, .4], handN: 'open' });
       fig('cris', 700, 1000, { outfit: 'night', view: 'l', pose: 'run', ph: .3, tor: .25, ex: 'angrytalk', armN: [1.3, .2], armF: [1.4, .3], handN: 'open', handF: 'open' });
     },
     cap: [{ t: 'Le soir.', at: 'tl' }],
-    bub: [{ s: 'cris', t: 'O que você acha que está fazendo?!', tr: 'Qu’est-ce que tu crois faire ?!', kind: 'shout', x: .7, y: .18, mw: 230 }, { s: 'thibaut', t: 'Silêncio! Volte para o seu quarto.', tr: 'Silence ! Retourne dans ta chambre.', kind: 'whisper', x: .23, y: .3, mw: 220 }],
+    bub: [{ s: 'cris', t: 'O que você acha que está fazendo?!', tr: 'Qu’est-ce que tu crois faire ?!', kind: 'shout', x: .7, y: .18, mw: 230 }, { s: 'thibaut', t: 'Silêncio! Volte para o seu quarto.', tr: 'Silence ! Retourne dans ta chambre.', kind: 'whisper', x: .2, y: .2, mw: 220 }],
   }, {
     draw(w, h) {
-      cam(560, 600, 1.7);
+      cam(560, 545, 1.7);
       hallway({ td: .28, ld: 0, lamp: 60 });
       fig('thibaut', 480, 1010, { outfit: 'night', view: 'r', ex: 'angrytalk', armN: [.9, .3], handN: 'open' });
       fig('cris', 640, 1010, { outfit: 'night', view: 'l', ex: 'sadtalk', reachN: [540, 650], handN: 'open' });
     },
-    bub: [{ s: 'cris', t: 'Deixe-me entrar.', tr: 'Laisse-moi entrer.', x: .76, y: .14 }, { s: 'thibaut', t: 'Você está louco? Sai daqui.', tr: 'T’es fou ? Sors d’ici.', kind: 'whisper', x: .25, y: .3, mw: 200 }],
+    bub: [{ s: 'cris', t: 'Deixe-me entrar.', tr: 'Laisse-moi entrer.', x: .64, y: .13 }, { s: 'thibaut', t: 'Você está louco? Sai daqui.', tr: 'T’es fou ? Sors d’ici.', kind: 'whisper', x: .2, y: .3, mw: 200 }],
   }]],
   [1, [{
     w: 1.15,

@@ -19,9 +19,9 @@ page(14, [
   [1.05, [{
     w: .8,
     draw(w, h) {
-      cam(250, 760, 1.35);
+      cam(220, 800, 1.0);
       farmyard({ table: false });
-      goat(60, 1040, .85, { graze: true }); goat(-120, 1020, .8, { flip: true });
+      goat(80, 1040, .85, { graze: true }); goat(-120, 1020, .8, { flip: true }); chicken(520, 1070, .9, { peck: true });
       fig('cris', 330, 1060, { outfit: 'farm', view: 'r', ex: 'suspicious', look: [1, -.2], reachN: [270, 900], holdN: (u) => bucket(2 * u, 10 * u, u / 4.4 * .55, false) });
     },
     cap: [{ t: 'Fin de matinée.', at: 'tl' }],
@@ -46,10 +46,10 @@ page(14, [
   }, {
     w: 1.2,
     draw(w, h) {
-      cam(740, 560, 1.15);
+      cam(700, 520, 1.15);
       kitchen({});
-      fig('cris', 520, 1010, { outfit: 'farm', view: 'r', ex: 'sadtalk', reachN: [560, 630], holdN: hKnife });
-      fig('louise', 880, 1010, { view: 'l', ex: 'smile', armN: [.6, 1.4], handN: 'open' });
+      fig('cris', 470, 920, { outfit: 'farm', view: 'r', ex: 'sadtalk', look: [1, 0], reachN: [560, 640], holdN: hKnife, reachF: [520, 645] });
+      fig('louise', 900, 925, { view: 'l', ex: 'smile', armN: [.6, 1.4], handN: 'open' });
     },
     cap: [{ t: 'L’après-midi.', at: 'tl' }],
     bub: [{ s: 'cris', t: 'Has he let you see exactly what he’s writing?', tr: 'Il t’a montré ce qu’il écrit, exactement ?', x: .26, y: .2, mw: 260 }, { s: 'louise', t: 'We’ll have to ask him. I’ve invited him to eat with us.', tr: 'Il faudra le lui demander. Je l’ai invité à dîner avec nous.', x: .76, y: .28, mw: 250 }],
@@ -70,45 +70,82 @@ page(14, [
   }]],
 ]);
 
-// ----------------------------------------------------------------------------------- Planche 15 — le dîner
+// ----------------------------------------------------------------------------------- Planches 15–16 — le dîner
+// heads at the table: Louise ~ (735, 595), Thibaut ~ (1050, 587), Cris ~ (1366, 579)
+const closeUp = (cx, cy, z = 2.3) => cam(cx, cy - .12 * 470 / z, z);
 page(15, [
   [1, [{
-    draw(w, h) { cam(1180, 640, 1.25); dinner({ c: { ex: 'talk' }, t: { ex: 'smile', look: [1, 0] } }); },
-    bub: [{ s: 'cris', t: 'Tell us more.', tr: 'Racontez-nous.', x: .78, y: .14 }, { s: 'thibaut', t: 'I haven’t gotten far beyond the robbery…', tr: 'Je ne suis pas allé beaucoup plus loin que le braquage…', x: .33, y: .22, mw: 260 }],
+    draw(w, h) { cam(1180, 541, 1.4); dinner({ c: { ex: 'talk', look: [-1, 0] }, t: { ex: 'smile', look: [1, 0] } }); },
+    bub: [{ s: 'cris', t: 'Tell us more.', tr: 'Racontez-nous.', x: .62, y: .13 }, { s: 'thibaut', t: 'I haven’t gotten far beyond the robbery…', tr: 'Je ne suis pas allé beaucoup plus loin que le braquage…', x: .24, y: .26, mw: 250 }],
   }, {
-    draw(w, h) { cam(1300, 600, 2.0); dinner({ c: { ex: 'suspicious', eyes: 'narrow', mouth: 'open' }, t: { ex: 'blank', look: [1, 0] } }); },
-    bub: [{ s: 'cris', t: 'Does anyone get killed?', tr: 'Quelqu’un se fait tuer ?', x: .3, y: .18 }],
+    draw(w, h) { closeUp(1350, 579); dinner({ c: { ex: 'suspicious', eyes: 'narrow', mouth: 'open', look: [-1, 0] } }); },
+    bub: [{ s: 'cris', t: 'Does anyone get killed?', tr: 'Quelqu’un se fait tuer ?', x: .32, y: .17 }],
   }]],
   [1, [{
-    draw(w, h) { cam(1050, 600, 2.0); dinner({ t: { ex: 'smirk', look: [1, 0] } }); },
-    bub: [{ s: 'thibaut', t: 'Well it wouldn’t hold much interest these days if someone didn’t die.', tr: 'Ça n’aurait pas grand intérêt aujourd’hui si personne ne mourait.', x: .5, y: .2, mw: 330 }],
+    draw(w, h) { closeUp(1050, 587); dinner({ t: { ex: 'smirk', look: [1, 0] } }); },
+    bub: [{ s: 'thibaut', t: 'Well it wouldn’t hold much interest these days if someone didn’t die.', tr: 'Ça n’aurait pas grand intérêt aujourd’hui si personne ne mourait.', x: .5, y: .2, mw: 380 }],
   }, {
-    draw(w, h) { cam(1000, 640, 1.2); dinner({ l: { ex: 'talk', armN: [1.0, .9], handN: 'open' }, t: { ex: 'talk', look: [-1, 0], armF: [.5, -1.9], handF: 'open' } }); },
-    bub: [{ s: 'louise', t: 'How does the love story fit into the novel?', tr: 'Et l’histoire d’amour, comment s’intègre-t-elle au roman ?', x: .2, y: .16, mw: 230 }, { s: 'thibaut', t: 'Well crime brings people together… the plans, the secrets, the dreams of money… running off to some distant foreign place to spend it all.', tr: 'Le crime rapproche les gens… les plans, les secrets, les rêves d’argent… s’enfuir dans un pays lointain pour tout dépenser.', x: .66, y: .3, mw: 300, size: .86 }],
+    draw(w, h) { closeUp(760, 595); dinner({ l: { ex: 'talk', look: [1, 0], armN: [1.0, .9], handN: 'open' } }); },
+    bub: [{ s: 'louise', t: 'How does the love story fit into the novel?', tr: 'Et l’histoire d’amour, comment s’intègre-t-elle au roman ?', x: .62, y: .18, mw: 280 }],
+  }]],
+  [1.05, [{
+    draw(w, h) { cam(1050, 525, 1.3); dinner({ t: { ex: 'dreamy', armF: [.6, -2.2], handF: 'open' }, l: { ex: 'smile' }, c: { ex: 'blank', look: [-1, 0] } }); },
+    bub: [{ s: 'thibaut', t: 'Well crime brings people together… the plans, the secrets, the dreams of money… running off to some distant foreign place to spend it all.', tr: 'Le crime rapproche les gens… les plans, les secrets, les rêves d’argent… s’enfuir dans un pays lointain pour tout dépenser.', x: .5, y: .24, mw: 620 }],
   }]],
   [1, [{
-    draw(w, h) { cam(1180, 640, 1.3); dinner({ c: { ex: 'sly' }, t: { ex: 'smirk', look: [1, 0] } }); },
-    bub: [{ s: 'cris', t: 'But something always goes wrong doesn’t it?', tr: 'Mais il y a toujours quelque chose qui tourne mal, non ?', x: .72, y: .15, mw: 240 }, { s: 'thibaut', t: 'Seems like it always does… in the movies.', tr: 'On dirait bien… au cinéma.', x: .27, y: .3, mw: 220 }],
+    draw(w, h) { closeUp(1350, 579); dinner({ c: { ex: 'sly', look: [-1, 0] } }); },
+    bub: [{ s: 'cris', t: 'But something always goes wrong doesn’t it?', tr: 'Mais il y a toujours quelque chose qui tourne mal, non ?', x: .36, y: .2, mw: 270 }],
   }, {
-    draw(w, h) { cam(1050, 640, 1.05); dinner({ l: { ex: 'smile' }, c: { ex: 'talk' }, t: { ex: 'worried' } }); },
-    bub: [{ s: 'louise', t: 'I have a printer if you’d like to print it out to read it over.', tr: 'J’ai une imprimante si vous voulez l’imprimer pour le relire.', x: .2, y: .2, mw: 220, size: .9 },
-          { s: 'cris', t: 'Can’t you give us some more specifics to the story?', tr: 'Vous ne pouvez pas nous en dire un peu plus ?', x: .8, y: .17, mw: 210, size: .9 },
-          { s: 'thibaut', t: 'I couldn’t have anyone read it until it’s near finished.', tr: 'Personne ne doit le lire avant qu’il soit presque fini.', x: .5, y: .5, mw: 230, size: .9 }],
-  }]],
-  [1.1, [{
-    w: .9,
-    draw(w, h) { cam(900, 640, 1.4); dinner({ l: { ex: 'talk', blush: true }, t: { ex: 'smile', look: [-1, 0] } }); },
-    bub: [{ s: 'louise', t: 'I meant a printed version just for you to read.', tr: 'Je parlais d’une version imprimée, rien que pour vous.', x: .3, y: .17, mw: 230 }, { s: 'thibaut', t: 'Ok. Thanks, I’ll see.', tr: 'D’accord. Merci, je verrai.', x: .76, y: .32 }],
-  }, {
-    w: 1.1,
-    draw(w, h) { cam(1200, 640, 1.3); dinner({ c: { ex: 'angrytalk' }, t: { ex: 'talk', look: [1, 0], armF: [.5, -1.9], handF: 'open' } }); },
-    bub: [{ s: 'cris', t: 'The lovers? And their crime? At least you can tell us that.', tr: 'Les amants ? Et leur crime ? Ça, au moins, vous pouvez nous le dire.', x: .74, y: .18, mw: 250 },
-          { s: 'thibaut', t: 'I want you to experience it from beginning to end without giving away the plot twists.', tr: 'Je veux que vous le viviez du début à la fin, sans rien dévoiler des rebondissements.', x: .26, y: .3, mw: 260, size: .92 }],
+    draw(w, h) { closeUp(1050, 587); dinner({ t: { ex: 'smile', eyes: 'half', look: [1, 0] } }); },
+    bub: [{ s: 'thibaut', t: 'Seems like it always does… in the movies.', tr: 'On dirait bien… au cinéma.', x: .5, y: .18, mw: 300 }],
   }]],
 ]);
 
-// ----------------------------------------------------------------------------------- Planche 16 — ce que Cris a vu
 page(16, [
+  [1, [{
+    w: 1.15,
+    draw(w, h) { cam(1050, 525, 1.05); dinner({ l: { ex: 'smile', look: [1, 0] }, c: { ex: 'talk', look: [-1, 0] }, t: { ex: 'worried', look: [1, 0] } }); },
+    bub: [{ s: 'louise', t: 'I have a printer if you’d like to print it out to read it over.', tr: 'J’ai une imprimante si vous voulez l’imprimer pour le relire.', x: .2, y: .22, mw: 230, size: .92 },
+          { s: 'cris', t: 'Can’t you give us some more specifics to the story?', tr: 'Vous ne pouvez pas nous en dire un peu plus ?', x: .8, y: .2, mw: 220, size: .92 }],
+  }, {
+    w: .85,
+    draw(w, h) { closeUp(1050, 587, 2.5); dinner({ t: { ex: 'talk', brows: 'worried', look: [1, 0] } }); },
+    bub: [{ s: 'thibaut', t: 'I couldn’t have anyone read it until it’s near finished.', tr: 'Personne ne doit le lire avant qu’il soit presque fini.', x: .5, y: .2, mw: 260 }],
+  }]],
+  [1, [{
+    draw(w, h) { closeUp(760, 595); dinner({ l: { ex: 'talk', blush: true, look: [1, 0] } }); },
+    bub: [{ s: 'louise', t: 'I meant a printed version just for you to read.', tr: 'Je parlais d’une version imprimée, rien que pour vous.', x: .62, y: .18, mw: 270 }],
+  }, {
+    draw(w, h) { closeUp(1050, 587); dinner({ t: { ex: 'smile', look: [-1, 0] } }); },
+    bub: [{ s: 'thibaut', t: 'Ok. Thanks, I’ll see.', tr: 'D’accord. Merci, je verrai.', x: .5, y: .18 }],
+  }]],
+  [1, [{
+    w: 1.1,
+    draw(w, h) { closeUp(1340, 579, 2.1); dinner({ c: { ex: 'angrytalk', look: [-1, 0] } }); },
+    bub: [{ s: 'cris', t: 'The lovers? And their crime? At least you can tell us that.', tr: 'Les amants ? Et leur crime ? Ça, au moins, vous pouvez nous le dire.', x: .36, y: .2, mw: 300 }],
+  }, {
+    w: .9,
+    draw(w, h) { closeUp(1050, 587, 2.3); dinner({ t: { ex: 'talk', look: [1, 0], armF: [.5, -2.0], handF: 'open' } }); },
+    bub: [{ s: 'thibaut', t: 'I want you to experience it from beginning to end without giving away the plot twists.', tr: 'Je veux que vous le viviez du début à la fin, sans rien dévoiler des rebondissements.', x: .5, y: .22, mw: 300, size: .92 }],
+  }]],
+  [1.1, [{
+    w: .85,
+    draw(w, h) { closeUp(1350, 579); dinner({ c: { ex: 'sly', eyes: 'half', look: [-1, 0] } }); },
+    bub: [{ s: 'cris', t: 'Always the plot twists. Isn’t that a cliche?', tr: 'Toujours les rebondissements. Ce n’est pas un cliché ?', x: .38, y: .2, mw: 260 }],
+  }, {
+    w: 1.15,
+    draw(w, h) {
+      closeUp(1050, 595, 3.3);
+      dinner({ t: { eyes: 'narrow', brows: 'angry', mouth: 'smirk', look: [1, 0] } });
+      glow(1050, 700, 160, 90, '#FFB84A', 90);
+      panelVignette(PAL.night, 150, .5);
+    },
+    bub: [{ s: 'thibaut', t: 'Just wait till the plot twist hits you. You won’t find it cliche.', tr: 'Attendez que le rebondissement vous frappe. Vous ne le trouverez pas cliché.', x: .5, y: .18, mw: 380 }],
+  }]],
+]);
+
+// ----------------------------------------------------------------------------------- Planche 17 — ce que Cris a vu
+page(17, [
   [1, [{
     draw(w, h) {
       cam(560, 450, 2.0);

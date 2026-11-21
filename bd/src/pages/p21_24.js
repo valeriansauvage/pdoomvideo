@@ -20,8 +20,8 @@ const phoneScreen = (u, sw) => {
   xPop();
 };
 
-// ----------------------------------------------------------------------------------- Planche 20 — l'interrogatoire
-page(20, [
+// ----------------------------------------------------------------------------------- Planche 21 — l'interrogatoire
+page(21, [
   [1, [{
     w: .9,
     draw(w, h) {
@@ -58,8 +58,8 @@ page(20, [
   }]],
 ]);
 
-// ----------------------------------------------------------------------------------- Planche 21 — « Vous me dites quelque chose »
-page(21, [
+// ----------------------------------------------------------------------------------- Planche 22 — « Vous me dites quelque chose »
+page(22, [
   [1, [{
     w: .8,
     draw(w, h) { cam(1200, 560, .75); farmyard({ doorOpen: true }); fig('cris', 855, 905, { outfit: 'farm2', view: 'r', s: .9, ex: 'worried' }); fig('vlad', 1500, 1060, { view: 'l', outfit: 'plain', ex: 'suspicious', look: [-1, -.3], s: 1.1 }); },
@@ -99,8 +99,8 @@ page(21, [
   }]],
 ]);
 
-// ----------------------------------------------------------------------------------- Planche 22 — le sang
-page(22, [
+// ----------------------------------------------------------------------------------- Planche 23 — le sang
+page(23, [
   [1, [{
     draw(w, h) { cam(1760, 510, 1.1); yardInterview({ tx: 1450, t: { ex: 'blank' }, v: { ex: 'neutral' }, d: { ex: 'talk' }, cris: [1640, { ex: 'talk' }] }); },
     bub: [{ s: 'vlad', t: 'This man has been here all the time, all this month?', tr: 'Cet homme a été là tout le temps, tout ce mois-ci ?', x: .78, y: .14, mw: 260 },
@@ -133,8 +133,8 @@ page(22, [
   }]],
 ]);
 
-// ----------------------------------------------------------------------------------- Planche 23 — « On les a eus ! »
-page(23, [
+// ----------------------------------------------------------------------------------- Planche 24 — « On les a eus ! »
+page(24, [
   [1, [{
     w: 1.15,
     draw(w, h) { cam(1950, 500, .95); yardInterview({ tx: 1500, t: { ex: 'happy', armF: [2.2, .3], handF: 'open' }, v: { view: 'r', ex: 'blank', pose: 'walk', ph: .3 }, d: { view: 'r', ex: 'angrytalk', pose: 'walk', ph: .7 }, vx: 2050, dx: 2230, cris: [1680, { ex: 'blank' }] }); },
