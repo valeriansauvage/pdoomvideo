@@ -85,14 +85,14 @@ page(2, [
     draw(w, h) {
       cam(1000, 560, .62);
       parisStreet({ smoke: 1.1 });
-      crowd({ rows: [[860, .48, 34], [930, .62, 22]], banner: [180, 560, 'ON LÂCHE RIEN !'], seed: 2 });
+      crowd({ rows: [[860, .48, 34], [930, .62, 22]], banner: [180, 560, 'RETRAITE À 60 ANS'], seed: 2 });
       fig('valerian', 900, 1030, { s: 1.05, holdN: hCroissant, armN: [.35, 1.5], holdF: hCoffee, armF: [.4, 1.45], ex: 'talk' });
       fig('vlad', 1140, 1030, { s: 1.05, view: 'l', ex: 'talk', armN: [.2, .9] });
       crowd({ rows: [[1190, .95, 7]], x0: -200, x1: 2300, seed: 5, props: false });
     },
     cap: [{ t: 'Au même moment, une manifestation traverse Paris.', at: 'tl' }],
-    bub: [{ s: 'valerian', t: '… ?', x: .4, y: .34, size: 1.1 }, { s: 'vlad', t: '… !', x: .62, y: .3, size: 1.1 }],
-    sfx: [{ t: 'ON LÂCHE RIEN !', x: .5, y: .42, size: 92, rot: -.06, col: '#E8553E' }, { t: 'HOU ! HOU !', x: .86, y: .18, size: 54, rot: .1, col: PAL.ochre }],
+    bub: [{ s: 'valerian', t: '… ?', x: .4, y: .25, size: 1.1 }, { s: 'vlad', t: '… !', x: .63, y: .23, size: 1.1 }],
+    sfx: [{ t: 'ON LÂCHE RIEN !', x: .52, y: .27, size: 92, rot: -.06, col: '#E8553E' }, { t: 'HOU ! HOU !', x: .86, y: .14, size: 54, rot: .1, col: PAL.ochre }],
   }]],
   [1, [{
     draw(w, h) {
@@ -129,7 +129,7 @@ page(2, [
       fig('vlad', 1110, 1020, { view: 'r', ex: 'smile', look: [1, -.2], armF: [1.4, .25], handF: 'open' });
       fig('valerian', 900, 1020, { ex: 'neutral', look: [1, -.3], blush: true, holdF: hCoffee, armF: [.3, 1.4] });
     },
-    bub: [{ s: 'vlad', t: 'Tant de jeunes femmes.', x: .74, y: .14 }, { s: 'valerian', t: 'Aucun de ceux que je voudrais ne serait ici.', x: .28, y: .2, mw: 300 }],
+    bub: [{ s: 'vlad', t: 'Tant de jeunes femmes.', x: .66, y: .1 }, { s: 'valerian', t: 'Aucun de ceux que je voudrais ne serait ici.', x: .3, y: .33, mw: 300 }],
   }]],
   [1.1, [{
     draw(w, h) {
@@ -140,6 +140,6 @@ page(2, [
       fig('vlad', 1060, 1160, { view: 'b', s: 1.05 });
       fig('valerian', 905, 1160, { view: 'b', s: 1.05, holdN: hCoffee, armN: [.3, 1.3] });
     },
-    bub: [{ s: 'vlad', t: 'Et nous voilà.', x: .72, y: .17 }, { s: 'valerian', t: 'Et nous voilà.', x: .3, y: .25 }],
+    bub: [{ s: 'vlad', t: 'Et nous voilà.', x: .66, y: .1 }, { s: 'valerian', t: 'Et nous voilà.', x: .3, y: .3 }],
   }]],
 ]);
